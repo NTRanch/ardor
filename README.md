@@ -20,4 +20,4 @@ values). Modern MCP era only (2026-07-28); 46 tools.
 
 License: Apache-2.0.
 
-MCP Registry name: `mcp-name: io.github.ntranch/ardor`
+MCP Registry name: `mcp-name: io.github.NTRanch/ardor`

@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.ntranch/ardor",
+  "name": "io.github.NTRanch/ardor",
   "title": "Ardor",
   "description": "NTRanch maker MCP: authoring, safety gates, playtest QA and release handoffs for adult games/apps.",
   "version": "0.1.0",
@@ -21,7 +21,7 @@
   ],
   "_meta": {
     "io.modelcontextprotocol.registry/publisher-provided": {
-      "io.github.ntranch/identity": {
+      "io.github.NTRanch/identity": {
         "publisher": "NTRanch",
         "github": "https://github.com/NTRanch",
         "cratesIo": "https://crates.io/users/NTRanch"

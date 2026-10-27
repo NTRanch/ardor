@@ -10,7 +10,7 @@ routing, deterministic playtest QA, release handoffs to 47 verified
 distribution/service channels, and channel credential *references*
 (never values).
 
-- MCP Registry name: `mcp-name: io.github.ntranch/ardor`
+- MCP Registry name: `mcp-name: io.github.NTRanch/ardor`
 - Source: https://github.com/NTRanch/ardor
 - License: Apache-2.0
 

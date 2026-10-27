@@ -1,0 +1,34 @@
+{
+  "surfaces": [
+    {
+      "config": {},
+      "enabled": true,
+      "id": "accessibility",
+      "progression_gated": false
+    },
+    {
+      "config": {},
+      "enabled": true,
+      "id": "aftercare",
+      "progression_gated": false
+    },
+    {
+      "config": {},
+      "enabled": true,
+      "id": "purge",
+      "progression_gated": false
+    },
+    {
+      "config": {},
+      "enabled": true,
+      "id": "safeword",
+      "progression_gated": false
+    },
+    {
+      "config": {},
+      "enabled": true,
+      "id": "stop",
+      "progression_gated": false
+    }
+  ]
+}

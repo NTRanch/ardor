@@ -1,0 +1,64 @@
+{
+  "accounts": [
+    {
+      "account": "ntranch",
+      "channel": "itch_io",
+      "credential_kind": "butler_key",
+      "id": "itch_io:ntranch",
+      "scopes": [
+        "publish"
+      ],
+      "seq": 1,
+      "store_ref": {
+        "path": "ntranch/itch/butler-key",
+        "store": "pass"
+      },
+      "verification": {
+        "detail": null,
+        "last_verified_at": "2026-10-27T15:30:00Z",
+        "method": "itch.io key validation via GET /api/1/<key>/me, run by the value holder",
+        "status": "verified"
+      }
+    },
+    {
+      "account": "ntranch-studio",
+      "channel": "vgen",
+      "credential_kind": "portal_login",
+      "id": "vgen:ntranch-studio",
+      "scopes": [
+        "commissions"
+      ],
+      "seq": 2,
+      "store_ref": {
+        "entry": "vgen-studio-login",
+        "store": "secure_vault"
+      },
+      "verification": {
+        "detail": null,
+        "last_verified_at": "2026-10-27T18:30:00Z",
+        "method": "operator attestation: VGen artist account login works",
+        "status": "verified"
+      }
+    },
+    {
+      "account": "ntranch",
+      "channel": "renderotica",
+      "credential_kind": "portal_login",
+      "id": "renderotica:ntranch",
+      "scopes": [
+        "publish"
+      ],
+      "seq": 3,
+      "store_ref": {
+        "path": "ntranch/renderotica/vendor-login",
+        "store": "pass"
+      },
+      "verification": {
+        "detail": null,
+        "last_verified_at": "2026-10-27T18:35:00Z",
+        "method": "operator attestation: Renderotica vendor account login works",
+        "status": "verified"
+      }
+    }
+  ]
+}

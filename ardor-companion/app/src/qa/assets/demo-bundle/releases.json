@@ -1,0 +1,22 @@
+{
+  "handoffs": [
+    {
+      "seq": 1,
+      "id": "handoff-1",
+      "channel": "nutaku",
+      "channel_name": "Nutaku",
+      "section": "distribution",
+      "executor": "slipway",
+      "automation_class": "prepared_submission",
+      "artifacts": [
+        {
+          "name": "demo.apk",
+          "sha256": "8121a3b9ffbf190e13db0406baf060c18f1c8e2d7b812ae1c76d5de55239a5a3",
+          "kind": "signed_apk"
+        }
+      ],
+      "status": "prepared",
+      "note": "demo bundle: artifact bytes ship in assets/artifacts so the on-device digest check can pass"
+    }
+  ]
+}

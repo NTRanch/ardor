@@ -1,0 +1,12 @@
+# Rust build outputs
+/ardor/target/
+
+# Gradle / Android build outputs (ardor-companion)
+.gradle/
+**/build/
+
+# Release artifacts — bundles are published to GitHub Releases, not kept in source
+/release/
+
+# Scratch
+*.log

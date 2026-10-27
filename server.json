@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ntranch/ardor",
+  "title": "Ardor",
+  "description": "NTRanch maker MCP: authoring, safety gates, playtest QA and release handoffs for adult games/apps.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/NTRanch/ardor",
+  "repository": {
+    "url": "https://github.com/NTRanch/ardor",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NTRanch/ardor/releases/download/v0.1.0/ardor-mcp-0.1.0-linux-x64.mcpb",
+      "fileSha256": "5e1f439677a3dffd292b39a036f2e88c6782b0732cfff45c7a5fe5fcc68abe02",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "io.github.ntranch/identity": {
+        "publisher": "NTRanch",
+        "github": "https://github.com/NTRanch",
+        "cratesIo": "https://crates.io/users/NTRanch"
+      }
+    }
+  }
+}

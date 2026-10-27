@@ -1,0 +1,22 @@
+{
+  "characters": [
+    {
+      "id": "ada",
+      "name": "Ada",
+      "role": "host",
+      "version": 1
+    },
+    {
+      "id": "rin",
+      "name": "Rin",
+      "reaction_profile": {
+        "base_receptivity": 55,
+        "conditioning": 20,
+        "sensitivity": 60,
+        "stamina": 80
+      },
+      "role": "guest",
+      "version": 1
+    }
+  ]
+}

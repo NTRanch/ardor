@@ -1,0 +1,50 @@
+{
+  "flags": [
+    {
+      "kind": "story",
+      "name": "met_ada"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "arrival",
+      "kind": "scene",
+      "next": "greeting"
+    },
+    {
+      "actions": [
+        {
+          "actor": "ada",
+          "intensity": 3,
+          "kind": "embrace",
+          "target": "rin"
+        }
+      ],
+      "choices": [
+        {
+          "label": "Stay",
+          "next": "END"
+        }
+      ],
+      "consent": {
+        "participants": [
+          "ada",
+          "rin"
+        ],
+        "state": "affirmative"
+      },
+      "id": "greeting",
+      "kind": "dialogue",
+      "lines": [
+        {
+          "speaker": "ada",
+          "text": "Welcome in."
+        }
+      ],
+      "participants": [
+        "ada",
+        "rin"
+      ]
+    }
+  ]
+}

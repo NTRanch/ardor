@@ -1,0 +1,22 @@
+{
+  "handoffs": [
+    {
+      "artifacts": [
+        {
+          "kind": "build",
+          "name": "evidence-game.zip",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "automation_class": "pipeline",
+      "channel": "itch_io",
+      "channel_name": "itch.io",
+      "executor": "butler",
+      "id": "handoff-1",
+      "note": "prepared by Ardor; execution belongs to the named executor and the publish skills' gates",
+      "section": "distribution",
+      "seq": 1,
+      "status": "prepared"
+    }
+  ]
+}

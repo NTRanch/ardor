@@ -1,0 +1,9 @@
+{
+  "age_gate": "18+ confirmation gate at first launch",
+  "content_tags": [],
+  "engine": "bevy",
+  "name": "Evidence Game",
+  "rating": "adult",
+  "slug": "evidence-game",
+  "start_node": "arrival"
+}

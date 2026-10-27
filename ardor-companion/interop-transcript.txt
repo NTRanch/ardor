@@ -1,0 +1,95 @@
+ARDOR STAGE 2 INTEROP — Kotlin client (kotlin-sdk 0.16.0 stdio transport + modern session layer)
+binary: /home/phaedrus/.local/share/ardor-companion-build/ardor-bin
+home: /tmp/ardor-interop-home18135077173581852509 (temp copy of fixtures/server-home)
+>>> server/discover
+<<< supportedVersions=[2026-07-28]
+>>> tools/list
+<<< 46 tools: create_project, get_project, list_projects, update_project_meta, upsert_character, get_character, list_characters, add_canon_rule, list_canon, check_canon, declare_flag, upsert_scene, upsert_dialogue, get_node, list_nodes, upsert_system, list_systems, set_reaction_profile, preview_reaction, upsert_arc, validate_story, upsert_level, list_levels, generate_playtest, get_safety, set_safety_surface, audit_safety, register_asset, list_assets, record_asset_handoff, run_playtest, verify_replay, add_screenshot_spec, record_defect, list_defects, list_channels, get_channel, prepare_handoff, list_handoffs, register_channel_account, list_channel_accounts, get_channel_account, record_auth_verification, credential_status, probe_channel_auth, publish_preflight
+>>> tools/call get_project {project: evidence-game}
+<<< isError=false
+{
+  "counts": {
+    "arcs": 0,
+    "assets": 0,
+    "canon_rules": 0,
+    "characters": 2,
+    "defects": 0,
+    "flags": 1,
+    "handoffs": 1,
+    "levels": 0,
+    "nodes": 2,
+    "playtest_runs": 1,
+    "systems": 0
+  },
+  "meta": {
+    "age_gate": "18+ confirmation gate at first launch",
+    "content_tags": [],
+    "engine": "bevy",
+    "name": "Evidence Game",
+    "rating": "adult",
+    "slug": "evidence-game",
+    "start_node": "arrival"
+  },
+  "project": "evidence-game",
+  "safety_audit_ok": true
+}
+>>> tools/call run_playtest {project: evidence-game, seed: 7, max_steps: 32}
+<<< isError=false
+{
+  "project": "evidence-game",
+  "run": {
+    "hash": "14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8",
+    "id": "run-2",
+    "max_steps": 32,
+    "seed": 7,
+    "start": "arrival",
+    "steps_count": 2,
+    "stop_reason": "terminal",
+    "truncated": false
+  }
+}
+>>> tools/call publish_preflight {project: evidence-game, channel: itch_io}
+<<< isError=false
+{
+  "channel": "itch_io",
+  "checks": [
+    {
+      "check": "channel_known",
+      "detail": "itch.io",
+      "ok": true
+    },
+    {
+      "check": "channel_verified",
+      "detail": "Operating: marketplace live; upload limits and adult-indexing posture confirmed from current itch.io documentation coverage (Oct 2026). Asset-pack extension from the D-128 channel sweep: live asset listings observed (Live2D sets, rigged VTuber models, VRM/avatar packs) [practice]; AI-disclosure enforcement for asset packs [secondary].",
+      "ok": true
+    },
+    {
+      "check": "release_target",
+      "detail": "a release target for this project",
+      "ok": true
+    },
+    {
+      "check": "safety_audit",
+      "detail": "all safety checks pass",
+      "ok": true
+    },
+    {
+      "check": "auth_registered",
+      "detail": "account itch_io:ntranch",
+      "ok": true
+    },
+    {
+      "check": "auth_verified",
+      "detail": "a verification attestation is on record",
+      "ok": true
+    },
+    {
+      "check": "auth_not_expired",
+      "detail": "not evaluated (no 'now' supplied)",
+      "ok": true
+    }
+  ],
+  "executor": "butler",
+  "ok": true
+}
+methods sent, in order: [server/discover, tools/list, tools/call, tools/call, tools/call]

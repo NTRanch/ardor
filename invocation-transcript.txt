@@ -1,0 +1,396 @@
+ARDOR D-116 INVOCATION TRANSCRIPT — one real session against the built binary
+binary: /home/hatch/workspace/ntranch-maker-mcp-20261027/ardor/target/debug/ardor  home: /tmp/ardor-d116-home
+>>> {"jsonrpc": "2.0", "id": 0, "method": "server/discover", "params": {"_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":0,"result":{"resultType":"complete","supportedVersions":["2026-07-28"],"capabilities":{"tools":{}},"instructions":"Ardor — the NTRanch game/app maker: author adult games and apps as gated project state. Every canonical write passes a decide() gate (canon + safety) before it lands; safety surfaces (stop/safeword, accessibility, aftercare, purge) are never progression-gated. Deterministic playtest generation replays the authored graph under a seed. Release handoffs are prepared records for the channel registry's executors; channel credentials are managed as references and status only — Ardor never holds a credential value.","ttlMs":0,"cacheScope":"private","_meta":{"io.modelcontextprotocol/serverInfo":{"name":"ardor","version":"0.1.0"}}}}
+>>> {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "create_project", "arguments": {"name": "Evidence Game", "slug": "evidence-game", "engine": "bevy", "rating": "adult", "age_gate": "18+ confirmation gate at first launch"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"created\": true,\n  \"meta\": {\n    \"age_gate\": \"18+ confirmation gate at first launch\",\n    \"content_tags\": [],\n    \"engine\": \"bevy\",\n    \"name\": \"Evidence Game\",\n    \"rating\": \"adult\",\n    \"slug\": \"evidence-game\",\n    \"start_node\": null\n  },\n  \"note\": \"safety surfaces were scaffolded enabled and ungated; they cannot be disabled or progression-gated\",\n  \"project\": \"evidence-game\",\n  \"safety_surfaces\": [\n    \"accessibility\",\n    \"aftercare\",\n    \"purge\",\n    \"safeword\",\n    \"stop\"\n  ]\n}"}],"isError":false}}
+--- create_project: isError=False
+{
+ "created": true,
+ "meta": {
+  "age_gate": "18+ confirmation gate at first launch",
+  "content_tags": [],
+  "engine": "bevy",
+  "name": "Evidence Game",
+  "rating": "adult",
+  "slug": "evidence-game",
+  "start_node": null
+ },
+ "note": "safety surfaces were scaffolded enabled and ungated; they cannot be disabled or progression-gated",
+ "project": "evidence-game",
+ "safety_surfaces": [
+  "accessibility",
+  "aftercare",
+  "purge",
+  "safeword",
+  "stop"
+ ]
+}
+>>> {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "upsert_character", "arguments": {"project": "evidence-game", "character": {"id": "ada", "name": "Ada", "role": "host"}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":2,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"character\": {\n    \"id\": \"ada\",\n    \"name\": \"Ada\",\n    \"role\": \"host\",\n    \"version\": 1\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- upsert_character: isError=False
+{
+ "character": {
+  "id": "ada",
+  "name": "Ada",
+  "role": "host",
+  "version": 1
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "upsert_character", "arguments": {"project": "evidence-game", "character": {"id": "rin", "name": "Rin", "role": "guest"}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"character\": {\n    \"id\": \"rin\",\n    \"name\": \"Rin\",\n    \"role\": \"guest\",\n    \"version\": 1\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- upsert_character: isError=False
+{
+ "character": {
+  "id": "rin",
+  "name": "Rin",
+  "role": "guest",
+  "version": 1
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "declare_flag", "arguments": {"project": "evidence-game", "flag": {"name": "met_ada", "kind": "story"}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":4,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"flags\": [\n    {\n      \"kind\": \"story\",\n      \"name\": \"met_ada\"\n    }\n  ],\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- declare_flag: isError=False
+{
+ "flags": [
+  {
+   "kind": "story",
+   "name": "met_ada"
+  }
+ ],
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 5, "method": "tools/call", "params": {"name": "upsert_scene", "arguments": {"project": "evidence-game", "node": {"id": "arrival", "next": "END"}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":5,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"node\": {\n    \"id\": \"arrival\",\n    \"kind\": \"scene\",\n    \"next\": \"END\"\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- upsert_scene: isError=False
+{
+ "node": {
+  "id": "arrival",
+  "kind": "scene",
+  "next": "END"
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 6, "method": "tools/call", "params": {"name": "update_project_meta", "arguments": {"project": "evidence-game", "start_node": "arrival"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":6,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"meta\": {\n    \"age_gate\": \"18+ confirmation gate at first launch\",\n    \"content_tags\": [],\n    \"engine\": \"bevy\",\n    \"name\": \"Evidence Game\",\n    \"rating\": \"adult\",\n    \"slug\": \"evidence-game\",\n    \"start_node\": \"arrival\"\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- update_project_meta: isError=False
+{
+ "meta": {
+  "age_gate": "18+ confirmation gate at first launch",
+  "content_tags": [],
+  "engine": "bevy",
+  "name": "Evidence Game",
+  "rating": "adult",
+  "slug": "evidence-game",
+  "start_node": "arrival"
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 7, "method": "tools/call", "params": {"name": "upsert_dialogue", "arguments": {"project": "evidence-game", "node": {"id": "greeting", "participants": ["ada", "rin"], "lines": [{"speaker": "ada", "text": "Welcome in."}], "consent": {"state": "affirmative", "participants": ["ada", "rin"]}, "actions": [{"kind": "embrace", "actor": "ada", "target": "rin", "intensity": 3}], "choices": [{"label": "Stay", "next": "END"}]}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":7,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"node\": {\n    \"actions\": [\n      {\n        \"actor\": \"ada\",\n        \"intensity\": 3,\n        \"kind\": \"embrace\",\n        \"target\": \"rin\"\n      }\n    ],\n    \"choices\": [\n      {\n        \"label\": \"Stay\",\n        \"next\": \"END\"\n      }\n    ],\n    \"consent\": {\n      \"participants\": [\n        \"ada\",\n        \"rin\"\n      ],\n      \"state\": \"affirmative\"\n    },\n    \"id\": \"greeting\",\n    \"kind\": \"dialogue\",\n    \"lines\": [\n      {\n        \"speaker\": \"ada\",\n        \"text\": \"Welcome in.\"\n      }\n    ],\n    \"participants\": [\n      \"ada\",\n      \"rin\"\n    ]\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- upsert_dialogue: isError=False
+{
+ "node": {
+  "actions": [
+   {
+    "actor": "ada",
+    "intensity": 3,
+    "kind": "embrace",
+    "target": "rin"
+   }
+  ],
+  "choices": [
+   {
+    "label": "Stay",
+    "next": "END"
+   }
+  ],
+  "consent": {
+   "participants": [
+    "ada",
+    "rin"
+   ],
+   "state": "affirmative"
+  },
+  "id": "greeting",
+  "kind": "dialogue",
+  "lines": [
+   {
+    "speaker": "ada",
+    "text": "Welcome in."
+   }
+  ],
+  "participants": [
+   "ada",
+   "rin"
+  ]
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 8, "method": "tools/call", "params": {"name": "upsert_scene", "arguments": {"project": "evidence-game", "node": {"id": "arrival", "next": "greeting"}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":8,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"node\": {\n    \"id\": \"arrival\",\n    \"kind\": \"scene\",\n    \"next\": \"greeting\"\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- upsert_scene: isError=False
+{
+ "node": {
+  "id": "arrival",
+  "kind": "scene",
+  "next": "greeting"
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 9, "method": "tools/call", "params": {"name": "set_reaction_profile", "arguments": {"project": "evidence-game", "character": "rin", "profile": {"base_receptivity": 55, "sensitivity": 60, "conditioning": 20, "stamina": 80}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":9,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"character\": {\n    \"id\": \"rin\",\n    \"name\": \"Rin\",\n    \"reaction_profile\": {\n      \"base_receptivity\": 55,\n      \"conditioning\": 20,\n      \"sensitivity\": 60,\n      \"stamina\": 80\n    },\n    \"role\": \"guest\",\n    \"version\": 1\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- set_reaction_profile: isError=False
+{
+ "character": {
+  "id": "rin",
+  "name": "Rin",
+  "reaction_profile": {
+   "base_receptivity": 55,
+   "conditioning": 20,
+   "sensitivity": 60,
+   "stamina": 80
+  },
+  "role": "guest",
+  "version": 1
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 10, "method": "tools/call", "params": {"name": "preview_reaction", "arguments": {"project": "evidence-game", "character": "rin", "context": {"relationship": 40, "arousal": 30, "fatigue": 10}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":10,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"character\": \"rin\",\n  \"context\": {\n    \"arousal\": 30,\n    \"fatigue\": 10,\n    \"relationship\": 40\n  },\n  \"preview\": {\n    \"action_kind\": null,\n    \"action_modifier\": 0,\n    \"band\": \"ardent\",\n    \"base_score\": 100,\n    \"factors\": {\n      \"arousal\": 30,\n      \"base_receptivity\": 55,\n      \"conditioning\": 20,\n      \"fatigue\": 10,\n      \"prior_choices\": 0,\n      \"relationship\": 40,\n      \"scene_history\": 0,\n      \"sensitivity\": 60\n    },\n    \"profile_band\": \"ardent\",\n    \"score\": 100\n  },\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- preview_reaction: isError=False
+{
+ "character": "rin",
+ "context": {
+  "arousal": 30,
+  "fatigue": 10,
+  "relationship": 40
+ },
+ "preview": {
+  "action_kind": null,
+  "action_modifier": 0,
+  "band": "ardent",
+  "base_score": 100,
+  "factors": {
+   "arousal": 30,
+   "base_receptivity": 55,
+   "conditioning": 20,
+   "fatigue": 10,
+   "prior_choices": 0,
+   "relationship": 40,
+   "scene_history": 0,
+   "sensitivity": 60
+  },
+  "profile_band": "ardent",
+  "score": 100
+ },
+ "project": "evidence-game"
+}
+>>> {"jsonrpc": "2.0", "id": 11, "method": "tools/call", "params": {"name": "run_playtest", "arguments": {"project": "evidence-game", "seed": 7, "max_steps": 32}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":11,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"project\": \"evidence-game\",\n  \"run\": {\n    \"hash\": \"14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8\",\n    \"id\": \"run-1\",\n    \"max_steps\": 32,\n    \"seed\": 7,\n    \"start\": \"arrival\",\n    \"steps_count\": 2,\n    \"stop_reason\": \"terminal\",\n    \"truncated\": false\n  }\n}"}],"isError":false}}
+--- run_playtest: isError=False
+{
+ "project": "evidence-game",
+ "run": {
+  "hash": "14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8",
+  "id": "run-1",
+  "max_steps": 32,
+  "seed": 7,
+  "start": "arrival",
+  "steps_count": 2,
+  "stop_reason": "terminal",
+  "truncated": false
+ }
+}
+>>> {"jsonrpc": "2.0", "id": 12, "method": "tools/call", "params": {"name": "verify_replay", "arguments": {"project": "evidence-game", "run": "run-1"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":12,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"current_hash\": \"14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8\",\n  \"match\": true,\n  \"note\": \"the authored graph still replays byte-identically\",\n  \"project\": \"evidence-game\",\n  \"recorded_hash\": \"14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8\",\n  \"run\": \"run-1\"\n}"}],"isError":false}}
+--- verify_replay: isError=False
+{
+ "current_hash": "14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8",
+ "match": true,
+ "note": "the authored graph still replays byte-identically",
+ "project": "evidence-game",
+ "recorded_hash": "14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8",
+ "run": "run-1"
+}
+>>> {"jsonrpc": "2.0", "id": 13, "method": "tools/call", "params": {"name": "register_channel_account", "arguments": {"record": {"channel": "itch_io", "account": "ntranch", "credential_kind": "butler_key", "store_ref": {"store": "pass", "path": "ntranch/itch/butler-key"}, "scopes": ["publish"]}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":13,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch\",\n    \"channel\": \"itch_io\",\n    \"credential_kind\": \"butler_key\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"itch_io:ntranch\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"publish\"\n    ],\n    \"status\": \"unverified\",\n    \"store_ref\": {\n      \"path\": \"ntranch/itch/butler-key\",\n      \"store\": \"pass\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": null,\n      \"method\": null,\n      \"status\": \"unverified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"reference registered; the value itself never entered Ardor — it lives in the named estate store\"\n}"}],"isError":false}}
+--- register_channel_account: isError=False
+{
+ "account": {
+  "account": "ntranch",
+  "channel": "itch_io",
+  "credential_kind": "butler_key",
+  "expired": false,
+  "expires_at": null,
+  "id": "itch_io:ntranch",
+  "rotation_due": false,
+  "scopes": [
+   "publish"
+  ],
+  "status": "unverified",
+  "store_ref": {
+   "path": "ntranch/itch/butler-key",
+   "store": "pass"
+  },
+  "verification": {
+   "detail": null,
+   "last_verified_at": null,
+   "method": null,
+   "status": "unverified"
+  },
+  "verification_age_days": null
+ },
+ "note": "reference registered; the value itself never entered Ardor \u2014 it lives in the named estate store"
+}
+>>> {"jsonrpc": "2.0", "id": 14, "method": "tools/call", "params": {"name": "record_auth_verification", "arguments": {"account_id": "itch_io:ntranch", "result": "verified", "method": "itch.io key validation via GET /api/1/<key>/me, run by the value holder", "verified_at": "2026-10-27T15:30:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":14,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch\",\n    \"channel\": \"itch_io\",\n    \"credential_kind\": \"butler_key\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"itch_io:ntranch\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"publish\"\n    ],\n    \"status\": \"verified\",\n    \"store_ref\": {\n      \"path\": \"ntranch/itch/butler-key\",\n      \"store\": \"pass\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": \"2026-10-27T15:30:00Z\",\n      \"method\": \"itch.io key validation via GET /api/1/<key>/me, run by the value holder\",\n      \"status\": \"verified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"attestation recorded; the probe ran on the value holder's side — Ardor never saw the credential\"\n}"}],"isError":false}}
+--- record_auth_verification: isError=False
+{
+ "account": {
+  "account": "ntranch",
+  "channel": "itch_io",
+  "credential_kind": "butler_key",
+  "expired": false,
+  "expires_at": null,
+  "id": "itch_io:ntranch",
+  "rotation_due": false,
+  "scopes": [
+   "publish"
+  ],
+  "status": "verified",
+  "store_ref": {
+   "path": "ntranch/itch/butler-key",
+   "store": "pass"
+  },
+  "verification": {
+   "detail": null,
+   "last_verified_at": "2026-10-27T15:30:00Z",
+   "method": "itch.io key validation via GET /api/1/<key>/me, run by the value holder",
+   "status": "verified"
+  },
+  "verification_age_days": null
+ },
+ "note": "attestation recorded; the probe ran on the value holder's side \u2014 Ardor never saw the credential"
+}
+>>> {"jsonrpc": "2.0", "id": 15, "method": "tools/call", "params": {"name": "publish_preflight", "arguments": {"project": "evidence-game", "channel": "itch_io", "now": "2026-10-27T16:00:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":15,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"channel\": \"itch_io\",\n  \"checks\": [\n    {\n      \"check\": \"channel_known\",\n      \"detail\": \"itch.io\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"channel_verified\",\n      \"detail\": \"Operating: marketplace live; upload limits and adult-indexing posture confirmed from current itch.io documentation coverage (Oct 2026).\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"safety_audit\",\n      \"detail\": \"all safety checks pass\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_registered\",\n      \"detail\": \"account itch_io:ntranch\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_verified\",\n      \"detail\": \"a verification attestation is on record\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_not_expired\",\n      \"detail\": \"within its recorded validity\",\n      \"ok\": true\n    }\n  ],\n  \"executor\": \"butler\",\n  \"ok\": true\n}"}],"isError":false}}
+--- publish_preflight: isError=False
+{
+ "channel": "itch_io",
+ "checks": [
+  {
+   "check": "channel_known",
+   "detail": "itch.io",
+   "ok": true
+  },
+  {
+   "check": "channel_verified",
+   "detail": "Operating: marketplace live; upload limits and adult-indexing posture confirmed from current itch.io documentation coverage (Oct 2026).",
+   "ok": true
+  },
+  {
+   "check": "safety_audit",
+   "detail": "all safety checks pass",
+   "ok": true
+  },
+  {
+   "check": "auth_registered",
+   "detail": "account itch_io:ntranch",
+   "ok": true
+  },
+  {
+   "check": "auth_verified",
+   "detail": "a verification attestation is on record",
+   "ok": true
+  },
+  {
+   "check": "auth_not_expired",
+   "detail": "within its recorded validity",
+   "ok": true
+  }
+ ],
+ "executor": "butler",
+ "ok": true
+}
+>>> {"jsonrpc": "2.0", "id": 16, "method": "tools/call", "params": {"name": "prepare_handoff", "arguments": {"project": "evidence-game", "channel": "itch_io", "artifacts": [{"name": "evidence-game.zip", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "kind": "build"}]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":16,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"handoff\": {\n    \"artifacts\": [\n      {\n        \"kind\": \"build\",\n        \"name\": \"evidence-game.zip\",\n        \"sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\"\n      }\n    ],\n    \"automation_class\": \"pipeline\",\n    \"channel\": \"itch_io\",\n    \"channel_name\": \"itch.io\",\n    \"executor\": \"butler\",\n    \"id\": \"handoff-1\",\n    \"note\": \"prepared by Ardor; execution belongs to the named executor and the publish skills' gates\",\n    \"seq\": 1,\n    \"status\": \"prepared\"\n  },\n  \"handoffs\": [\n    {\n      \"artifacts\": [\n        {\n          \"kind\": \"build\",\n          \"name\": \"evidence-game.zip\",\n          \"sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\"\n        }\n      ],\n      \"automation_class\": \"pipeline\",\n      \"channel\": \"itch_io\",\n      \"channel_name\": \"itch.io\",\n      \"executor\": \"butler\",\n      \"id\": \"handoff-1\",\n      \"note\": \"prepared by Ardor; execution belongs to the named executor and the publish skills' gates\",\n      \"seq\": 1,\n      \"status\": \"prepared\"\n    }\n  ],\n  \"project\": \"evidence-game\"\n}"}],"isError":false}}
+--- prepare_handoff: isError=False
+{
+ "handoff": {
+  "artifacts": [
+   {
+    "kind": "build",
+    "name": "evidence-game.zip",
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+   }
+  ],
+  "automation_class": "pipeline",
+  "channel": "itch_io",
+  "channel_name": "itch.io",
+  "executor": "butler",
+  "id": "handoff-1",
+  "note": "prepared by Ardor; execution belongs to the named executor and the publish skills' gates",
+  "seq": 1,
+  "status": "prepared"
+ },
+ "handoffs": [
+  {
+   "artifacts": [
+    {
+     "kind": "build",
+     "name": "evidence-game.zip",
+     "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+   ],
+   "automation_class": "pipeline",
+   "channel": "itch_io",
+   "channel_name": "itch.io",
+   "executor": "butler",
+   "id": "handoff-1",
+   "note": "prepared by Ardor; execution belongs to the named executor and the publish skills' gates",
+   "seq": 1
+>>> {"jsonrpc": "2.0", "id": 17, "method": "tools/call", "params": {"name": "set_safety_surface", "arguments": {"project": "evidence-game", "surface": "safeword", "config": {"enabled": false}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":17,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"error\":{\"code\":\"safety_surface_mandatory\",\"message\":\"safety surface 'safeword' is mandatory and cannot be disabled\"}}"}],"isError":true}}
+--- set_safety_surface: isError=True
+{
+ "error": {
+  "code": "safety_surface_mandatory",
+  "message": "safety surface 'safeword' is mandatory and cannot be disabled"
+ }
+}
+server exit code on EOF: 0
+
+
+ARDOR D-116 INVOCATION TRANSCRIPT — ANNEX SESSION (Stage 1.1, D-128/D-129) — one real session against the updated binary
+binary: /home/hatch/workspace/ntranch-maker-mcp-20261027/ardor/target/debug/ardor  home: /tmp/ardor-annex-home
+Arc: discover -> scaffold adult project -> VGen (services) account reference registered + verified -> publish_preflight honestly not-ok (release_target) -> handoff refused not_a_release_channel -> Renderotica (adult assets) account registered + verified -> preflight all-green -> handoff prepared -> Fab (SFW-only) handoff refused channel_sfw_only -> BOOTH handoff refused unknown_channel (family struck, D-129)
+>>> {"jsonrpc": "2.0", "id": 1, "method": "server/discover", "params": {"_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","supportedVersions":["2026-07-28"],"capabilities":{"tools":{}},"instructions":"Ardor — the NTRanch game/app maker: author adult games and apps as gated project state. Every canonical write passes a decide() gate (canon + safety) before it lands; safety surfaces (stop/safeword, accessibility, aftercare, purge) are never progression-gated. Deterministic playtest generation replays the authored graph under a seed. Release handoffs are prepared records for the channel registry's executors; channel credentials are managed as references and status only — Ardor never holds a credential value.","ttlMs":0,"cacheScope":"private","_meta":{"io.modelcontextprotocol/serverInfo":{"name":"ardor","version":"0.1.0"}}}}
+>>> {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "create_project", "arguments": {"name": "Annex Game", "slug": "annex-game", "engine": "bevy", "rating": "adult", "age_gate": "18+ age confirmation on first launch", "content_tags": ["romance"]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":2,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"created\": true,\n  \"meta\": {\n    \"age_gate\": \"18+ age confirmation on first launch\",\n    \"content_tags\": [\n      \"romance\"\n    ],\n    \"engine\": \"bevy\",\n    \"name\": \"Annex Game\",\n    \"rating\": \"adult\",\n    \"slug\": \"annex-game\",\n    \"start_node\": null\n  },\n  \"note\": \"safety surfaces were scaffolded enabled and ungated; they cannot be disabled or progression-gated\",\n  \"project\": \"annex-game\",\n  \"safety_surfaces\": [\n    \"accessibility\",\n    \"aftercare\",\n    \"purge\",\n    \"safeword\",\n    \"stop\"\n  ]\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "get_channel", "arguments": {"channel": "vgen"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"artifact_requirements\": [\n    \"service listings with per-service request forms and attached ToS (illustration, Live2D art + rigging, animation, writing) — services are contracted, not packaged releases\"\n  ],\n  \"auth\": {\n    \"kind\": \"portal_login\",\n    \"note\": \"Artist account login; payouts route via Stripe/PayPal under the account, but commission operations authenticate by the account login. No token flow exists to record.\",\n    \"probe\": \"none — portal-only channel; verification is an operator attestation that the artist account login works.\"\n  },\n  \"automation_class\": \"prepared_submission\",\n  \"category\": \"services\",\n  \"content_policy\": \"Commission platform whose official NSFW Policy reads: 'Adult content is allowed. Porn is not.' Drawn/animated/audio work is in scope under the tag regime (Sexually suggestive 18+, Sexual nudity 18+, Heavy gore/violence 18+; 18+ items hidden from under-18 users; untagged mature content risks removal/suspension); 'porn' in VGen's borrowed definition means photos/video of actual humans in sexual activities — the bound comes from its processors (Stripe + PayPal). Illustration, Live2D art + rigging (a staple category), animation and writing commissions run through per-service request forms with attached ToS; a Shop sells one-of-a-kind/stock products with maturity ratings. Platform fee 5% charged to the artist plus processing (Stripe, US: 2.9% + $0.30; PayPal path = 5% + own PayPal fees) [secondary-grade — confirm at account setup].\",\n  \"cross_listed_in\": [],\n  \"handoff_executor\": \"manual\",\n  \"id\": \"vgen\",\n  \"name\": \"VGen\",\n  \"platforms\": [\n    \"web\"\n  ],\n  \"section\": \"services\",\n  \"submission_route\": \"Open artist signup; services listed per category.\",\n  \"verification\": {\n    \"checked\": \"2026-10-27\",\n    \"note\": \"Operating (sweep 2026-10-27): NSFW policy and tag taxonomy from VGen's own help centre [official]; live NSFW commission trade observed [practice]; fee figures [secondary].\",\n    \"status\": \"verified\"\n  }\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "register_channel_account", "arguments": {"record": {"channel": "vgen", "account": "ntranch-studio", "credential_kind": "portal_login", "store_ref": {"store": "secure_vault", "entry": "vgen-studio-login"}, "scopes": ["commissions"]}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":4,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch-studio\",\n    \"channel\": \"vgen\",\n    \"credential_kind\": \"portal_login\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"vgen:ntranch-studio\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"commissions\"\n    ],\n    \"status\": \"unverified\",\n    \"store_ref\": {\n      \"entry\": \"vgen-studio-login\",\n      \"store\": \"secure_vault\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": null,\n      \"method\": null,\n      \"status\": \"unverified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"reference registered; the value itself never entered Ardor — it lives in the named estate store\"\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 5, "method": "tools/call", "params": {"name": "record_auth_verification", "arguments": {"account_id": "vgen:ntranch-studio", "result": "verified", "method": "operator attestation: VGen artist account login works", "verified_at": "2026-10-27T18:30:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":5,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch-studio\",\n    \"channel\": \"vgen\",\n    \"credential_kind\": \"portal_login\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"vgen:ntranch-studio\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"commissions\"\n    ],\n    \"status\": \"verified\",\n    \"store_ref\": {\n      \"entry\": \"vgen-studio-login\",\n      \"store\": \"secure_vault\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": \"2026-10-27T18:30:00Z\",\n      \"method\": \"operator attestation: VGen artist account login works\",\n      \"status\": \"verified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"attestation recorded; the probe ran on the value holder's side — Ardor never saw the credential\"\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 6, "method": "tools/call", "params": {"name": "publish_preflight", "arguments": {"project": "annex-game", "channel": "vgen", "now": "2026-10-27T19:00:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":6,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"channel\": \"vgen\",\n  \"checks\": [\n    {\n      \"check\": \"channel_known\",\n      \"detail\": \"VGen\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"channel_verified\",\n      \"detail\": \"Operating (sweep 2026-10-27): NSFW policy and tag taxonomy from VGen's own help centre [official]; live NSFW commission trade observed [practice]; fee figures [secondary].\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"release_target\",\n      \"detail\": \"services channel: tracked for commissions/contracts, not release handoffs\",\n      \"ok\": false\n    },\n    {\n      \"check\": \"safety_audit\",\n      \"detail\": \"all safety checks pass\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_registered\",\n      \"detail\": \"account vgen:ntranch-studio\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_verified\",\n      \"detail\": \"a verification attestation is on record\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_not_expired\",\n      \"detail\": \"within its recorded validity\",\n      \"ok\": true\n    }\n  ],\n  \"executor\": \"manual\",\n  \"ok\": false\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 7, "method": "tools/call", "params": {"name": "prepare_handoff", "arguments": {"project": "annex-game", "channel": "vgen", "artifacts": [{"name": "rig.zip", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "kind": "asset"}]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":7,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"error\":{\"code\":\"not_a_release_channel\",\"message\":\"channel 'vgen' is a services channel (commissions/contracts), not a release target; it is tracked for commissioning and hiring, and Ardor prepares no release handoff for it\"}}"}],"isError":true}}
+>>> {"jsonrpc": "2.0", "id": 8, "method": "tools/call", "params": {"name": "register_channel_account", "arguments": {"record": {"channel": "renderotica", "account": "ntranch", "credential_kind": "portal_login", "store_ref": {"store": "pass", "path": "ntranch/renderotica/vendor-login"}, "scopes": ["publish"]}}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":8,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch\",\n    \"channel\": \"renderotica\",\n    \"credential_kind\": \"portal_login\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"renderotica:ntranch\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"publish\"\n    ],\n    \"status\": \"unverified\",\n    \"store_ref\": {\n      \"path\": \"ntranch/renderotica/vendor-login\",\n      \"store\": \"pass\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": null,\n      \"method\": null,\n      \"status\": \"unverified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"reference registered; the value itself never entered Ardor — it lives in the named estate store\"\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 9, "method": "tools/call", "params": {"name": "record_auth_verification", "arguments": {"account_id": "renderotica:ntranch", "result": "verified", "method": "operator attestation: Renderotica vendor account login works", "verified_at": "2026-10-27T18:35:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":9,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"account\": {\n    \"account\": \"ntranch\",\n    \"channel\": \"renderotica\",\n    \"credential_kind\": \"portal_login\",\n    \"expired\": false,\n    \"expires_at\": null,\n    \"id\": \"renderotica:ntranch\",\n    \"rotation_due\": false,\n    \"scopes\": [\n      \"publish\"\n    ],\n    \"status\": \"verified\",\n    \"store_ref\": {\n      \"path\": \"ntranch/renderotica/vendor-login\",\n      \"store\": \"pass\"\n    },\n    \"verification\": {\n      \"detail\": null,\n      \"last_verified_at\": \"2026-10-27T18:35:00Z\",\n      \"method\": \"operator attestation: Renderotica vendor account login works\",\n      \"status\": \"verified\"\n    },\n    \"verification_age_days\": null\n  },\n  \"note\": \"attestation recorded; the probe ran on the value holder's side — Ardor never saw the credential\"\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 10, "method": "tools/call", "params": {"name": "publish_preflight", "arguments": {"project": "annex-game", "channel": "renderotica", "now": "2026-10-27T19:00:00Z"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":10,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"channel\": \"renderotica\",\n  \"checks\": [\n    {\n      \"check\": \"channel_known\",\n      \"detail\": \"Renderotica / CGBytes\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"channel_verified\",\n      \"detail\": \"Operating (sweep 2026-10-27): the marketplace is described in a UDRP decision record and competitor profiles [secondary].\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"release_target\",\n      \"detail\": \"a release target for this project\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"safety_audit\",\n      \"detail\": \"all safety checks pass\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_registered\",\n      \"detail\": \"account renderotica:ntranch\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_verified\",\n      \"detail\": \"a verification attestation is on record\",\n      \"ok\": true\n    },\n    {\n      \"check\": \"auth_not_expired\",\n      \"detail\": \"within its recorded validity\",\n      \"ok\": true\n    }\n  ],\n  \"executor\": \"manual\",\n  \"ok\": true\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 11, "method": "tools/call", "params": {"name": "prepare_handoff", "arguments": {"project": "annex-game", "channel": "renderotica", "artifacts": [{"name": "asset-pack.zip", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "kind": "asset"}]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":11,"result":{"resultType":"complete","content":[{"type":"text","text":"{\n  \"handoff\": {\n    \"artifacts\": [\n      {\n        \"kind\": \"asset\",\n        \"name\": \"asset-pack.zip\",\n        \"sha256\": \"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"\n      }\n    ],\n    \"automation_class\": \"prepared_submission\",\n    \"channel\": \"renderotica\",\n    \"channel_name\": \"Renderotica / CGBytes\",\n    \"executor\": \"manual\",\n    \"id\": \"handoff-1\",\n    \"note\": \"prepared by Ardor; execution belongs to the named executor and the publish skills' gates\",\n    \"section\": \"assets\",\n    \"seq\": 1,\n    \"status\": \"prepared\"\n  },\n  \"handoffs\": [\n    {\n      \"artifacts\": [\n        {\n          \"kind\": \"asset\",\n          \"name\": \"asset-pack.zip\",\n          \"sha256\": \"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"\n        }\n      ],\n      \"automation_class\": \"prepared_submission\",\n      \"channel\": \"renderotica\",\n      \"channel_name\": \"Renderotica / CGBytes\",\n      \"executor\": \"manual\",\n      \"id\": \"handoff-1\",\n      \"note\": \"prepared by Ardor; execution belongs to the named executor and the publish skills' gates\",\n      \"section\": \"assets\",\n      \"seq\": 1,\n      \"status\": \"prepared\"\n    }\n  ],\n  \"project\": \"annex-game\"\n}"}],"isError":false}}
+>>> {"jsonrpc": "2.0", "id": 12, "method": "tools/call", "params": {"name": "prepare_handoff", "arguments": {"project": "annex-game", "channel": "fab", "artifacts": [{"name": "asset-pack.zip", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "kind": "asset"}]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":12,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"error\":{\"code\":\"channel_sfw_only\",\"message\":\"channel 'fab' is SFW-only and this project is adult-rated; SFW-only channels live in a separate registry section and never take adult releases\"}}"}],"isError":true}}
+>>> {"jsonrpc": "2.0", "id": 13, "method": "tools/call", "params": {"name": "prepare_handoff", "arguments": {"project": "annex-game", "channel": "booth", "artifacts": [{"name": "game.zip", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "kind": "build"}]}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "d116-annex-evidence", "version": "1"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+<<< {"jsonrpc":"2.0","id":13,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"error\":{\"code\":\"unknown_channel\",\"message\":\"'booth' is not in the channel-target registry\"}}"}],"isError":true}}
+### server exited 0 on EOF

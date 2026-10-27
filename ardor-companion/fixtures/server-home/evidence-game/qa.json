@@ -1,0 +1,14 @@
+{
+  "runs": [
+    {
+      "hash": "14b271c23aef8468e568ee2785041d015be7a27a753fa9d62f0fa4aa59a088f8",
+      "id": "run-1",
+      "max_steps": 32,
+      "seed": 7,
+      "start": "arrival",
+      "steps_count": 2,
+      "stop_reason": "terminal",
+      "truncated": false
+    }
+  ]
+}

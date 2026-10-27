@@ -1,0 +1,24 @@
+[package]
+name = "ardor"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Ardor — NTRanch game/app maker MCP server: authored project state, cast and canon, scenes and systems, adult dialogue as structured data, story and levels, safety systems, asset routing, playtest QA, and release handoffs. Modern MCP era only (2026-07-28)."
+repository = "https://github.com/NTRanch/ardor"
+homepage = "https://github.com/NTRanch/ardor"
+documentation = "https://github.com/NTRanch/ardor#readme"
+readme = "README.md"
+keywords = ["mcp", "model-context-protocol", "game-development", "authoring", "ntranch"]
+categories = ["command-line-utilities", "development-tools", "games"]
+
+[dependencies]
+# Fleet pin (D-113): one rmcp version across every estate server;
+# bumps are single fleet events. Modern era only — see src/guard.rs.
+rmcp = { version = "=3.8.0", default-features = false, features = ["server"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+tokio = { version = "1", features = ["io-std", "io-util", "macros", "rt-multi-thread", "sync"] }
+
+[lints.clippy]
+all = "warn"

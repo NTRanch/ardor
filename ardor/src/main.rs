@@ -17,16 +17,6 @@
 
 #![forbid(unsafe_code)]
 
-mod accounts;
-mod channels;
-mod gate;
-mod guard;
-mod model;
-mod playtest;
-mod server;
-mod store;
-mod tools;
-
 use std::process::ExitCode;
 use std::sync::Arc;
 
@@ -34,7 +24,9 @@ use rmcp::ServiceExt;
 use rmcp::transport::async_rw::AsyncRwTransport;
 use tokio::sync::Mutex;
 
-use crate::store::Store;
+use ardor::guard;
+use ardor::server;
+use ardor::store::Store;
 
 /// Duplex buffer between the era guard and the SDK service.
 /// Request lines can reach the 4 MiB line bound; the SDK consumes

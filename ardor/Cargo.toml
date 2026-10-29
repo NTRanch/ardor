@@ -1,6 +1,6 @@
 [package]
 name = "ardor"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 license = "Apache-2.0"
 description = "Ardor — NTRanch game/app maker MCP server: authored project state, cast and canon, scenes and systems, adult dialogue as structured data, story and levels, safety systems, asset routing, playtest QA, and release handoffs. Modern MCP era only (2026-07-28)."

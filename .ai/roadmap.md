@@ -97,6 +97,6 @@ Curated 2026-10-28 (D-313 Phase 0 — NTRanch four → 1.0 program): canonical t
 - [x] R-604 Kotlin companion interop re-run green on the 1.0.0 tree (G-R2 gate: 1/1, as at 0.1.0)
   - verify: test -f .ai/memory/evidence/kotlin-interop-1.0.0.md
   - evidence: 1 verify commands, all exit 0 at 2026-10-29T05:34:46Z
-- [ ] R-605 ardor 1.0.0 published to crates.io under the NTRanch account
+- [x] R-605 ardor 1.0.0 published to crates.io under the NTRanch account
   - verify: curl -sf -H "User-Agent: bloch-roadmap" https://crates.io/api/v1/crates/ardor/1.0.0 -o /dev/null
-  - evidence:
+  - evidence: 1 verify commands, all exit 0 at 2026-10-29T05:37:43Z

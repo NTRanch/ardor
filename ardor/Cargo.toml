@@ -8,7 +8,7 @@ repository = "https://github.com/NTRanch/ardor"
 homepage = "https://github.com/NTRanch/ardor"
 documentation = "https://github.com/NTRanch/ardor#readme"
 readme = "README.md"
-keywords = ["mcp", "model-context-protocol", "game-development", "authoring", "ntranch"]
+keywords = ["mcp", "game-development", "authoring", "ntranch"]
 categories = ["command-line-utilities", "development-tools", "games"]
 
 [dependencies]

@@ -845,3 +845,80 @@ fn annex_registry_end_to_end() {
     client.close();
     let _ = std::fs::remove_dir_all(&home);
 }
+
+#[test]
+fn asset_registration_carries_hash_and_lane() {
+    let home = scratch_home("assets");
+    let mut client = Client::spawn(&home);
+    client.discover();
+    client.tool(
+        "create_project",
+        json!({
+            "name": "Asset Game",
+            "slug": "asset-game",
+            "engine": "bevy",
+            "rating": "adult",
+            "age_gate": "18+ age confirmation on first launch"
+        }),
+    );
+
+    // Validation: a labelled asset registers, and the read-back
+    // hash and lane stamp are identical to what was submitted
+    // (AR-2 gate).
+    let hash = "a".repeat(64);
+    let registered = client.tool(
+        "register_asset",
+        json!({
+            "project": "asset-game",
+            "asset": {
+                "id": "hero-sprite",
+                "kind": "sprite",
+                "sha256": hash,
+                "provenance": {"source": "smoke generated"},
+                "route_to": "lumen",
+                "origin_lane": "ntranch",
+                "content_label": "nsfw"
+            }
+        }),
+    );
+    assert_eq!(registered["asset"]["sha256"], hash);
+    assert_eq!(registered["asset"]["origin_lane"], "ntranch");
+    assert_eq!(registered["asset"]["content_label"], "nsfw");
+    let listed = client.tool("list_assets", json!({"project": "asset-game"}));
+    assert_eq!(listed["assets"][0]["sha256"], hash, "read-back hash identical");
+    assert_eq!(listed["assets"][0]["content_label"], "nsfw");
+
+    // Adversarial: every unlabelled or mislabelled shape is
+    // refused with lane_unclassified and stores nothing.
+    for asset in [
+        json!({"id": "no-lane", "kind": "sprite", "sha256": "b".repeat(64),
+               "provenance": {"source": "smoke"}, "route_to": "lumen"}),
+        json!({"id": "no-label", "kind": "sprite", "sha256": "b".repeat(64),
+               "provenance": {"source": "smoke"}, "route_to": "lumen",
+               "origin_lane": "ntranch"}),
+        json!({"id": "no-origin", "kind": "sprite", "sha256": "b".repeat(64),
+               "provenance": {"source": "smoke"}, "route_to": "lumen",
+               "content_label": "nsfw"}),
+        json!({"id": "bad-label", "kind": "sprite", "sha256": "b".repeat(64),
+               "provenance": {"source": "smoke"}, "route_to": "lumen",
+               "origin_lane": "ntranch", "content_label": "unrated"}),
+        json!({"id": "bad-origin", "kind": "sprite", "sha256": "b".repeat(64),
+               "provenance": {"source": "smoke"}, "route_to": "lumen",
+               "origin_lane": "elsewhere", "content_label": "nsfw"}),
+    ] {
+        let err = client.tool_domain_error(
+            "register_asset",
+            json!({"project": "asset-game", "asset": asset}),
+        );
+        assert_eq!(err["code"], "lane_unclassified", "asset refused: {err}");
+    }
+    let listed = client.tool("list_assets", json!({"project": "asset-game"}));
+    assert_eq!(
+        listed["assets"].as_array().expect("assets array").len(),
+        1,
+        "refused registrations stored nothing: {listed}"
+    );
+
+    client.close();
+    let _ = std::fs::remove_dir_all(&home);
+}

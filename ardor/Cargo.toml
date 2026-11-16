@@ -22,3 +22,7 @@ tokio = { version = "1", features = ["io-std", "io-util", "macros", "rt-multi-th
 
 [lints.clippy]
 all = "warn"
+
+[workspace]
+members = ["ardor-tui"]
+resolver = "2"

@@ -1,0 +1,23 @@
+[package]
+name = "ardor-tui"
+# Inherits the ardor workspace version (1.0.1). The repo's
+# server.json still says 1.0.0 — a known, pre-existing skew owned
+# by the registry lane; this crate notes it and does not fix it.
+version = "1.0.1"
+edition = "2024"
+license = "Apache-2.0"
+description = "Ardor maker console: ratatui TUI + line mode over the ardor MCP server (fleet TUI pattern, D-1562)."
+repository = "https://github.com/NTRanch/ardor"
+
+[dependencies]
+# Fleet TUI pattern (DESIGN D2): the TUI crate depends only on
+# ratatui + crossterm + serde_json and programs against a narrow
+# facade trait. The real facade is an MCP stdio client spawning
+# the ardor server binary (ardor is a server-only bin + lib; the
+# TUI drives the server's own tools, never its store files).
+crossterm = "0.29"
+ratatui = "0.30"
+serde_json = "1.0"
+
+[lints.clippy]
+all = "warn"

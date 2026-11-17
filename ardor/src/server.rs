@@ -283,7 +283,7 @@ fn tool_definitions() -> Vec<Tool> {
         // group 7: asset routing and provenance
         (
             "register_asset",
-            "Register an asset record: id, kind, SHA-256 content hash, provenance (source required), and route_to naming its specialist owner (lumen, torori, ache, neemu, local, unassigned). Records only — Ardor never processes the asset.",
+            "Register an asset record: id, kind, SHA-256 content hash, provenance (source required), lane stamp (origin_lane ntranch|qompassai and content_label sfw|nsfw, both required from birth — unlabelled assets are refused), and route_to naming its specialist owner (lumen, torori, ache, neemu, local, unassigned). Records only — Ardor never processes the asset.",
             schema(&[project(), ("asset", o())], &["project", "asset"]),
         ),
         (

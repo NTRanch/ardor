@@ -3,7 +3,7 @@
   "name": "io.github.NTRanch/ardor",
   "title": "Ardor",
   "description": "NTRanch maker MCP: authoring, safety gates, playtest QA and release handoffs for adult games/apps.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://github.com/NTRanch/ardor",
   "repository": {
     "url": "https://github.com/NTRanch/ardor",
@@ -25,6 +25,10 @@
         "publisher": "NTRanch",
         "github": "https://github.com/NTRanch",
         "cratesIo": "https://crates.io/users/NTRanch"
+      },
+      "io.github.NTRanch/ardor": {
+        "agentCard": ".well-known/agent-card.json",
+        "versionNote": "Server version of record is 1.0.1: the ardor crate in this repo is 1.0.1 and 1.0.1 is the published crates.io release. The packages entry still references the v1.0.0 mcpb asset because no 1.0.1 mcpb bundle is recorded; no 1.0.1 package is asserted."
       }
     }
   }

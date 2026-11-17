@@ -43,6 +43,13 @@ pub const SAFETY_SURFACES: [&str; 5] = ["accessibility", "aftercare", "purge", "
 /// The reserved branch target meaning "the graph ends here".
 pub const TERMINAL: &str = "END";
 
+/// The lane stamp every asset record carries from birth (Bloch
+/// lane law): the lane it originated in and its content label.
+/// An unclassified record defaults to the NSFW side, fail-closed —
+/// at this intake that means refusal, never a silent stamp.
+pub const ORIGIN_LANES: [&str; 2] = ["ntranch", "qompassai"];
+pub const CONTENT_LABELS: [&str; 2] = ["nsfw", "sfw"];
+
 /// A typed gate refusal: a stable code plus a human message.
 #[derive(Debug)]
 pub struct Refusal {
@@ -457,6 +464,16 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
                 return Err(Refusal::new(
                     "provenance_required",
                     "an asset record must name its provenance source; unprovenanced assets do not enter a project",
+                ));
+            }
+            let origin_lane = str_field(asset, "origin_lane").unwrap_or("");
+            let content_label = str_field(asset, "content_label").unwrap_or("");
+            if !ORIGIN_LANES.contains(&origin_lane) || !CONTENT_LABELS.contains(&content_label) {
+                return Err(Refusal::new(
+                    "lane_unclassified",
+                    "an asset record must carry its lane stamp from birth: origin_lane \
+                     (ntranch or qompassai) and content_label (sfw or nsfw); unlabelled \
+                     assets do not enter a project",
                 ));
             }
             Ok(())

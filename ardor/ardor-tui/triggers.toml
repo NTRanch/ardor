@@ -1,0 +1,22 @@
+# Ardor trigger rules (fleet TUI programme D-1562, DESIGN D4).
+# Rules are data, listed in the Fleet panel; a rule not present
+# here does not exist. Loaded at startup; the embedded copy in
+# the binary is this file verbatim (include_str!).
+#
+# The one rung-1 rule: a playtest run completes with every safety
+# gate green (as reported by ardor's own audit_safety /
+# publish_preflight tools in the same session) -> propose a
+# release handoff. prepare_handoff is consequential, so the rule
+# may only fire in plan mode: it stages a proposal a human
+# approves; it never calls the tool itself.
+
+[[rule]]
+id = "ardor-playtest-to-handoff"
+origin_lane = "ntranch"
+content_label = "nsfw"
+on = { event = "playtest.completed", where = "gates_green" }
+then = { mcp = "ardor", tool = "prepare_handoff" }
+mode = "plan"
+idempotency = "event-hash"
+max_depth = 1
+enabled = true

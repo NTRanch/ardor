@@ -49,8 +49,9 @@ explicit arguments, never on protocol-session affinity.
    to disable a surface or to progression-gate one, however deeply
    nested the payload. Includes content tags, rating metadata, and
    age-gate patterns.
-7. **Asset routing and provenance** — intake, hash, provenance, and
-   routing records. Specialist work stays with its owner (lumen for
+7. **Asset routing and provenance** — intake, hash, provenance,
+   lane stamp (`origin_lane` + `content_label` from birth;
+   unlabelled assets are refused), and routing records. Specialist work stays with its owner (lumen for
    sprite-to-3D, torori for audio, ache for haptics, neemu for
    screened corpus work); Ardor records handoffs, it does not
    re-implement domains.

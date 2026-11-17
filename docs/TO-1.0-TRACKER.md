@@ -43,9 +43,9 @@ rows as work moves.
 
 | ID | Task | Lane | Status | Notes |
 |---|---|---|---|---|
-| ST1-1 | Defaults-profile record + genesis-sheet schema and census | ASTRA | DONE-PENDING-GATE | ASTRA 2026-11-17: versioned proposal profile, schema/census, seed hashes and conformance runs. See docs/GENESIS.md; Owner profile values await ruling. |
-| ST1-2 | Group-1 extension pair: `record_default_ruling`, `get_genesis_state`; ledger as project state | ASTRA | DONE-PENDING-GATE | ASTRA 2026-11-17: extension pair and append-only ledger; typed refusals and deterministic history. 120 workspace tests (base 106); workdir REPORT.md carries gate artifacts. |
-| ST1-3 | Clearance scan ships as a skill in the same commission (checklist + evidence grading), sheet recorded by tool | ASTRA | DONE-PENDING-GATE | ASTRA 2026-11-17: ~/workspace/custom-skills/ardor-name-clearance/SKILL.md; record_clearance_sheet intake. Skill validates; trust recorder missing (reported). |
+| ST1-1 | Defaults-profile record + genesis-sheet schema and census | ASTRA | DONE | ASTRA 2026-11-17: versioned proposal profile, schema/census, seed hashes and conformance runs. See docs/GENESIS.md; Owner profile values await ruling. |
+| ST1-2 | Group-1 extension pair: `record_default_ruling`, `get_genesis_state`; ledger as project state | ASTRA | DONE | ASTRA 2026-11-17: extension pair and append-only ledger; typed refusals and deterministic history. 120 workspace tests (base 106); workdir REPORT.md carries gate artifacts. |
+| ST1-3 | Clearance scan ships as a skill in the same commission (checklist + evidence grading), sheet recorded by tool | ASTRA | DONE | ASTRA 2026-11-17: ~/workspace/custom-skills/ardor-name-clearance/SKILL.md; record_clearance_sheet intake. Skill validates; trust recorder missing (reported). |
 | GATE-S1 | Stage 1 gate | PAX | TODO | Unlocks enforcement for Stages 2 and 4. |
 
 ## Stage 2 — Canon census (M)

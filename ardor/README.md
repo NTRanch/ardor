@@ -23,11 +23,13 @@ stdio front door with the typed `-32022` unsupported-version error
 naming `2026-07-28` as the one supported version. State rides on
 explicit arguments, never on protocol-session affinity.
 
-## The ten tool groups (46 tools)
+## The ten tool groups (49 tools)
 
 1. **Project scaffolding** — create/inspect projects with the studio
    conventions in place. Adult-rated projects require a non-empty age
-   gate at creation and on every metadata patch.
+   gate at creation and on every metadata patch. Genesis adds
+   `record_default_ruling`, `get_genesis_state`, and `record_clearance_sheet`;
+   see [the Genesis contract](../docs/GENESIS.md).
 2. **Cast and canon** — character identity records, canon `lock`/`fact`
    rules, and versioned cast changes. Conflicting writes are refused
    unless they carry a recorded amendment.

@@ -15,12 +15,12 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{Value, json};
 
-use crate::model::empty_object;
+use crate::model::{canonical, empty_object, sha256_hex};
 
 /// Document names (also the in-memory field keys), alphabetical.
-pub const DOCS: [&str; 11] = [
-    "assets", "canon", "cast", "graph", "levels", "project", "qa", "releases", "safety", "story",
-    "systems",
+pub const DOCS: [&str; 12] = [
+    "assets", "canon", "cast", "genesis", "graph", "levels", "project", "qa", "releases", "safety",
+    "story", "systems",
 ];
 
 /// A store failure (I/O or corrupt state). Carried as a stable
@@ -66,6 +66,10 @@ impl ProjectState {
     pub fn meta(&self) -> &Value {
         self.doc("project")
     }
+}
+
+fn target_seed_exists(dir: &Path) -> bool {
+    dir.join("genesis.json").exists()
 }
 
 /// The server home: a root directory holding project directories.
@@ -140,10 +144,43 @@ impl Store {
             };
             docs.insert(name.to_string(), value);
         }
-        Ok(ProjectState {
+        let state = ProjectState {
             slug: slug.to_string(),
             docs,
-        })
+        };
+        Ok(state)
+    }
+
+    /// Verify genesis seed artifacts only at the genesis boundary. A broken
+    /// seed must never prevent inspecting or repairing safety surfaces.
+    pub fn verify_seed(&self, state: &ProjectState) -> Result<(), StoreError> {
+        let dir = self.project_dir(&state.slug);
+        if state.doc("genesis")["schema"] == crate::genesis::VERSION {
+            for file in crate::model::arr(state.doc("genesis"), "seed_manifest") {
+                let name = file["path"].as_str().unwrap_or("");
+                if !crate::genesis::SEED_PATHS.contains(&name) {
+                    return Err(StoreError {
+                        code: "seed_manifest_mismatch",
+                        message: "unknown seed path".to_string(),
+                    });
+                }
+                let bytes = fs::read(dir.join("repo-seed").join(name)).map_err(|_| StoreError {
+                    code: "seed_manifest_mismatch",
+                    message: format!("missing or unreadable seed: {name}"),
+                })?;
+                let text = String::from_utf8(bytes).map_err(|_| StoreError {
+                    code: "seed_manifest_mismatch",
+                    message: format!("non-UTF8 seed: {name}"),
+                })?;
+                if file["sha256"] != sha256_hex(&text) {
+                    return Err(StoreError {
+                        code: "seed_manifest_mismatch",
+                        message: format!("seed changed: {name}"),
+                    });
+                }
+            }
+        }
+        Ok(())
     }
 
     /// Persist the named documents of a state, each atomically.
@@ -153,7 +190,24 @@ impl Store {
         fs::create_dir_all(&dir).map_err(|e| io_error("cannot create project dir", e))?;
         for name in changed {
             let value = state.doc(name);
-            let text = serde_json::to_string_pretty(value).expect("values serialize");
+            let text = if *name == "genesis" {
+                canonical(value)
+            } else {
+                serde_json::to_string_pretty(value).expect("values serialize")
+            };
+            // The seed is immutable material authored at project creation. Paths
+            // come from initialize(), never from a caller-provided manifest.
+            if *name == "genesis" && !target_seed_exists(&dir) {
+                for file in crate::model::arr(value, "seed_manifest") {
+                    let path = dir
+                        .join("repo-seed")
+                        .join(file["path"].as_str().expect("seed path"));
+                    fs::create_dir_all(path.parent().expect("seed parent"))
+                        .map_err(|e| io_error("create seed directory", e))?;
+                    fs::write(&path, file["content"].as_str().expect("seed text"))
+                        .map_err(|e| io_error("write seed file", e))?;
+                }
+            }
             let tmp = dir.join(format!(".{name}.json.tmp"));
             let target = dir.join(format!("{name}.json"));
             fs::write(&tmp, format!("{text}\n"))

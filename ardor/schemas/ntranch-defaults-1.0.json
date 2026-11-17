@@ -1,0 +1,14 @@
+{
+  "id": "ntranch-defaults",
+  "version": "1.0",
+  "status": "proposal",
+  "items": {
+    "platforms": "Choose per title and registry channel targets",
+    "connectivity": "Declare offline and online requirements per title",
+    "release_model": "Rule release model separately for each channel class",
+    "art_audio_pipeline": "Route media to the registered specialist owners",
+    "voice": "Rule voice posture per title before production",
+    "language": "Rule source language and localization scope per title",
+    "accessibility": "Enabled and ungated from scaffold; verify before release"
+  }
+}

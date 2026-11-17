@@ -136,6 +136,12 @@ fn load_project(store: &Store, map: &Map<String, Value>) -> R<(String, ProjectSt
 /// any mutation or save, leaving state byte-identical.
 fn gated_write(store: &Store, state: &mut ProjectState, op: Op) -> R<()> {
     let accounts = store.load_accounts()?;
+    if matches!(
+        &op,
+        Op::RecordDefaultRuling { .. } | Op::RecordClearanceSheet { .. }
+    ) {
+        store.verify_seed(state)?;
+    }
     gate::decide(state, &accounts, &op)?;
     let docs = gate::apply(state, op);
     store.save(state, &docs)?;
@@ -162,6 +168,7 @@ fn create_project(store: &mut Store, args: &Value) -> R<Value> {
             "rating",
             "age_gate",
             "content_tags",
+            "channel_targets",
         ],
     )?;
     let name = req_str(&map, "name")?;
@@ -196,8 +203,25 @@ fn create_project(store: &mut Store, args: &Value) -> R<Value> {
         }
         None => "adult".to_string(),
     };
+    let targets = map
+        .get("channel_targets")
+        .cloned()
+        .unwrap_or_else(|| json!([]));
+    let Some(channels) = targets.as_array() else {
+        return Err(ToolFailure::params("channel_targets must be an array"));
+    };
+    let mut seen = std::collections::BTreeSet::new();
+    for target in channels {
+        let Some(id) = target.as_str() else {
+            return Err(ToolFailure::params("channel target must be a string"));
+        };
+        if crate::channels::find_channel(id).is_none() || !seen.insert(id) {
+            return Err(ToolFailure::params("unknown or duplicate channel target"));
+        }
+    }
     let meta = json!({
         "name": name,
+        "channel_targets": targets,
         "engine": opt_str(&map, "engine").unwrap_or_else(|| "undecided".to_string()),
         "rating": rating,
         "age_gate": opt_str(&map, "age_gate").unwrap_or_default(),
@@ -213,6 +237,59 @@ fn create_project(store: &mut Store, args: &Value) -> R<Value> {
         "safety_surfaces": gate::SAFETY_SURFACES,
         "note": "safety surfaces were scaffolded enabled and ungated; they cannot be disabled or progression-gated"
     }))
+}
+
+fn get_genesis_state(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_, state) = load_project(store, &map)?;
+    store.verify_seed(&state)?;
+    Ok(crate::genesis::get_state(&state))
+}
+
+fn record_default_ruling(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "rulings", "ruling_ref"])?;
+    let (_, mut state) = load_project(store, &map)?;
+    let rulings = serde_json::from_value(map.get("rulings").cloned().unwrap_or(Value::Null))
+        .map_err(|_| {
+            ToolFailure::params(
+                "rulings must be an array of {item,state: confirmed|re-ruled,value}",
+            )
+        })?;
+    let ruling_ref = req_str(&map, "ruling_ref")?;
+    gated_write(
+        store,
+        &mut state,
+        Op::RecordDefaultRuling {
+            rulings,
+            ruling_ref,
+        },
+    )?;
+    Ok(crate::genesis::get_state(&state))
+}
+
+fn record_clearance_sheet(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "sheet", "ruling_ref", "adopt"])?;
+    let (_, mut state) = load_project(store, &map)?;
+    let sheet =
+        serde_json::from_value(map.get("sheet").cloned().unwrap_or(Value::Null)).map_err(|_| {
+            ToolFailure::params("sheet must follow ardor-genesis-sheet 1.0 clearance schema")
+        })?;
+    let ruling_ref = req_str(&map, "ruling_ref")?;
+    let adopt = match map.get("adopt") {
+        None => false,
+        Some(Value::Bool(b)) => *b,
+        _ => return Err(ToolFailure::params("adopt must be boolean")),
+    };
+    gated_write(
+        store,
+        &mut state,
+        Op::RecordClearanceSheet {
+            sheet,
+            ruling_ref,
+            adopt,
+        },
+    )?;
+    Ok(crate::genesis::get_state(&state))
 }
 
 fn slugify(name: &str) -> String {
@@ -1265,6 +1342,9 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         "upsert_character" => upsert_character(store, arguments),
         // group 1: project scaffolding
         "create_project" => create_project(store, arguments),
+        "get_genesis_state" => get_genesis_state(store, arguments),
+        "record_default_ruling" => record_default_ruling(store, arguments),
+        "record_clearance_sheet" => record_clearance_sheet(store, arguments),
         "get_project" => get_project(store, arguments),
         "list_projects" => list_projects(store, arguments),
         "update_project_meta" => update_project_meta(store, arguments),

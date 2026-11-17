@@ -70,6 +70,15 @@ impl Refusal {
 /// params validation; judged by [`decide`]; executed by [`apply`].
 #[derive(Debug)]
 pub enum Op {
+    RecordDefaultRuling {
+        rulings: Vec<crate::genesis::Ruling>,
+        ruling_ref: String,
+    },
+    RecordClearanceSheet {
+        sheet: crate::genesis::Clearance,
+        ruling_ref: String,
+        adopt: bool,
+    },
     AddCanonRule {
         rule: Value,
     },
@@ -135,13 +144,14 @@ pub enum Op {
 /// atomic save). Alphabetical within each op.
 fn changed_docs(op: &Op) -> Vec<&'static str> {
     match op {
+        Op::RecordDefaultRuling { .. } | Op::RecordClearanceSheet { .. } => vec!["genesis"],
         Op::AddCanonRule { .. } => vec!["canon"],
         Op::AddScreenshotSpec { .. } | Op::RecordDefect { .. } | Op::RecordPlaytestRun { .. } => {
             vec!["qa"]
         }
         Op::CreateProject { .. } => vec![
-            "assets", "canon", "cast", "graph", "levels", "project", "qa", "releases", "safety",
-            "story", "systems",
+            "assets", "canon", "cast", "genesis", "graph", "levels", "project", "qa", "releases",
+            "safety", "story", "systems",
         ],
         Op::DeclareFlag { .. } | Op::UpsertDialogue { .. } | Op::UpsertScene { .. } => {
             vec!["graph"]
@@ -300,6 +310,15 @@ pub fn safety_audit(state: &ProjectState) -> Value {
 /// the release-handoff check.
 pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Refusal> {
     match op {
+        Op::RecordDefaultRuling {
+            rulings,
+            ruling_ref,
+        } => crate::genesis::decide_rulings(state, rulings, ruling_ref),
+        Op::RecordClearanceSheet {
+            sheet,
+            ruling_ref,
+            adopt,
+        } => crate::genesis::decide_clearance(state, sheet, ruling_ref, *adopt),
         Op::CreateProject { meta } => {
             if str_field(meta, "rating") == Some("adult")
                 && str_field(meta, "age_gate").unwrap_or("").is_empty()
@@ -312,6 +331,25 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             Ok(())
         }
         Op::UpdateProjectMeta { patch } => {
+            if state.doc("genesis")["schema"] == crate::genesis::VERSION
+                && patch.get("name").is_some()
+            {
+                let g = state.doc("genesis");
+                if g["clearance"]["verdict"] == "COLLISION" {
+                    return Err(Refusal::new(
+                        "clearance_collision",
+                        "current candidate collided",
+                    ));
+                }
+                if patch["name"] != g["adoption"]["candidate"]
+                    || g["adoption"]["ruling_ref"].as_str().is_none()
+                {
+                    return Err(Refusal::new(
+                        "name_conditional",
+                        "record and adopt a clearance sheet before public name use",
+                    ));
+                }
+            }
             let rating = str_field(patch, "rating")
                 .or_else(|| str_field(state.meta(), "rating"))
                 .unwrap_or("adult");
@@ -766,6 +804,15 @@ fn check_node(state: &ProjectState, node: &Value, dialogue: bool) -> Result<(), 
 pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
     let docs = changed_docs(&op);
     match op {
+        Op::RecordDefaultRuling {
+            rulings,
+            ruling_ref,
+        } => crate::genesis::apply_rulings(state, rulings, ruling_ref),
+        Op::RecordClearanceSheet {
+            sheet,
+            ruling_ref,
+            adopt,
+        } => crate::genesis::apply_clearance(state, sheet, ruling_ref, adopt),
         Op::CreateProject { meta } => {
             let mut project = meta;
             project
@@ -785,6 +832,7 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
                 })
                 .collect();
             *state.doc_mut("safety") = json!({"surfaces": surfaces});
+            crate::genesis::initialize(state);
         }
         Op::UpdateProjectMeta { patch } => {
             let meta = state.doc_mut("project").as_object_mut().expect("object");

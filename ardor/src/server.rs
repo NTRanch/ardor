@@ -92,6 +92,39 @@ fn tool_definitions() -> Vec<Tool> {
     let specs: Vec<(&str, &str, serde_json::Map<String, Value>)> = vec![
         // group 1: project scaffolding
         (
+            "get_genesis_state",
+            "Read the versioned genesis sheet, ledger, seed manifest, census and conformance runs without writing.",
+            schema(&[project()], &["project"]),
+        ),
+        (
+            "record_default_ruling",
+            "Record an Owner block or individual ruling. Items start inherited. Confirmed preserves the profile value; re-ruled changes it. Append-only ledger.",
+            schema(
+                &[
+                    project(),
+                    (
+                        "rulings",
+                        json!({"type":"array","minItems":1,"maxItems":7,"items":crate::genesis::schema_definition("ruling")}),
+                    ),
+                    ("ruling_ref", s()),
+                ],
+                &["project", "rulings", "ruling_ref"],
+            ),
+        ),
+        (
+            "record_clearance_sheet",
+            "Record skill-produced clearance evidence, with exact leg coverage and evidence grades. Adoption requires an Owner ruling accepting any notes; collisions refuse adoption.",
+            schema(
+                &[
+                    project(),
+                    ("sheet", crate::genesis::schema_definition("clearance")),
+                    ("ruling_ref", s()),
+                    ("adopt", json!({"type":"boolean"})),
+                ],
+                &["project", "sheet", "ruling_ref"],
+            ),
+        ),
+        (
             "create_project",
             "Scaffold a new project (name, engine, rating, age gate) with its safety surfaces seeded enabled and ungated. Adult-rated projects require an age gate — the gate refuses otherwise.",
             schema(
@@ -102,6 +135,7 @@ fn tool_definitions() -> Vec<Tool> {
                     ("rating", en(&["adult", "mature", "all_ages"])),
                     ("age_gate", s_max(500)),
                     ("content_tags", a()),
+                    ("channel_targets", a()),
                 ],
                 &["name"],
             ),

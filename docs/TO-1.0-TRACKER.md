@@ -43,9 +43,9 @@ rows as work moves.
 
 | ID | Task | Lane | Status | Notes |
 |---|---|---|---|---|
-| ST1-1 | Defaults-profile record + genesis-sheet schema and census | ASTRA | TODO | Spec: ARDOR-PIPELINES.md S1 (Project Genesis). |
-| ST1-2 | Group-1 extension pair: `record_default_ruling`, `get_genesis_state`; ledger as project state | ASTRA | TODO | |
-| ST1-3 | Clearance scan ships as a skill in the same commission (checklist + evidence grading), sheet recorded by tool | ASTRA | TODO | Skill lives in the estate custom-skills tree, not this repo. |
+| ST1-1 | Defaults-profile record + genesis-sheet schema and census | ASTRA | CLAIMED | Claimed 2026-11-17. Spec: ARDOR-PIPELINES.md S1 (Project Genesis). |
+| ST1-2 | Group-1 extension pair: `record_default_ruling`, `get_genesis_state`; ledger as project state | ASTRA | CLAIMED | Claimed 2026-11-17. |
+| ST1-3 | Clearance scan ships as a skill in the same commission (checklist + evidence grading), sheet recorded by tool | ASTRA | CLAIMED | Claimed 2026-11-17. Skill lives in the estate custom-skills tree, not this repo. |
 | GATE-S1 | Stage 1 gate | PAX | TODO | Unlocks enforcement for Stages 2 and 4. |
 
 ## Stage 2 — Canon census (M)

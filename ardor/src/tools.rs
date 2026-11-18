@@ -138,7 +138,9 @@ fn gated_write(store: &Store, state: &mut ProjectState, op: Op) -> R<()> {
     let accounts = store.load_accounts()?;
     if matches!(
         &op,
-        Op::RecordDefaultRuling { .. } | Op::RecordClearanceSheet { .. }
+        Op::RecordDefaultRuling { .. }
+            | Op::RecordClearanceSheet { .. }
+            | Op::RecordDenylist { .. }
     ) {
         store.verify_seed(state)?;
     }
@@ -289,6 +291,16 @@ fn record_clearance_sheet(store: &mut Store, args: &Value) -> R<Value> {
             adopt,
         },
     )?;
+    Ok(crate::genesis::get_state(&state))
+}
+
+fn record_denylist(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "terms", "ruling_ref"])?;
+    let (_, mut state) = load_project(store, &map)?;
+    let terms = serde_json::from_value(map.get("terms").cloned().unwrap_or(Value::Null))
+        .map_err(|_| ToolFailure::params("terms must be an array of strings"))?;
+    let ruling_ref = req_str(&map, "ruling_ref")?;
+    gated_write(store, &mut state, Op::RecordDenylist { terms, ruling_ref })?;
     Ok(crate::genesis::get_state(&state))
 }
 
@@ -510,6 +522,54 @@ fn check_canon(store: &mut Store, args: &Value) -> R<Value> {
             "message": r.message
         })),
     }
+}
+
+fn declare_canon_table(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "table", "amendment"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let table = req_obj(&map, "table")?;
+    crate::canon::validate_table(&table).map_err(ToolFailure::params)?;
+    let amendment = opt_obj(&map, "amendment");
+    let id = table["id"].as_str().unwrap_or("").to_string();
+    gated_write(
+        store,
+        &mut state,
+        Op::DeclareCanonTable { table, amendment },
+    )?;
+    Ok(json!({
+        "project": state.slug,
+        "table": find_by_id(state.doc("canon"), "tables", &id),
+        "history": state.doc("canon")["table_history"]
+    }))
+}
+
+fn declare_cast_pair(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "pair"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let pair = req_obj(&map, "pair")?;
+    crate::canon::validate_pair(&pair).map_err(ToolFailure::params)?;
+    let id = pair["id"].as_str().unwrap_or("").to_string();
+    gated_write(store, &mut state, Op::DeclareCastPair { pair })?;
+    Ok(json!({
+        "project": state.slug,
+        "pair": find_by_id(state.doc("canon"), "cast_pairs", &id)
+    }))
+}
+
+fn run_canon_census(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    gated_write(store, &mut state, Op::RecordCanonCensus)?;
+    let run = arr(state.doc("census"), "runs").last().cloned();
+    let mut out = crate::canon::get_state(&state);
+    out["run"] = json!(run);
+    Ok(out)
+}
+
+fn get_canon_census(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    Ok(crate::canon::get_state(&state))
 }
 
 // ---------- group 3: scenes and systems ----------
@@ -1336,6 +1396,10 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         // group 2: cast and canon
         "add_canon_rule" => add_canon_rule(store, arguments),
         "check_canon" => check_canon(store, arguments),
+        "declare_canon_table" => declare_canon_table(store, arguments),
+        "declare_cast_pair" => declare_cast_pair(store, arguments),
+        "get_canon_census" => get_canon_census(store, arguments),
+        "run_canon_census" => run_canon_census(store, arguments),
         "get_character" => get_character(store, arguments),
         "list_canon" => list_canon(store, arguments),
         "list_characters" => list_characters(store, arguments),
@@ -1345,6 +1409,7 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         "get_genesis_state" => get_genesis_state(store, arguments),
         "record_default_ruling" => record_default_ruling(store, arguments),
         "record_clearance_sheet" => record_clearance_sheet(store, arguments),
+        "record_denylist" => record_denylist(store, arguments),
         "get_project" => get_project(store, arguments),
         "list_projects" => list_projects(store, arguments),
         "update_project_meta" => update_project_meta(store, arguments),

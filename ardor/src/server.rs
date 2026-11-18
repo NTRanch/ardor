@@ -125,6 +125,21 @@ fn tool_definitions() -> Vec<Tool> {
             ),
         ),
         (
+            "record_denylist",
+            "Replace the project's denylist (studio names, real persons, real projects) as genesis state: one ledger entry per change, Owner ruling reference required. The canon census sweeps shippable text against it.",
+            schema(
+                &[
+                    project(),
+                    (
+                        "terms",
+                        json!({"type":"array","maxItems":1024,"items":{"type":"string","minLength":1,"maxLength":4000}}),
+                    ),
+                    ("ruling_ref", s()),
+                ],
+                &["project", "terms", "ruling_ref"],
+            ),
+        ),
+        (
             "create_project",
             "Scaffold a new project (name, engine, rating, age gate) with its safety surfaces seeded enabled and ungated. Adult-rated projects require an age gate — the gate refuses otherwise.",
             schema(
@@ -202,6 +217,29 @@ fn tool_definitions() -> Vec<Tool> {
             "check_canon",
             "Dry-run a proposed character/scene/dialogue/level write against the gate and report the verdict — allowed, or refused with the gate's code — without writing anything.",
             schema(&[project(), ("proposal", o())], &["project", "proposal"]),
+        ),
+        (
+            "declare_canon_table",
+            "Declare a canon table as data (canon-census 1.0): typed columns, one row per fact with a ruling reference, optional frozen cells, a declared row total, and whether every character must appear. Changing or unfreezing a frozen cell requires an amendment with a reason.",
+            schema(
+                &[project(), ("table", o()), ("amendment", o())],
+                &["project", "table"],
+            ),
+        ),
+        (
+            "declare_cast_pair",
+            "Declare a foreign cast for differentiation: members with descriptor fields, a source reference, and optionally the Owner's overlap threshold (per-mille) with its ruling. Names may never match; overlap is reported for the Owner to rule.",
+            schema(&[project(), ("pair", o())], &["project", "pair"]),
+        ),
+        (
+            "run_canon_census",
+            "Run canon-census 1.0 over current canon and record the run (input state hash, census artifact hash, verdict, refusal codes). Counts, orphans, differentiation, denylist sweep of shippable text. Never touches safety surfaces.",
+            schema(&[project()], &["project"]),
+        ),
+        (
+            "get_canon_census",
+            "Read the census of current canon and whether it is verified now (canon_unverified, census_stale, or the latest run's refusal) without writing.",
+            schema(&[project()], &["project"]),
         ),
         // group 3: scenes and systems
         (

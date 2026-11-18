@@ -79,9 +79,21 @@ pub enum Op {
         ruling_ref: String,
         adopt: bool,
     },
+    RecordDenylist {
+        terms: Vec<String>,
+        ruling_ref: String,
+    },
     AddCanonRule {
         rule: Value,
     },
+    DeclareCanonTable {
+        table: Value,
+        amendment: Option<Value>,
+    },
+    DeclareCastPair {
+        pair: Value,
+    },
+    RecordCanonCensus,
     AddScreenshotSpec {
         spec: Value,
     },
@@ -144,14 +156,19 @@ pub enum Op {
 /// atomic save). Alphabetical within each op.
 fn changed_docs(op: &Op) -> Vec<&'static str> {
     match op {
-        Op::RecordDefaultRuling { .. } | Op::RecordClearanceSheet { .. } => vec!["genesis"],
-        Op::AddCanonRule { .. } => vec!["canon"],
+        Op::RecordDefaultRuling { .. }
+        | Op::RecordClearanceSheet { .. }
+        | Op::RecordDenylist { .. } => vec!["genesis"],
+        Op::AddCanonRule { .. } | Op::DeclareCanonTable { .. } | Op::DeclareCastPair { .. } => {
+            vec!["canon"]
+        }
+        Op::RecordCanonCensus => vec!["census"],
         Op::AddScreenshotSpec { .. } | Op::RecordDefect { .. } | Op::RecordPlaytestRun { .. } => {
             vec!["qa"]
         }
         Op::CreateProject { .. } => vec![
-            "assets", "canon", "cast", "genesis", "graph", "levels", "project", "qa", "releases",
-            "safety", "story", "systems",
+            "assets", "canon", "cast", "census", "genesis", "graph", "levels", "project", "qa",
+            "releases", "safety", "story", "systems",
         ],
         Op::DeclareFlag { .. } | Op::UpsertDialogue { .. } | Op::UpsertScene { .. } => {
             vec!["graph"]
@@ -319,6 +336,9 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             ruling_ref,
             adopt,
         } => crate::genesis::decide_clearance(state, sheet, ruling_ref, *adopt),
+        Op::RecordDenylist { terms, ruling_ref } => {
+            crate::genesis::decide_denylist(state, terms, ruling_ref)
+        }
         Op::CreateProject { meta } => {
             if str_field(meta, "rating") == Some("adult")
                 && str_field(meta, "age_gate").unwrap_or("").is_empty()
@@ -389,6 +409,12 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             }
             Ok(())
         }
+        Op::DeclareCanonTable { table, amendment } => {
+            crate::canon::decide_table(state, table, amendment.as_ref())
+        }
+        // Declared data is reported on by the census, never refused for
+        // what it says; the census run itself always records.
+        Op::DeclareCastPair { .. } | Op::RecordCanonCensus => Ok(()),
         Op::DeclareFlag { .. } => Ok(()),
         Op::UpsertScene { node } | Op::UpsertDialogue { node } => {
             check_node(state, node, matches!(op, Op::UpsertDialogue { .. }))
@@ -813,6 +839,9 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
             ruling_ref,
             adopt,
         } => crate::genesis::apply_clearance(state, sheet, ruling_ref, adopt),
+        Op::RecordDenylist { terms, ruling_ref } => {
+            crate::genesis::apply_denylist(state, terms, ruling_ref)
+        }
         Op::CreateProject { meta } => {
             let mut project = meta;
             project
@@ -892,6 +921,11 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
         Op::AddCanonRule { rule } => {
             crate::model::arr_mut(state.doc_mut("canon"), "rules").push(rule);
         }
+        Op::DeclareCanonTable { table, amendment } => {
+            crate::canon::apply_table(state, table, amendment)
+        }
+        Op::DeclareCastPair { pair } => crate::canon::apply_pair(state, pair),
+        Op::RecordCanonCensus => crate::canon::apply_run(state),
         Op::DeclareFlag { flag } => {
             let name = str_field(&flag, "name").unwrap_or("").to_string();
             let graph = state.doc_mut("graph");

@@ -396,6 +396,96 @@ pub fn apply_clearance(state: &mut ProjectState, sheet: Clearance, reference: St
     );
 }
 
+/// Bounds for the Stage 2 denylist (studio names, real persons, real
+/// projects). Terms are compared case- and whitespace-folded.
+pub const DENYLIST_MAX_TERMS: usize = 1024;
+
+fn validate_denylist(terms: &[String]) -> Result<(), Refusal> {
+    if terms.len() > DENYLIST_MAX_TERMS {
+        return Err(refusal(
+            "invalid_denylist",
+            format!("at most {DENYLIST_MAX_TERMS} terms"),
+        ));
+    }
+    let mut seen = std::collections::BTreeSet::new();
+    for term in terms {
+        if !nonblank(term) || !seen.insert(crate::model::fold(term)) {
+            return Err(refusal(
+                "invalid_denylist",
+                format!("blank, oversized or repeated term: {term:?}"),
+            ));
+        }
+    }
+    Ok(())
+}
+
+/// Stage 2: the denylist is genesis state, replaced whole by an
+/// Owner-referenced ledger entry (never edited in place).
+pub fn decide_denylist(
+    state: &ProjectState,
+    terms: &[String],
+    reference: &str,
+) -> Result<(), Refusal> {
+    if state.doc("genesis")["schema"] != VERSION {
+        return Err(refusal(
+            "genesis_missing",
+            "legacy project has no genesis profile",
+        ));
+    }
+    if !runs_match(state) {
+        return Err(refusal(
+            "genesis_run_mismatch",
+            "historical conformance record does not match its artifact or predecessor",
+        ));
+    }
+    if !ledger_matches(state.doc("genesis")) {
+        return Err(refusal(
+            "genesis_ledger_mismatch",
+            "current state does not match ledger",
+        ));
+    }
+    if !nonblank(reference) {
+        return Err(refusal(
+            "ruling_ref_required",
+            "a denylist change records its ruling reference",
+        ));
+    }
+    validate_denylist(terms)
+}
+
+pub fn apply_denylist(state: &mut ProjectState, terms: Vec<String>, reference: String) {
+    let before = sha256_hex(&canonical(state.doc("genesis")));
+    state.doc_mut("genesis")["denylist"] = json!(terms);
+    append(
+        state,
+        "denylist",
+        json!({ "terms": terms }),
+        reference,
+        before,
+    );
+}
+
+/// The denylist the canon census sweeps with, only when genesis state
+/// is present and re-derives from its ledger; otherwise the typed code.
+pub fn denylist(state: &ProjectState) -> Result<Vec<String>, &'static str> {
+    let g = state.doc("genesis");
+    if g["schema"] != VERSION {
+        return Err("genesis_missing");
+    }
+    if !ledger_matches(g) {
+        return Err("genesis_ledger_mismatch");
+    }
+    // An empty list is a valid ruling; never having ruled is not.
+    if !arr(g, "ledger").iter().any(|e| e["kind"] == "denylist") {
+        return Err("denylist_unruled");
+    }
+    Ok(arr(g, "denylist")
+        .iter()
+        .filter_map(Value::as_str)
+        .map(str::to_string)
+        .collect())
+}
+
 fn append(
     state: &mut ProjectState,
     kind: &str,
@@ -435,6 +525,7 @@ fn ledger_matches(g: &Value) -> bool {
     let mut clearance = Value::Null;
     let mut adoption = Value::Null;
     let mut candidate = g["initial_candidate"].clone();
+    let mut denylist = json!([]);
     for (index, entry) in arr(g, "ledger").iter().enumerate() {
         let Some(reference) = entry["ruling_ref"].as_str().filter(|s| nonblank(s)) else {
             return false;
@@ -487,6 +578,17 @@ fn ledger_matches(g: &Value) -> bool {
                     Value::Null
                 };
             }
+            Some("denylist") => {
+                let Ok(terms) =
+                    serde_json::from_value::<Vec<String>>(entry["payload"]["terms"].clone())
+                else {
+                    return false;
+                };
+                if validate_denylist(&terms).is_err() {
+                    return false;
+                }
+                denylist = json!(terms);
+            }
             _ => return false,
         }
     }
@@ -494,6 +596,7 @@ fn ledger_matches(g: &Value) -> bool {
         && g["clearance"] == clearance
         && g["adoption"] == adoption
         && g["candidate"] == candidate
+        && g["denylist"] == denylist
 }
 
 fn sheet_census(state: &ProjectState) -> Value {
@@ -565,6 +668,7 @@ fn runs_match(state: &ProjectState) -> bool {
     prior["candidate"] = g["initial_candidate"].clone();
     prior["clearance"] = Value::Null;
     prior["adoption"] = Value::Null;
+    prior["denylist"] = json!([]);
     prior["ledger"] = json!([]);
     prior["runs"] = json!([]);
     let mut previous_runs = Vec::new();

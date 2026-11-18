@@ -2,7 +2,7 @@
 //!
 //! One directory per project under the server home; one JSON
 //! document per concern inside it (`project.json`, `cast.json`,
-//! `canon.json`, `graph.json`, `systems.json`, `story.json`,
+//! `canon.json`, `census.json`, `graph.json`, `systems.json`, `story.json`,
 //! `levels.json`, `safety.json`, `assets.json`, `qa.json`,
 //! `releases.json`). Documents load fully into memory; a canonical
 //! write replaces exactly the documents an operation touched, via
@@ -18,9 +18,9 @@ use serde_json::{Value, json};
 use crate::model::{canonical, empty_object, sha256_hex};
 
 /// Document names (also the in-memory field keys), alphabetical.
-pub const DOCS: [&str; 12] = [
-    "assets", "canon", "cast", "genesis", "graph", "levels", "project", "qa", "releases", "safety",
-    "story", "systems",
+pub const DOCS: [&str; 13] = [
+    "assets", "canon", "cast", "census", "genesis", "graph", "levels", "project", "qa", "releases",
+    "safety", "story", "systems",
 ];
 
 /// A store failure (I/O or corrupt state). Carried as a stable

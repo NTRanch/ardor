@@ -282,7 +282,7 @@ fn full_client_round_trip() {
         .iter()
         .filter_map(|t| t["name"].as_str())
         .collect();
-    assert_eq!(names.len(), 46, "46 tools across the ten groups: {names:?}");
+    assert_eq!(names.len(), 49, "49 tools across the ten groups: {names:?}");
     for expected in [
         "create_project",
         "upsert_dialogue",
@@ -924,4 +924,58 @@ fn asset_registration_carries_hash_and_lane() {
 
     client.close();
     let _ = std::fs::remove_dir_all(&home);
+}
+
+#[test]
+fn genesis_validation_modern_mcp_records_owner_rulings_and_clearance() {
+    let home = scratch_home("genesis-validation");
+    let mut client = Client::spawn(&home);
+    client.discover();
+    client.tool(
+        "create_project",
+        json!({"slug":"genesis","name":"Working","rating":"all_ages"}),
+    );
+    let profile = ardor::genesis::profile();
+    let rulings: Vec<_> = ardor::genesis::ITEMS
+        .iter()
+        .map(|id| json!({"item":id,"state":"confirmed","value":profile["items"][id]}))
+        .collect();
+    let ruled = client.tool(
+        "record_default_ruling",
+        json!({"project":"genesis","rulings":rulings,"ruling_ref":"OWNER-fixture-block"}),
+    );
+    assert_eq!(ruled["sheet"]["ledger"][0]["id"], "D-1");
+    let legs:Vec<_>=["package:crates.io","namespace:github","namespace:mcp","storefront:itch_io","trademark","domain"].iter().map(|id|json!({
+        "id":id,"finding":"Fixture: no collision","verified":true,"evidence":[{"url":"https://example.test/fixture","grade":"primary"}],"owed_steps":[],"outcome":"CLEAR"
+    })).collect();
+    let complete = client.tool("record_clearance_sheet", json!({"project":"genesis","sheet":{"candidate":"Working","verdict":"CLEAR","legs":legs,"notes":[]},"ruling_ref":"OWNER-fixture-adopt","adopt":true}));
+    assert_eq!(complete["census"]["complete"], true);
+    assert_eq!(
+        client.tool("get_genesis_state", json!({"project":"genesis"})),
+        complete
+    );
+    client.close();
+    std::fs::remove_dir_all(home).unwrap();
+}
+
+#[test]
+fn genesis_adversarial_modern_mcp_refusals_preserve_every_byte() {
+    let home = scratch_home("genesis-adversarial");
+    let mut client = Client::spawn(&home);
+    client.discover();
+    client.tool(
+        "create_project",
+        json!({"slug":"genesis","name":"Working","rating":"all_ages"}),
+    );
+    let before = snapshot_tree(&home);
+    let refusal = client.tool_domain_error("record_default_ruling", json!({"project":"genesis","rulings":[{"item":"voice","state":"confirmed","value":"changed"}],"ruling_ref":"OWNER-fixture"}));
+    assert_eq!(refusal["code"], "default_value_changed");
+    let malformed = client.tool_raw(
+        "record_clearance_sheet",
+        json!({"project":"genesis","sheet":{"verdict":"CLEAR"},"ruling_ref":"OWNER-fixture"}),
+    );
+    assert_eq!(malformed["error"]["code"], -32602);
+    assert_eq!(snapshot_tree(&home), before);
+    client.close();
+    std::fs::remove_dir_all(home).unwrap();
 }

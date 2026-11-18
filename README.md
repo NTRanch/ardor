@@ -9,7 +9,10 @@ scaffolding, cast and canon, scenes and systems, kink-legitimate
 dialogue as structured data, story and levels, content-safety
 systems, asset routing, deterministic playtest QA, release handoffs
 to 47 verified channels, and channel credential references (never
-values). Modern MCP era only (2026-07-28); 46 tools.
+values). Modern MCP era only (2026-07-28); 49 tools.
+
+Stage 1 Genesis adds a ruled defaults ledger and evidence-graded name clearance;
+see [the Genesis contract](docs/GENESIS.md).
 
 - **Server (Rust, rmcp):** [`ardor/`](ardor/) — see
   [`ardor/README.md`](ardor/README.md) for the full tool map.

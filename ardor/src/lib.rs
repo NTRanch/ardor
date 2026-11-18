@@ -6,6 +6,7 @@
 pub mod accounts;
 pub mod channels;
 pub mod gate;
+pub mod genesis;
 pub mod guard;
 pub mod model;
 pub mod playtest;

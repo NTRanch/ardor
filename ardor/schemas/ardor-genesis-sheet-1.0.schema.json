@@ -1,0 +1,409 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile",
+    "defaults",
+    "candidate",
+    "initial_candidate",
+    "channel_targets",
+    "clearance",
+    "adoption",
+    "denylist",
+    "seed_manifest",
+    "ledger"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ardor-genesis-sheet 1.0"
+    },
+    "profile": {
+      "const": {
+        "id": "ntranch-defaults",
+        "version": "1.0",
+        "status": "proposal",
+        "items": {
+          "platforms": "Choose per title and registry channel targets",
+          "connectivity": "Declare offline and online requirements per title",
+          "release_model": "Rule release model separately for each channel class",
+          "art_audio_pipeline": "Route media to the registered specialist owners",
+          "voice": "Rule voice posture per title before production",
+          "language": "Rule source language and localization scope per title",
+          "accessibility": "Enabled and ungated from scaffold; verify before release"
+        }
+      }
+    },
+    "defaults": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/default"
+      },
+      "minItems": 7,
+      "maxItems": 7
+    },
+    "candidate": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "initial_candidate": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "channel_targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+      },
+      "uniqueItems": true
+    },
+    "clearance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/clearance"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "adoption": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/adoption"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "denylist": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+      }
+    },
+    "seed_manifest": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/seed"
+      },
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "ledger": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ardor-genesis-sheet 1.0",
+  "$defs": {
+    "ruling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item",
+        "state",
+        "value"
+      ],
+      "properties": {
+        "item": {
+          "enum": [
+            "platforms",
+            "connectivity",
+            "release_model",
+            "art_audio_pipeline",
+            "voice",
+            "language",
+            "accessibility"
+          ]
+        },
+        "state": {
+          "enum": [
+            "confirmed",
+            "re-ruled"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "grade"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https?://",
+          "maxLength": 4000
+        },
+        "grade": {
+          "enum": [
+            "primary",
+            "secondary"
+          ]
+        }
+      }
+    },
+    "leg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "finding",
+        "verified",
+        "evidence",
+        "owed_steps",
+        "outcome"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "finding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "owed_steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        },
+        "outcome": {
+          "enum": [
+            "CLEAR",
+            "CLEAR WITH NOTES",
+            "COLLISION"
+          ]
+        }
+      }
+    },
+    "clearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate",
+        "verdict",
+        "legs",
+        "notes"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "verdict": {
+          "enum": [
+            "CLEAR",
+            "CLEAR WITH NOTES",
+            "COLLISION"
+          ]
+        },
+        "legs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/leg"
+          },
+          "minItems": 6
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "default": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "state",
+        "value",
+        "ruling_ref"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "platforms",
+            "connectivity",
+            "release_model",
+            "art_audio_pipeline",
+            "voice",
+            "language",
+            "accessibility"
+          ]
+        },
+        "state": {
+          "enum": [
+            "inherited",
+            "confirmed",
+            "re-ruled"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "ruling_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "adoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate",
+        "ruling_ref",
+        "clearance_hash"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "ruling_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "clearance_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "seed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "content"
+      ],
+      "properties": {
+        "path": {
+          "enum": [
+            "LICENSE",
+            "README.md",
+            "design/DESIGN.md",
+            "tests/README.md",
+            "DECISIONS.md"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "ruling_ref",
+        "payload"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^D-[1-9][0-9]*$"
+        },
+        "kind": {
+          "enum": [
+            "defaults",
+            "clearance"
+          ]
+        },
+        "ruling_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ruling"
+              },
+              "minItems": 1,
+              "maxItems": 7
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sheet",
+                "adopt"
+              ],
+              "properties": {
+                "sheet": {
+                  "$ref": "#/$defs/clearance"
+                },
+                "adopt": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "$comment": "Structural schema. The Rust census additionally checks exact IDs and channel coverage, evidence consistency, ledger replay, seed hashes, and conformance freshness. The runs array is outside this sheet to avoid self-hashing."
+}

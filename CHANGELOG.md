@@ -1,5 +1,11 @@
 # Changelog — Ardor
 
+## Unreleased — Stage 1 Genesis
+
+- Add the versioned defaults profile and genesis census, append-only project
+  decision ledger, clearance evidence intake, seed hashes and conformance runs.
+- Add three group-1 tools and the external Ardor name-clearance skill.
+
 ## 1.0.0 — 2026-10-28
 
 The 1.0 close-out of the 0.1.0 maker surface. No tool was added,

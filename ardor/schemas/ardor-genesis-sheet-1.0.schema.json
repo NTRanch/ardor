@@ -366,7 +366,8 @@
         "kind": {
           "enum": [
             "defaults",
-            "clearance"
+            "clearance",
+            "denylist"
           ]
         },
         "ruling_ref": {
@@ -397,6 +398,24 @@
                 },
                 "adopt": {
                   "type": "boolean"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "terms"
+              ],
+              "properties": {
+                "terms": {
+                  "type": "array",
+                  "maxItems": 1024,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  }
                 }
               }
             }

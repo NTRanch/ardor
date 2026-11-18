@@ -77,6 +77,16 @@ fn write_canonical(value: &Value, out: &mut String) {
     }
 }
 
+/// Case- and whitespace-folded text: lowercased, runs of whitespace
+/// collapsed to one space, trimmed. The comparison form for names and
+/// denylist terms (canon-census 1.0).
+pub fn fold(text: &str) -> String {
+    text.to_lowercase()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
 /// SHA-256 hex digest of a string.
 pub fn sha256_hex(text: &str) -> String {
     let mut hasher = Sha256::new();

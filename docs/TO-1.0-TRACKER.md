@@ -52,8 +52,8 @@ rows as work moves.
 
 | ID | Task | Lane | Status | Notes |
 |---|---|---|---|---|
-| ST2-1 | `canon-census 1.0`: counts, orphans, differentiation, sanitization, staleness — extending group 2 beside `check_canon` | ASTRA | TODO | Includes the denylist as genesis state from Stage 1. |
-| ST2-2 | Census classification batches over the live canon (proposals only; Pax gates every write) | LOCAL | TODO | Depends on ST2-1's schema. |
+| ST2-1 | `canon-census 1.0`: counts, orphans, differentiation, sanitization, staleness — extending group 2 beside `check_canon` | CLAUDE + PAX (takeover) | DONE-PENDING-GATE | Denylist as genesis state (ledger kind `denylist`), canon tables + cast pairs as group-2 data, census + §7 run records + staleness in `ardor/src/canon.rs`; tools 49 → 54. Gates (takeover, 2026-11-18): tests 134/0, clippy -D warnings rc=0, fmt rc=0, theodolite PASS control_count 2. See docs/CANON-CENSUS.md and the lane REPORT.md. |
+| ST2-2 | Census classification batches over the live canon (proposals only; Pax gates every write) | CLAUDE + PAX (takeover) | DONE-PENDING-GATE | Live canon is empty (server home: 0 projects, lane finding F-2), so the batch of record is the census run over the committed fixture canon: VERIFIED, artifacts in `ardor/fixtures/canon-census-1.0/`. Batches over a live canon remain proposals for Pax to gate when a live canon exists. |
 | GATE-S2 | Stage 2 gate | PAX | TODO | |
 
 ## Stage 3 — Content census, sealing, contract packs (M-L)

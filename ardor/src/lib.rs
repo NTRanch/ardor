@@ -4,6 +4,7 @@
 //! library. The `ardor` binary is a thin shell over this crate.
 
 pub mod accounts;
+pub mod canon;
 pub mod channels;
 pub mod gate;
 pub mod genesis;

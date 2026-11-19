@@ -391,6 +391,35 @@ fn tool_definitions() -> Vec<Tool> {
             "Run the keeper-chain 1.0 validator over a stored chain and record the run (section 7 conformance): completeness findings, keeper state, refusal codes. Pure reporting — a refused validation is recorded, never hidden.",
             schema(&[project(), ("chain", s_max(64))], &["project", "chain"]),
         ),
+        (
+            "intake_session_record",
+            "Intake a torogao-scene-record/1 session record (JSON wire form) plus the conditioning record Ardor holds for that generation request. The chain's session-record field moves to present-unverified and the record is held by its SHA-256. No Torogao code is linked or consulted; activation is the check.",
+            schema(
+                &[
+                    project(),
+                    ("chain", s_max(64)),
+                    ("record", o()),
+                    ("conditioning", o()),
+                ],
+                &["project", "chain", "record", "conditioning"],
+            ),
+        ),
+        (
+            "activate_chain",
+            "Activate a keeper chain (Amendment A1: Ardor-side). The keeper-chain 1.0 validator runs its four legs over what Ardor holds: (a) the session record validates whole against the published torogao-scene-record/1 schema, (b) the recipe's conditioning hash equals the hash derived from the conditioning record on file — never a transcribed value, (c) the chain's final-file hash equals the registered asset's hash, (d) the custody map is well-formed. Pass: the chain is active, its session-record field reads verified with the record's SHA-256, and a conformance run record exists. Any leg failing is a typed refusal and the chain stays in manual-intake form. custody_refusals, when supplied, are recorded verbatim in the chain.",
+            schema(
+                &[project(), ("chain", s_max(64)), ("custody_refusals", a())],
+                &["project", "chain"],
+            ),
+        ),
+        (
+            "record_custody_refusal",
+            "Record a custody refusal Torogao has issued against a chain's asset, verbatim, in the chain. Ardor records the refusal; no Ardor verb overrides a custody freeze.",
+            schema(
+                &[project(), ("chain", s_max(64)), ("refusal", s())],
+                &["project", "chain", "refusal"],
+            ),
+        ),
         // group 8: playtest and QA
         (
             "run_playtest",

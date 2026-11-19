@@ -126,6 +126,19 @@ pub enum Op {
     RecordChainValidation {
         chain_id: String,
     },
+    IntakeSessionRecord {
+        chain_id: String,
+        record: Value,
+        conditioning: Value,
+    },
+    ActivateChain {
+        chain_id: String,
+        custody_refusals: Vec<String>,
+    },
+    RecordCustodyRefusal {
+        chain_id: String,
+        refusal: String,
+    },
     SetReactionProfile {
         character_id: String,
         profile: Value,
@@ -181,7 +194,11 @@ fn changed_docs(op: &Op) -> Vec<&'static str> {
         }
         Op::PrepareHandoff { .. } => vec!["releases"],
         Op::RecordAssetHandoff { .. } | Op::RegisterAsset { .. } => vec!["assets"],
-        Op::RecordChainValidation { .. } | Op::RegisterChain { .. } => vec!["chains"],
+        Op::ActivateChain { .. }
+        | Op::IntakeSessionRecord { .. }
+        | Op::RecordChainValidation { .. }
+        | Op::RecordCustodyRefusal { .. }
+        | Op::RegisterChain { .. } => vec!["chains"],
         Op::SetReactionProfile { .. } | Op::UpsertCharacter { .. } => vec!["cast"],
         Op::SetSafetySurface { .. } => vec!["safety"],
         Op::UpdateProjectMeta { .. } => vec!["project"],
@@ -559,7 +576,12 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             Ok(())
         }
         Op::RegisterChain { chain } => crate::chains::decide_chain(state, chain),
-        Op::RecordChainValidation { chain_id } => crate::chains::decide_existing(state, chain_id),
+        Op::ActivateChain { chain_id, .. } => crate::chains::decide_activation(state, chain_id),
+        Op::IntakeSessionRecord { chain_id, .. }
+        | Op::RecordChainValidation { chain_id }
+        | Op::RecordCustodyRefusal { chain_id, .. } => {
+            crate::chains::decide_existing(state, chain_id)
+        }
         Op::AddScreenshotSpec { spec } => {
             let node = str_field(spec, "node").unwrap_or("");
             if !node_exists(state, node) {
@@ -1029,6 +1051,18 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
         Op::RegisterChain { chain } => crate::chains::apply_chain(state, chain),
         Op::RecordChainValidation { chain_id } => {
             crate::chains::apply_validation_run(state, &chain_id)
+        }
+        Op::IntakeSessionRecord {
+            chain_id,
+            record,
+            conditioning,
+        } => crate::chains::apply_intake(state, &chain_id, record, conditioning),
+        Op::ActivateChain {
+            chain_id,
+            custody_refusals,
+        } => crate::chains::apply_activation(state, &chain_id, custody_refusals),
+        Op::RecordCustodyRefusal { chain_id, refusal } => {
+            crate::chains::apply_custody_refusal(state, &chain_id, refusal)
         }
         Op::AddScreenshotSpec { spec } => {
             crate::model::arr_mut(state.doc_mut("qa"), "screenshot_specs").push(spec);

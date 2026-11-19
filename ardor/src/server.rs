@@ -371,6 +371,26 @@ fn tool_definitions() -> Vec<Tool> {
                 &["project", "asset", "target"],
             ),
         ),
+        (
+            "register_chain",
+            "Register (or update) a keeper chain (keeper-chain 1.0) for a registered asset: the ART-BIBLE field set generalized to Ardor — canon references with hashes, the verbatim prompt pair, model checkpoint + sampler parameters, conditioning entries, seed, ordered finish operations, final-file SHA-256, and the verdict with its ruling reference. New chains register in manual-intake form (session_record state absent-unverified). The asset must exist, of the same kind; a named record_id must be a cast character.",
+            schema(&[project(), ("chain", o())], &["project", "chain"]),
+        ),
+        (
+            "list_chains",
+            "All keeper chains for a project, with the keeper-chain run count.",
+            schema(&[project()], &["project"]),
+        ),
+        (
+            "get_chain",
+            "One keeper chain: its stored record, the current completeness validation, and its keeper-chain run records (validation and activation).",
+            schema(&[project(), ("chain", s_max(64))], &["project", "chain"]),
+        ),
+        (
+            "run_chain_validation",
+            "Run the keeper-chain 1.0 validator over a stored chain and record the run (section 7 conformance): completeness findings, keeper state, refusal codes. Pure reporting — a refused validation is recorded, never hidden.",
+            schema(&[project(), ("chain", s_max(64))], &["project", "chain"]),
+        ),
         // group 8: playtest and QA
         (
             "run_playtest",

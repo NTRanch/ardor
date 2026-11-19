@@ -120,6 +120,12 @@ pub enum Op {
     RegisterAsset {
         asset: Value,
     },
+    RegisterChain {
+        chain: Value,
+    },
+    RecordChainValidation {
+        chain_id: String,
+    },
     SetReactionProfile {
         character_id: String,
         profile: Value,
@@ -167,14 +173,15 @@ fn changed_docs(op: &Op) -> Vec<&'static str> {
             vec!["qa"]
         }
         Op::CreateProject { .. } => vec![
-            "assets", "canon", "cast", "census", "genesis", "graph", "levels", "project", "qa",
-            "releases", "safety", "story", "systems",
+            "assets", "canon", "cast", "census", "chains", "genesis", "graph", "levels", "project",
+            "qa", "releases", "safety", "story", "systems",
         ],
         Op::DeclareFlag { .. } | Op::UpsertDialogue { .. } | Op::UpsertScene { .. } => {
             vec!["graph"]
         }
         Op::PrepareHandoff { .. } => vec!["releases"],
         Op::RecordAssetHandoff { .. } | Op::RegisterAsset { .. } => vec!["assets"],
+        Op::RecordChainValidation { .. } | Op::RegisterChain { .. } => vec!["chains"],
         Op::SetReactionProfile { .. } | Op::UpsertCharacter { .. } => vec!["cast"],
         Op::SetSafetySurface { .. } => vec!["safety"],
         Op::UpdateProjectMeta { .. } => vec!["project"],
@@ -551,6 +558,8 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             }
             Ok(())
         }
+        Op::RegisterChain { chain } => crate::chains::decide_chain(state, chain),
+        Op::RecordChainValidation { chain_id } => crate::chains::decide_existing(state, chain_id),
         Op::AddScreenshotSpec { spec } => {
             let node = str_field(spec, "node").unwrap_or("");
             if !node_exists(state, node) {
@@ -1016,6 +1025,10 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
                 "target": target,
                 "status": "recorded"
             }));
+        }
+        Op::RegisterChain { chain } => crate::chains::apply_chain(state, chain),
+        Op::RecordChainValidation { chain_id } => {
+            crate::chains::apply_validation_run(state, &chain_id)
         }
         Op::AddScreenshotSpec { spec } => {
             crate::model::arr_mut(state.doc_mut("qa"), "screenshot_specs").push(spec);

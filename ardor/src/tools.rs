@@ -332,6 +332,7 @@ fn get_project(store: &mut Store, args: &Value) -> R<Value> {
             "arcs": count("story", "arcs"),
             "levels": count("levels", "levels"),
             "assets": count("assets", "assets"),
+            "chains": count("chains", "chains"),
             "playtest_runs": count("qa", "runs"),
             "defects": count("qa", "defects"),
             "handoffs": count("releases", "handoffs")
@@ -973,6 +974,61 @@ fn record_asset_handoff(store: &mut Store, args: &Value) -> R<Value> {
     }))
 }
 
+fn register_chain(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let chain = req_obj(&map, "chain")?;
+    crate::chains::validate_chain(&chain).map_err(ToolFailure::params)?;
+    gated_write(
+        store,
+        &mut state,
+        Op::RegisterChain {
+            chain: chain.clone(),
+        },
+    )?;
+    let id = chain["id"].as_str().unwrap_or("");
+    let stored = crate::chains::find_chain(&state, id).cloned();
+    Ok(json!({"project": state.slug, "chain": stored}))
+}
+
+fn list_chains(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    Ok(crate::chains::list_state(&state))
+}
+
+fn get_chain(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    crate::chains::get_state(&state, &id).ok_or_else(|| {
+        ToolFailure::domain("unknown_chain", format!("no keeper chain named '{id}'"))
+    })
+}
+
+fn run_chain_validation(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    gated_write(
+        store,
+        &mut state,
+        Op::RecordChainValidation {
+            chain_id: id.clone(),
+        },
+    )?;
+    let view = crate::chains::get_state(&state, &id).expect("gate checked the chain exists");
+    let latest = view["runs"]
+        .as_array()
+        .and_then(|runs| runs.last().cloned());
+    Ok(json!({
+        "project": state.slug,
+        "chain": id,
+        "validation": view["validation"],
+        "run": latest
+    }))
+}
+
 // ---------- group 8: playtest and QA ----------
 
 fn run_playtest(store: &mut Store, args: &Value) -> R<Value> {
@@ -1369,9 +1425,13 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         "run_playtest" => run_playtest(store, arguments),
         "verify_replay" => verify_replay(store, arguments),
         // group 7: asset routing and provenance
+        "get_chain" => get_chain(store, arguments),
         "list_assets" => list_assets(store, arguments),
+        "list_chains" => list_chains(store, arguments),
         "record_asset_handoff" => record_asset_handoff(store, arguments),
         "register_asset" => register_asset(store, arguments),
+        "register_chain" => register_chain(store, arguments),
+        "run_chain_validation" => run_chain_validation(store, arguments),
         // group 6: content and safety systems
         "audit_safety" => audit_safety(store, arguments),
         "get_safety" => get_safety(store, arguments),

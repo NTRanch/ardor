@@ -5,6 +5,7 @@
 
 pub mod accounts;
 pub mod canon;
+pub mod chains;
 pub mod channels;
 pub mod gate;
 pub mod genesis;
@@ -12,6 +13,7 @@ pub mod guard;
 pub mod model;
 pub mod playtest;
 pub mod projection;
+pub mod scene_record;
 pub mod server;
 pub mod store;
 pub mod tools;

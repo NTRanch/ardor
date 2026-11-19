@@ -332,6 +332,7 @@ fn get_project(store: &mut Store, args: &Value) -> R<Value> {
             "arcs": count("story", "arcs"),
             "levels": count("levels", "levels"),
             "assets": count("assets", "assets"),
+            "chains": count("chains", "chains"),
             "playtest_runs": count("qa", "runs"),
             "defects": count("qa", "defects"),
             "handoffs": count("releases", "handoffs")
@@ -973,6 +974,155 @@ fn record_asset_handoff(store: &mut Store, args: &Value) -> R<Value> {
     }))
 }
 
+fn register_chain(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let chain = req_obj(&map, "chain")?;
+    crate::chains::validate_chain(&chain).map_err(ToolFailure::params)?;
+    gated_write(
+        store,
+        &mut state,
+        Op::RegisterChain {
+            chain: chain.clone(),
+        },
+    )?;
+    let id = chain["id"].as_str().unwrap_or("");
+    let stored = crate::chains::find_chain(&state, id).cloned();
+    Ok(json!({"project": state.slug, "chain": stored}))
+}
+
+fn list_chains(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    Ok(crate::chains::list_state(&state))
+}
+
+fn get_chain(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    crate::chains::get_state(&state, &id).ok_or_else(|| {
+        ToolFailure::domain("unknown_chain", format!("no keeper chain named '{id}'"))
+    })
+}
+
+fn run_chain_validation(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    gated_write(
+        store,
+        &mut state,
+        Op::RecordChainValidation {
+            chain_id: id.clone(),
+        },
+    )?;
+    let view = crate::chains::get_state(&state, &id).expect("gate checked the chain exists");
+    let latest = view["runs"]
+        .as_array()
+        .and_then(|runs| runs.last().cloned());
+    Ok(json!({
+        "project": state.slug,
+        "chain": id,
+        "validation": view["validation"],
+        "run": latest
+    }))
+}
+
+fn intake_session_record(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain", "record", "conditioning"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    let record = req_obj(&map, "record")?;
+    let conditioning = req_obj(&map, "conditioning")?;
+    if crate::model::canonical(&record).len() > 1_048_576 {
+        return Err(ToolFailure::params(
+            "record exceeds the 1 MiB bound for a session record",
+        ));
+    }
+    gated_write(
+        store,
+        &mut state,
+        Op::IntakeSessionRecord {
+            chain_id: id.clone(),
+            record,
+            conditioning,
+        },
+    )?;
+    crate::chains::get_state(&state, &id).ok_or_else(|| {
+        ToolFailure::domain("unknown_chain", format!("no keeper chain named '{id}'"))
+    })
+}
+
+fn activate_chain(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain", "custody_refusals"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    let mut custody_refusals: Vec<String> = Vec::new();
+    if let Some(items) = map.get("custody_refusals") {
+        let Some(items) = items.as_array() else {
+            return Err(ToolFailure::params(
+                "custody_refusals must be an array of verbatim refusal strings",
+            ));
+        };
+        for item in items {
+            match item.as_str() {
+                Some(s) if !s.trim().is_empty() && s.len() <= 4000 => {
+                    custody_refusals.push(s.to_string());
+                }
+                _ => {
+                    return Err(ToolFailure::params(
+                        "custody_refusals entries must be nonblank strings of at most 4000 bytes",
+                    ));
+                }
+            }
+        }
+    }
+    gated_write(
+        store,
+        &mut state,
+        Op::ActivateChain {
+            chain_id: id.clone(),
+            custody_refusals,
+        },
+    )?;
+    let view = crate::chains::get_state(&state, &id).ok_or_else(|| {
+        ToolFailure::domain("unknown_chain", format!("no keeper chain named '{id}'"))
+    })?;
+    let run = view["runs"]
+        .as_array()
+        .and_then(|runs| runs.last())
+        .cloned()
+        .unwrap_or(Value::Null);
+    Ok(json!({
+        "activated": true,
+        "chain": view["chain"],
+        "run": run,
+        "gate": crate::chains::VERSION,
+    }))
+}
+
+fn record_custody_refusal(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "chain", "refusal"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let id = req_id(&map, "chain")?;
+    let refusal = req_str(&map, "refusal")?;
+    if refusal.len() > 4000 {
+        return Err(ToolFailure::params("refusal must be at most 4000 bytes"));
+    }
+    gated_write(
+        store,
+        &mut state,
+        Op::RecordCustodyRefusal {
+            chain_id: id.clone(),
+            refusal,
+        },
+    )?;
+    crate::chains::get_state(&state, &id).ok_or_else(|| {
+        ToolFailure::domain("unknown_chain", format!("no keeper chain named '{id}'"))
+    })
+}
+
 // ---------- group 8: playtest and QA ----------
 
 fn run_playtest(store: &mut Store, args: &Value) -> R<Value> {
@@ -1369,9 +1519,16 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         "run_playtest" => run_playtest(store, arguments),
         "verify_replay" => verify_replay(store, arguments),
         // group 7: asset routing and provenance
+        "activate_chain" => activate_chain(store, arguments),
+        "get_chain" => get_chain(store, arguments),
+        "intake_session_record" => intake_session_record(store, arguments),
         "list_assets" => list_assets(store, arguments),
+        "list_chains" => list_chains(store, arguments),
         "record_asset_handoff" => record_asset_handoff(store, arguments),
+        "record_custody_refusal" => record_custody_refusal(store, arguments),
         "register_asset" => register_asset(store, arguments),
+        "register_chain" => register_chain(store, arguments),
+        "run_chain_validation" => run_chain_validation(store, arguments),
         // group 6: content and safety systems
         "audit_safety" => audit_safety(store, arguments),
         "get_safety" => get_safety(store, arguments),

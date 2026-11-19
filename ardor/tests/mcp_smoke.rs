@@ -282,7 +282,7 @@ fn full_client_round_trip() {
         .iter()
         .filter_map(|t| t["name"].as_str())
         .collect();
-    assert_eq!(names.len(), 54, "54 tools across the ten groups: {names:?}");
+    assert_eq!(names.len(), 61, "61 tools across the ten groups: {names:?}");
     for expected in [
         "create_project",
         "upsert_dialogue",
@@ -295,6 +295,13 @@ fn full_client_round_trip() {
         "declare_cast_pair",
         "run_canon_census",
         "get_canon_census",
+        "register_chain",
+        "list_chains",
+        "get_chain",
+        "run_chain_validation",
+        "intake_session_record",
+        "activate_chain",
+        "record_custody_refusal",
     ] {
         assert!(names.contains(&expected), "missing tool {expected}");
     }

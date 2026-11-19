@@ -46,15 +46,15 @@ rows as work moves.
 | ST1-1 | Defaults-profile record + genesis-sheet schema and census | ASTRA | DONE | ASTRA 2026-11-17: versioned proposal profile, schema/census, seed hashes and conformance runs. See docs/GENESIS.md; Owner profile values await ruling. |
 | ST1-2 | Group-1 extension pair: `record_default_ruling`, `get_genesis_state`; ledger as project state | ASTRA | DONE | ASTRA 2026-11-17: extension pair and append-only ledger; typed refusals and deterministic history. 120 workspace tests (base 106); workdir REPORT.md carries gate artifacts. |
 | ST1-3 | Clearance scan ships as a skill in the same commission (checklist + evidence grading), sheet recorded by tool | ASTRA | DONE | ASTRA 2026-11-17: ~/workspace/custom-skills/ardor-name-clearance/SKILL.md; record_clearance_sheet intake. Skill validates; trust recorder missing (reported). |
-| GATE-S1 | Stage 1 gate | PAX | TODO | Unlocks enforcement for Stages 2 and 4. |
+| GATE-S1 | Stage 1 gate | PAX | DONE | Bookkeeping correction (2026-11-18): the gate passed and Stage 1 merged to main 2026-11-18 (`611c4ba`); the row was never flipped when the merge landed. Unlocks enforcement for Stages 2 and 4. |
 
 ## Stage 2 — Canon census (M)
 
 | ID | Task | Lane | Status | Notes |
 |---|---|---|---|---|
-| ST2-1 | `canon-census 1.0`: counts, orphans, differentiation, sanitization, staleness — extending group 2 beside `check_canon` | CLAUDE + PAX (takeover) | DONE-PENDING-GATE | Denylist as genesis state (ledger kind `denylist`), canon tables + cast pairs as group-2 data, census + §7 run records + staleness in `ardor/src/canon.rs`; tools 49 → 54. Gates (takeover, 2026-11-18): tests 134/0, clippy -D warnings rc=0, fmt rc=0, theodolite PASS control_count 2. See docs/CANON-CENSUS.md and the lane REPORT.md. |
-| ST2-2 | Census classification batches over the live canon (proposals only; Pax gates every write) | CLAUDE + PAX (takeover) | DONE-PENDING-GATE | Live canon is empty (server home: 0 projects, lane finding F-2), so the batch of record is the census run over the committed fixture canon: VERIFIED, artifacts in `ardor/fixtures/canon-census-1.0/`. Batches over a live canon remain proposals for Pax to gate when a live canon exists. |
-| GATE-S2 | Stage 2 gate | PAX | TODO | |
+| ST2-1 | `canon-census 1.0`: counts, orphans, differentiation, sanitization, staleness — extending group 2 beside `check_canon` | CLAUDE + PAX (takeover) | DONE | Denylist as genesis state (ledger kind `denylist`), canon tables + cast pairs as group-2 data, census + §7 run records + staleness in `ardor/src/canon.rs`; tools 49 → 54. Gates (takeover, 2026-11-18): tests 134/0, clippy -D warnings rc=0, fmt rc=0, theodolite PASS control_count 2. See docs/CANON-CENSUS.md and the lane REPORT.md. Bookkeeping correction (Pax, 2026-11-18): merged to main `6b215fb`; baseline suite 134/0 reproduced at the Stage 4 commission's start. |
+| ST2-2 | Census classification batches over the live canon (proposals only; Pax gates every write) | CLAUDE + PAX (takeover) | DONE | Live canon is empty (server home: 0 projects, lane finding F-2), so the batch of record is the census run over the committed fixture canon: VERIFIED, artifacts in `ardor/fixtures/canon-census-1.0/`. Batches over a live canon remain proposals for Pax to gate when a live canon exists. Bookkeeping correction (Pax, 2026-11-18): merged to main `6b215fb`; baseline suite 134/0 reproduced at the Stage 4 commission's start. |
+| GATE-S2 | Stage 2 gate | PAX | DONE | Bookkeeping correction (2026-11-18): GATE-S2 passed firsthand on the merged tree (134/0, clippy/fmt rc=0, theodolite PASS) and Stage 2 merged to main 2026-11-18 (`6b215fb`); the row was never flipped when the merge landed. |
 
 ## Stage 3 — Content census, sealing, contract packs (M-L)
 
@@ -69,8 +69,8 @@ rows as work moves.
 
 | ID | Task | Lane | Status | Notes |
 |---|---|---|---|---|
-| ST4-1 | `keeper-chain 1.0` schema + validator as a group-7 extension, manual-intake form (session-record field carrying `absent-unverified`) | ASTRA | TODO | Registry half; waits on Stages 1-2 only. |
-| ST4-2 | Activation: session-record intake as the normal route, custody refusals recorded verbatim, manual intake as fallback | ASTRA | BLOCKED | Waits on the D-838 torogao lift builds (session records, custody maps, freeze verbs), themselves stacked on the gencond branch landing — the Owner's call, separate programme. |
+| ST4-1 | `keeper-chain 1.0` schema + validator as a group-7 extension, manual-intake form (session-record field carrying `absent-unverified`) | PAX | DONE | Built 2026-11-18 on `pax/ardor-stage4-20261118` (commit `4f567e0`): typed `chains` document, chain record generalized from ART-BIBLE §1.1 to all shipped asset kinds, full `torogao-scene-record/1` structural validator (`src/scene_record.rs`), verbs `register_chain`/`list_chains`/`get_chain`/`run_chain_validation` (tools 54 → 58). Commission decisions: (a) typed chains document, (b) shipped asset kinds, (c) typed session-record states, (d) full structural validation, (e) dedicated verbs. Gates at this commit: workspace tests 152/0. See docs/KEEPER-CHAINS.md. Pax independent gate 2026-11-18: workspace tests 167/0, fmt/clippy rc=0, installed-binary probe serverInfo ardor 1.0.1 with 61 tools. |
+| ST4-2 | Activation: session-record intake as the normal route, custody refusals recorded verbatim, manual intake as fallback | PAX | DONE | Built 2026-11-18 (commit `05282dd`): verbs `intake_session_record`/`activate_chain`/`record_custody_refusal` (tools 58 → 61). The D-838 dependency is GONE per Amendment A1 (Owner ruling 2026-11-18): activation is Ardor-side — the validator's four legs (record validates whole; conditioning hash derived, never transcribed; final-file hash equals the registered asset's; custody map well-formed) — and Torogao integration is downstream, non-gating. (The Torogao lift itself landed 2026-11-04 at `4ae6680`, D-927.) Gates: workspace tests 167/0 (Δ +33 over the 134 baseline: 5 scene-record unit + 13 chains + 15 chains_activation), clippy -D warnings rc=0, fmt rc=0, theodolite PASS control_count 2 (all 10 touched files 0). Pax independent gate 2026-11-18: workspace tests 167/0, fmt/clippy rc=0, installed-binary probe serverInfo ardor 1.0.1 with 61 tools. |
 | GATE-S4 | Stage 4 gate (registry half) | PAX | TODO | |
 
 ## Stage 5 — Handoff packet (S-M)
@@ -91,5 +91,8 @@ rows as work moves.
 
 - The DFR-1 word: merge the 1.0.1 lineage to `main` (nothing blocks
   on it except main's freshness; stages build on branches).
-- The gencond branch landing (unblocks ST4-2 via the D-838 lift
-  programme).
+- ~~The gencond branch landing (unblocks ST4-2 via the D-838 lift
+  programme).~~ Struck 2026-11-18: no longer on Ardor's critical
+  path — Amendment A1 defines activation Ardor-side, and the
+  Torogao lift in fact landed on Torogao main 2026-11-04
+  (`4ae6680`, D-927).

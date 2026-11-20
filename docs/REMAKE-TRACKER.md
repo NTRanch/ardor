@@ -2251,27 +2251,43 @@ builds. Its instrument is the **friction log**:
 
 ## 8. Contradictions and gaps in the sources — listed, not resolved
 
+**Reconciliation strikes, 2026-11-20 (Owner-approved).** C1, C2, C3,
+C4, C6, C7, C9, and C10's ache and tackle items are resolved as
+recorded inline below. Still open: C5, C8, C10's neemu item, G1–G3,
+G5–G8 (G4 part-resolved by the C2/C3 strikes).
+
 **Contradictions (the two Part I sources, or a source against
 itself):**
 
 - **C1 — blushline's wave.** CENSUS §1's table says wave 2;
   CENSUS §6 and PIPELINE §1.3 put blushline first in wave 3.
+  **Struck 2026-11-20 → Wave 3.** CENSUS §6, PIPELINE §1.3, and the
+  2026-11-20 gate summary agree; §1's table is the outlier.
 - **C2 — the IL2CPP/native rung.** PIPELINE §7 gap 3 and
   CENSUS §4 describe the IL2CPP/Ghidra-class rung as
   uncommissioned / not existing, with IHSA-class titles not
   starting R1 until the Owner commissions it; CENSUS §7
   records the rung as commissioned (D-1202) and proven on
   Undercity Doll Shop.
+  **Struck 2026-11-20 → the rung exists.** Commissioned (D-1202)
+  and proven on Undercity Doll Shop per CENSUS §7; the gap text in
+  PIPELINE §7 and CENSUS §4 is stale.
 - **C3 — the R1 serialized-values rung.** PIPELINE §7 gap 5
   and CENSUS §§3–4 describe the AssetRipper-class /
   serialized-values rung as uncommissioned, with Hypnosis
   Card's and Time Stop's values open; CENSUS §7 records the
   rung as landed (D-1219) with both titles' payloads
   produced.
+  **Struck 2026-11-20 → landed (D-1219).** Measured output:
+  StopKing 14,765 of 14,770 values decoded exactly; Hachina
+  275,441 of 275,442 exactly.
 - **C4 — LAS figures.** CENSUS §8's registration (119 files /
   5,051,421,182 B) is superseded by the 2026-11-19 intake
   correction (118 files / 3,790,852,142 B); the registration
   text itself was not rewritten.
+  **Struck 2026-11-20 → 118 files / 3,790,852,142 B.** The 119th
+  file was a sibling RAR outside the extracted build (2026-11-20
+  correction).
 - **C5 — hypno_booth's S2c line.** CENSUS §9 (appended
   2026-11-16) still reads "S2c: NOT content-eligible" with
   no supersession note, although the 2026-11-17 S2c
@@ -2282,10 +2298,18 @@ itself):**
   places the tree in the RE tree; the full census entry
   records it under the remakes landing home. The census
   itself flags the divergence.
+  **Struck 2026-11-20 → the remakes landing home is the tree of
+  record.** Both locations hold byte-identical copies (SPEC
+  sha256 2ca7f1a0…, freeze records identical), verified on primo
+  2026-11-20; the freeze workdir copy is a working copy.
 - **C7 — Detailed Cowgirl Simulator's archives.** Two
   archive sets were filed under its name on 2026-11-16; the
   genuine build is RJ01419389, and the RJ01580537 set's
   payload is Yandere Kamikakushi.
+  **Struck 2026-11-20 → identification settled:** genuine build
+  RJ01419389; the RJ01580537 set is Yandere Kamikakushi's payload.
+  Correcting the filing remains owed work, not an open
+  contradiction.
 - **C8 — UnHolY DisAsTeR's listing.** Its censorship field
   reads "Uncensored" while its tag list also carries
   "Censored" — recorded as-is in the registration.
@@ -2293,6 +2317,9 @@ itself):**
   says "native Linux first per the Owner's word"; PIPELINE's
   dual-target law (D-1094) makes Linux + Android one
   deliverable, not done at Linux alone.
+  **Struck 2026-11-20 → dual-target (D-1094) stands.** "Linux
+  first" is sequence, not scope; nothing records the dual-target
+  law waived for this title.
 - **C10 — Part II records against themselves.** SERVERS.md
   vs the enhancement plan: tackle ("code has never landed"
   vs 0.3.2 published, smoke PASS); ache (1.0.0 / 10 tools vs
@@ -2301,6 +2328,13 @@ itself):**
   1.0.1). The plan itself names SERVERS.md stale and
   incomplete (its Part 2) — the disagreements are recorded
   here as the subjects' first census findings.
+  **Part-struck 2026-11-20.** ache resolved → v1.2.0, 11 tools
+  (adds ache_pairing); SERVERS.md's 1.0.0 / 10 tools is stale.
+  tackle resolved → the code exists and runs: the proving-ground
+  pilot's Stage 2 Checkpoint 1 passed against the live server
+  2026-11-20, falsifying "code has never landed"; its exact
+  version line is referred to census. neemu's surface remains
+  open.
 
 **Gaps (what the sources do not contain):**
 

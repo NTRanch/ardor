@@ -2252,8 +2252,8 @@ builds. Its instrument is the **friction log**:
 ## 8. Contradictions and gaps in the sources — listed, not resolved
 
 **Reconciliation strikes, 2026-11-20 (Owner-approved).** C1, C2, C3,
-C4, C6, C7, C9, and C10's ache and tackle items are resolved as
-recorded inline below. Still open: C5, C8, C10's neemu item, G1–G3,
+C4, C6, C7, C9, C10's ache and tackle items, and G1 are resolved as
+recorded inline below. Still open: C5, C8, C10's neemu item, G2–G3,
 G5–G8 (G4 part-resolved by the C2/C3 strikes).
 
 **Contradictions (the two Part I sources, or a source against
@@ -2341,6 +2341,11 @@ itself):**
 - **G1 — Teaching Feeling has no census entry.** Zero hits
   in CENSUS.md; its entire programme record is PIPELINE's
   amendment text (engine, rungs, and wave unstated).
+  **Struck 2026-11-20 → census entry landed.** The entry now
+  stands in CENSUS.md (added 2026-11-20): systems-only
+  permanently per the 2026-11-18 carve-out; model seat
+  hf-granite-4.2-3b (clerk, systems docs only); engine, rungs,
+  and wave remain not stated in the sources.
 - **G2 — Group rows without per-title rungs.** The Ren'Py
   remainder (dialogue trees for 10 of 12; the 12 unnamed,
   the uncovered 2 unnamed), the RPG Maker remainder, and

@@ -2252,8 +2252,8 @@ builds. Its instrument is the **friction log**:
 ## 8. Contradictions and gaps in the sources — listed, not resolved
 
 **Reconciliation strikes, 2026-11-20 (Owner-approved).** C1, C2, C3,
-C4, C6, C7, C9, C10's ache and tackle items, and G1 are resolved as
-recorded inline below. Still open: C5, C8, C10's neemu item, G2–G3,
+C4, C5, C6, C7, C9, C10's ache and tackle items, and G1 are resolved
+as recorded inline below. Still open: C8, C10's neemu item, G2–G3,
 G5–G8 (G4 part-resolved by the C2/C3 strikes).
 
 **Contradictions (the two Part I sources, or a source against
@@ -2294,6 +2294,11 @@ itself):**
   amendment postdates it; LAS's §8 entry, by contrast,
   carries an explicit supersession note. Whether the
   amendment reaches §9's line is not stated in §9.
+  **Struck 2026-11-20 → the amendment reaches §9.** Owner
+  ruled the §9 exclusion rested solely on unestablished-cast
+  grounds; the supersession note now stands in CENSUS §9,
+  and the entry reads as an eligible content source under
+  the 2026-11-17 amendment.
 - **C6 — Hachina's location (HAC-D2).** The registration
   places the tree in the RE tree; the full census entry
   records it under the remakes landing home. The census

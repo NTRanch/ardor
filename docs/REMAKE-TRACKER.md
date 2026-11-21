@@ -2422,5 +2422,22 @@ itself):**
   fleet record (§§6.8–6.11); pratique appears with no stated
   purpose, tool list, or launch line (§6.4); cartone has no
   SERVERS.md entry at all (§6.5).
+  **Struck 2026-11-20 → resolved by Owner ruling (decision
+  walk, 2026-11-20).** None of the four is an MCP server;
+  each slot proceeds as a behaviour census of the named
+  project in its actual form. **soundings**: the Rust
+  GPU/CPU scheduler daemon (GPU leases by UUID with VRAM
+  budgets; CPU and gated iGPU classes under the same lease
+  model). **sinfonia**: the published contract crate
+  (0.1.0 — device classes and capabilities, codec ladder,
+  validated session requests, admission as a pure
+  deterministic function; no host daemon exists).
+  **brightwork**: the still-image finishing library under
+  construction (matting, inpainting, face finishing behind
+  a provider trait; Superpose's finishing stage the named
+  consumer). **diver mcp**: the MCP enhancement plan's
+  Part 5 agent-card config-generator companion piece, not
+  a server. No slot is re-scoped to an MCP surface and
+  none is struck.
 
 *End of draft.*

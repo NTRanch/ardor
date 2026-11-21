@@ -2318,6 +2318,11 @@ itself):**
 - **C8 — UnHolY DisAsTeR's listing.** Its censorship field
   reads "Uncensored" while its tag list also carries
   "Censored" — recorded as-is in the registration.
+  **Struck 2026-11-20 → the dedicated censorship field
+  governs.** The lewdzone source itself carries both values
+  (field "Uncensored", tag list "Censored"); the held copy's
+  archive listings carry no censorship metadata to arbitrate.
+  The field is the more specific element.
 - **C9 — Vesper Isles' target law.** The D-1675 registration
   says "native Linux first per the Owner's word"; PIPELINE's
   dual-target law (D-1094) makes Linux + Android one
@@ -2340,6 +2345,15 @@ itself):**
   2026-11-20, falsifying "code has never landed"; its exact
   version line is referred to census. neemu's surface remains
   open.
+  **Struck 2026-11-20 → neemu's surface resolved,
+  completing C10.** The conflict was a launch-profile split,
+  confirmed by measurement (fleet probe, assay-canonical
+  count): the catalog is 15 tools; the 1.0.1 binary serves
+  core 2 tools / 549 tok by default and 15 / 6,589 under
+  --profile full; the preserved 1.0.0 binary under full
+  measures 15 / 6,139, exactly SERVERS.md's figure. The
+  recorded "675 tok" core figure does not reproduce (549
+  measured); its counting basis is not recoverable.
 
 **Gaps (what the sources do not contain):**
 
@@ -2361,6 +2375,11 @@ itself):**
   lane's first job, and the appended planning record's rung
   order implies NScripter work without the census body
   naming the engine.
+  **Struck 2026-11-20 → NScripter, named on evidence.**
+  The seven-games planning record names the NScripter family
+  (NS2 archive layout, Lua 5.1); the intake listing verifies
+  it (00.ns2, ns2make.exe, lua5.1.dll, numbered scripts;
+  1,626 members).
 - **G4 — Stale S-rung assignments.** CENSUS §7 instructs
   that pre-rung S-rung assignments (IHSA class, Undercity,
   SoldGirl Town via the BQ-2 note, and kin) be re-walked
@@ -2372,13 +2391,32 @@ itself):**
   (listings only, intakes uncommissioned) carry no further
   record; several Population C titles (Aria, CIRCLEMATE)
   have no engine stated in the census sections.
+  **State corrected 2026-11-20 (item stays open).** Iris,
+  Agent Mirai, and Goblin Burrow have since landed held
+  copies with format IDs (2026-11-19 queue registrations:
+  Unity 2022.3.62f2 Mono; TyranoBuilder/Electron; Kirikiri
+  xp3), and Maeve's Academy is copy-held, classed spec-grade
+  on its 604-label vocabulary in CENSUS §4. Mari's Story
+  and NTR Idol are unchanged. Intakes remain uncommissioned
+  for all six.
 - **G6 — The `ftbrain` name.** The Owner's 2026-11-16
   RJ423767 rename happened outside the RE tree; the title
   is present as Female_Teacher_Brainwashing_and_Training,
   and its RJ423767 identity is probable, not proven.
+  **Struck 2026-11-20 → identity proven.** The DLsite
+  product record's title for RJ423767 translates word for
+  word to the tree folder name, and the tree itself contains
+  RJ423767-Female_Teacher_Brainwashing_and_Training.7z with
+  the ftbrain/ directory inside the same folder — the
+  filename-level proof the census lacked.
 - **G7 — Vesper Isles' audio counts.** ~163 ogg streams at
   intake vs 160 indexed streams in the R1 record; the
   census does not reconcile the difference.
+  **Struck 2026-11-20 → counts reconcile exactly.** 160
+  indexed bank ogg + 2 path-loaded music files = 162 ogg
+  payloads, matching the PCK listing's exact count (162 .ogg
+  entries among its 704 files). The intake's "~163" was an
+  approximation; residue zero.
 - **G8 — Part II's missing four.** soundings, sinfonia,
   brightwork, and diver mcp (as a server) appear in neither
   fleet record (§§6.8–6.11); pratique appears with no stated

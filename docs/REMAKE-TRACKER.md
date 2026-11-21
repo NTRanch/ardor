@@ -2370,6 +2370,13 @@ itself):**
   the uncovered 2 unnamed), the RPG Maker remainder, and
   the Hypnotic Eyes pair carry no per-title rung detail in
   the census.
+  **Commissioned 2026-11-20 (Owner ruling, decision walk)
+  — item stays open until the lane lands.** The per-title
+  rung pass is commissioned as one census lane, queued in
+  the staged order: it names the Ren'Py 12 and the
+  uncovered 2, and gives per-title rungs for the RPG Maker
+  remainder and the Hypnotic Eyes pair. The item closes
+  on the lane's evidence, not on this commission.
 - **G3 — Mindsweeper's engine** is not stated in its
   registration; engine identification was the planning
   lane's first job, and the appended planning record's rung
@@ -2399,6 +2406,14 @@ itself):**
   on its 604-label vocabulary in CENSUS §4. Mari's Story
   and NTR Idol are unchanged. Intakes remain uncommissioned
   for all six.
+  **Intakes commissioned 2026-11-20 (Owner ruling,
+  decision walk) — item stays open on two titles.** Static
+  intakes for the four copy-held titles (Iris, Agent
+  Mirai, Goblin Burrow, Maeve's Academy) are commissioned
+  as a queued intake lane under D-1588 discipline.
+  Mari's Story and NTR Idol are recorded **source-blocked**:
+  no held copy located in any tree checked; their intakes
+  wait on acquisition (the Kamimachi Site position).
 - **G6 — The `ftbrain` name.** The Owner's 2026-11-16
   RJ423767 rename happened outside the RE tree; the title
   is present as Female_Teacher_Brainwashing_and_Training,

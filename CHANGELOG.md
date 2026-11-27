@@ -1,10 +1,22 @@
 # Changelog — Ardor
 
-## Unreleased — Stage 1 Genesis
+## 1.1.0 — 2026-11-26
 
-- Add the versioned defaults profile and genesis census, append-only project
-  decision ledger, clearance evidence intake, seed hashes and conformance runs.
-- Add three group-1 tools and the external Ardor name-clearance skill.
+The Stage 1–4 programme release: everything merged to main since the
+1.0.1 crates.io publish (2026-11-15) ships as one minor release.
+
+- Stage 1 Genesis: versioned defaults profile and genesis census,
+  append-only project decision ledger, clearance evidence intake, seed
+  hashes and conformance runs; three group-1 tools and the external
+  Ardor name-clearance skill.
+- Stage 2: canon-census 1.0 — denylist as genesis state, canon tables
+  and cast pairs as data, census with run records and staleness
+  (group 2 beside check_canon), with fixture census evidence.
+- Stage 4: keeper-chain 1.0 registry (manual-intake form) and the
+  ST4-2 Ardor-side activation per Amendment A1.
+- Registry record: server.json now points at the cargo registry
+  package (ardor 1.1.0); the v1.0.0 mcpb package reference is
+  superseded.
 
 ## 1.0.0 — 2026-10-28
 

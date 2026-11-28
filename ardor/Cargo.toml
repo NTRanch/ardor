@@ -19,6 +19,13 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sha2 = "0.10"
 tokio = { version = "1", features = ["io-std", "io-util", "macros", "rt-multi-thread", "sync"] }
+# Media tools (sheet_build, clip_verify_*): PNG/JPEG codecs and
+# the system FreeType the caption renderer drives the way Pillow
+# does. All local, no network, no external services.
+flate2 = "1"
+freetype-sys = "=0.20.1"
+jpeg-encoder = "0.6"
+zune-jpeg = "0.5"
 
 [lints.clippy]
 all = "warn"

@@ -521,6 +521,84 @@ fn tool_definitions() -> Vec<Tool> {
                 &["project", "channel"],
             ),
         ),
+        // group 11: sheet building + clip verification (media files)
+        (
+            "sheet_build",
+            "Build a contact sheet from panel stills: every panel sits under a caption band naming it and its Rule-9 class (fixture/construction/finished/candidate...). Modes: row (one native-resolution strip) and cast (grid upscaled by the preset's cast scale). Layout constants come from a named per-game preset (default moondeep). Writes a PNG master plus the preset's chat and phone JPEG derivatives (moondeep: 4800px q90 and 2600px q90), and returns their paths, dimensions and sha256; sidecar=true also writes the kit-compatible provenance JSON. Refusals (empty class/label, missing panel, oversized spec) happen before anything is written.",
+            schema(
+                &[
+                    ("mode", en(&["row", "cast"])),
+                    (
+                        "panels",
+                        json!({
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 64,
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "path": s(),
+                                    "class": s(),
+                                    "label": s(),
+                                },
+                                "required": ["path", "class", "label"],
+                                "additionalProperties": false,
+                            },
+                        }),
+                    ),
+                    ("out", s()),
+                    ("dir", s()),
+                    ("preset", s()),
+                    ("cols", i64()),
+                    ("scale", i64()),
+                    ("pad", i64()),
+                    ("gap", i64()),
+                    ("band", i64()),
+                    ("font_size", i64()),
+                    ("sidecar", json!({"type": "boolean"})),
+                ],
+                &["mode", "panels", "out"],
+            ),
+        ),
+        (
+            "clip_verify_freeze",
+            "Recompute frozen clips' freeze hashes and compare with the recorded freeze.sha256. The canonical form is torogao-format's h0 canonicalisation (spec of record): the raw clip text with the whole \"freeze\":{...} member removed (preceding comma, or trailing comma when freeze is the first member) and at most one trailing newline stripped. Files are named directly or discovered by walking directories for .json. Pass claim to also check the recomputed hash against an expected value. Per-file pass/mismatch/no_freeze/unreadable plus a summary and ok.",
+            schema(
+                &[
+                    (
+                        "paths",
+                        json!({"type": "array", "minItems": 1, "items": s()}),
+                    ),
+                    ("claim", s()),
+                ],
+                &["paths"],
+            ),
+        ),
+        (
+            "clip_verify_bind",
+            "Verify bind reports (bind_report.json, named directly or discovered by walking directories): each report's twin frames and loop-closure frames are pixel-diffed and compared against the gates.json claims for the clip (gates.json is searched in the report's directory, its parent, and its grandparent). Unclaimed pairs, missing frames, and reports with no checkable pairs are reported as skipped/unclaimed, never as passes.",
+            schema(
+                &[(
+                    "paths",
+                    json!({"type": "array", "minItems": 1, "items": s()}),
+                )],
+                &["paths"],
+            ),
+        ),
+        (
+            "clip_verify_corpus",
+            "Run the full clip corpus sweep over files or directories: the freeze check over every .json found plus the bind check over every bind_report.json, with a combined summary and ok. This is the corpus gate a tranche must reproduce (e.g. 33/33 freeze, 64/64 bind).",
+            schema(
+                &[
+                    (
+                        "paths",
+                        json!({"type": "array", "minItems": 1, "items": s()}),
+                    ),
+                    ("claim", s()),
+                ],
+                &["paths"],
+            ),
+        ),
     ];
     specs
         .into_iter()

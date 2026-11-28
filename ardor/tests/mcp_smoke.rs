@@ -274,7 +274,7 @@ fn full_client_round_trip() {
     let mut client = Client::spawn(&home);
     client.discover();
 
-    // The catalog is the full ten-group surface.
+    // The catalog is the full eleven-group surface.
     let list = client.call("tools/list", json!({}));
     let names: Vec<&str> = list["result"]["tools"]
         .as_array()
@@ -282,7 +282,7 @@ fn full_client_round_trip() {
         .iter()
         .filter_map(|t| t["name"].as_str())
         .collect();
-    assert_eq!(names.len(), 61, "61 tools across the ten groups: {names:?}");
+    assert_eq!(names.len(), 65, "65 tools across the eleven groups: {names:?}");
     for expected in [
         "create_project",
         "upsert_dialogue",
@@ -302,6 +302,10 @@ fn full_client_round_trip() {
         "intake_session_record",
         "activate_chain",
         "record_custody_refusal",
+        "sheet_build",
+        "clip_verify_freeze",
+        "clip_verify_bind",
+        "clip_verify_corpus",
     ] {
         assert!(names.contains(&expected), "missing tool {expected}");
     }

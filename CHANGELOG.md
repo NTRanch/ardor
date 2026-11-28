@@ -1,5 +1,22 @@
 # Changelog — Ardor
 
+## Unreleased
+
+- Group 11 — sheet building and clip verification (media file tools,
+  M-3/M-4 of the game-lessons-to-MCP mapping; the surface grows
+  61 → 65 tools): `sheet_build` generalizes the ardor-sheet kit —
+  row/cast contact sheets whose every panel carries its Rule-9
+  class caption, layout constants in named per-game presets
+  (moondeep: 4800px q90 chat JPEG + 2600px phone JPEG derivatives);
+  `clip_verify_freeze`, `clip_verify_bind` and `clip_verify_corpus`
+  generalize the ardor-verify kit — freeze hashes recomputed under
+  torogao-format h0 canonicalisation (spec of record, cited not
+  forked) and bind twin/loop frames pixel-diffed against gates.json
+  claims. Pixel-exact ports (Pillow Lanczos + libraqm shaping) gated
+  at 0 differing px against the kit reference sheets and at
+  33/33 freeze + 64/64 bind over the MoonDeep tranche-1 corpus.
+
+
 ## 1.1.0 — 2026-11-26
 
 The Stage 1–4 programme release: everything merged to main since the

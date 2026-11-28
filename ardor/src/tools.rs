@@ -1493,12 +1493,139 @@ fn publish_preflight(store: &mut Store, args: &Value) -> R<Value> {
     ))
 }
 
+// ---------- group 11: sheet building + clip verification ----------
+// Media file tools (M-3/M-4 of the game-lessons-to-MCP mapping):
+// they read and write files the caller names, never project
+// state, so they do not touch the decide() gate — the
+// generate_playtest pattern: compute over files, report.
+
+fn opt_u32(map: &Map<String, Value>, key: &str) -> Option<u32> {
+    map.get(key).and_then(Value::as_u64).map(|n| n as u32)
+}
+
+fn opt_i64_arg(map: &Map<String, Value>, key: &str) -> Option<i64> {
+    map.get(key).and_then(Value::as_i64)
+}
+
+fn req_paths(map: &Map<String, Value>) -> R<Vec<String>> {
+    let Some(items) = map.get("paths").and_then(Value::as_array) else {
+        return Err(ToolFailure::params("missing or non-array argument: paths"));
+    };
+    if items.is_empty() {
+        return Err(ToolFailure::params(
+            "argument paths must name at least one file or directory",
+        ));
+    }
+    items
+        .iter()
+        .map(|v| match v.as_str() {
+            Some(s) if !s.is_empty() => Ok(s.to_string()),
+            _ => Err(ToolFailure::params(
+                "argument paths must be non-empty strings",
+            )),
+        })
+        .collect()
+}
+
+fn sheet_build(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(
+        args,
+        &[
+            "mode",
+            "panels",
+            "out",
+            "dir",
+            "preset",
+            "cols",
+            "scale",
+            "pad",
+            "gap",
+            "band",
+            "font_size",
+            "sidecar",
+        ],
+    )?;
+    let mode = req_enum(&map, "mode", &["row", "cast"])?;
+    let out = req_str(&map, "out")?;
+    let preset_name = opt_str(&map, "preset").unwrap_or_else(|| "moondeep".to_string());
+    let preset = crate::sheet::preset_by_name(&preset_name).ok_or_else(|| {
+        ToolFailure::params(format!(
+            "unknown sheet preset: {preset_name} (known: {})",
+            crate::sheet::preset_names().join(", ")
+        ))
+    })?;
+    let Some(panel_items) = map.get("panels").and_then(Value::as_array) else {
+        return Err(ToolFailure::params("missing or non-array argument: panels"));
+    };
+    let mut panels = Vec::with_capacity(panel_items.len());
+    for (i, item) in panel_items.iter().enumerate() {
+        let Some(obj) = item.as_object() else {
+            return Err(ToolFailure::params(format!(
+                "panels[{i}] must be an object"
+            )));
+        };
+        for key in obj.keys() {
+            if !["path", "class", "label"].contains(&key.as_str()) {
+                return Err(ToolFailure::params(format!(
+                    "panels[{i}]: unknown key: {key}"
+                )));
+            }
+        }
+        let get = |k: &str| obj.get(k).and_then(Value::as_str).map(str::to_string);
+        panels.push(crate::sheet::PanelInput {
+            path: get("path").unwrap_or_default(),
+            class: get("class").unwrap_or_default(),
+            label: get("label").unwrap_or_default(),
+        });
+    }
+    let request = crate::sheet::SheetRequest {
+        mode,
+        panels,
+        out_name: out,
+        out_dir: opt_str(&map, "dir").unwrap_or_else(|| ".".to_string()),
+        preset,
+        cols: opt_u32(&map, "cols"),
+        scale: opt_u32(&map, "scale"),
+        pad: opt_i64_arg(&map, "pad"),
+        gap: opt_i64_arg(&map, "gap"),
+        band: opt_i64_arg(&map, "band"),
+        font_size: opt_i64_arg(&map, "font_size"),
+        sidecar: map.get("sidecar").and_then(Value::as_bool).unwrap_or(false),
+    };
+    crate::sheet::build_sheet(&request).map_err(|e| ToolFailure::domain("sheet_refused", e.0))
+}
+
+fn clip_verify_freeze(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["paths", "claim"])?;
+    let paths = req_paths(&map)?;
+    let claim = opt_str(&map, "claim");
+    Ok(crate::clipverify::run_freeze(&paths, claim.as_deref()))
+}
+
+fn clip_verify_bind(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["paths"])?;
+    let paths = req_paths(&map)?;
+    Ok(crate::clipverify::run_bind(&paths))
+}
+
+fn clip_verify_corpus(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["paths", "claim"])?;
+    let paths = req_paths(&map)?;
+    let claim = opt_str(&map, "claim");
+    Ok(crate::clipverify::run_corpus(&paths, claim.as_deref()))
+}
+
 // ---------- dispatch ----------
 
 /// Route one tool call. Unknown tools are params errors, as in
 /// the fleet pattern.
 pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
     match name {
+        // group 11: sheet building + clip verification (media files)
+        "clip_verify_bind" => clip_verify_bind(store, arguments),
+        "clip_verify_corpus" => clip_verify_corpus(store, arguments),
+        "clip_verify_freeze" => clip_verify_freeze(store, arguments),
+        "sheet_build" => sheet_build(store, arguments),
         // group 10: channel credentials and sessions
         "credential_status" => credential_status(store, arguments),
         "get_channel_account" => get_channel_account(store, arguments),

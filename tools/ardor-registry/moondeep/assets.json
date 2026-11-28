@@ -1528,6 +1528,17 @@
       },
       "route_to": "local",
       "sha256": "046c92a83a4c0ead2ab4feba3dde55b173ac113a43b8925b9130cc465748fe96"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-fresh-umbra-c2-eyefix",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/umbra/umbra-c2-eyefix.png"
+      },
+      "route_to": "local",
+      "sha256": "87f89b64b1f9827acb1a527104f8a3efb23b1962c12b60949b9a5e7863b6694d"
     }
   ]
 }

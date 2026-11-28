@@ -1690,12 +1690,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/solenne/solenne-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 130,
       "set": "canvas-fresh",
       "sha256": "e113c379e744b85c266fe0653348ebf08851ca3ad3c82509ba89a5ff3ab92906",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1706,12 +1706,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/umbra/umbra-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 131,
       "set": "canvas-fresh",
       "sha256": "62058abbb71e4c055e594af59353f99c3081162e1b3d39082bce6ca947259a4e",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1722,12 +1722,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/wrenna/wrenna-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 132,
       "set": "canvas-fresh",
       "sha256": "69b8dc9e8aeb1ad6cf3bfc13dc919fe6acee25e545550a25ef90a86935c18ebb",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1738,12 +1738,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/petra/petra-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 133,
       "set": "canvas-fresh",
       "sha256": "b8288743ef09e10d06c71c60a50e57271b466b601495dcabbedafb679747ef46",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1754,12 +1754,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/sable/sable-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 134,
       "set": "canvas-fresh",
       "sha256": "bf10aec4daa48c9e9a88ca3bb47ced396d04efb80dfe88dbb3370aa641cc2114",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1770,12 +1770,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/vesper/vesper-c2.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "lets move forward with canvas fresh c2 for all the girls - with a note that we may come back to character design later"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 135,
       "set": "canvas-fresh",
       "sha256": "98d0725de3cb67273a11800b69b1e578587981afe9a0d490d5f8604d5529a19d",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": []
     },
@@ -1802,12 +1802,12 @@
       "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c2-heightfix.png",
       "ruling": {
         "date": "2026-11-27",
-        "quote": "yeah that works for the height fix"
+        "quote": "Working cast confirmed — Owner, 2026-11-27 21:19 PT (canvas-fresh c2 set; candlelight accepted in this set)"
       },
       "seq": 137,
       "set": "heightfix",
       "sha256": "88f228a43a19bb0f6dfa93497eb6dfe692cd8477d326c93faf702161ddd1ccc7",
-      "status": "working-set",
+      "status": "locked",
       "superseded_by": null,
       "supersedes": [
         "tamsin-canvas-fresh-tamsin-c2"
@@ -1835,6 +1835,19 @@
       "seq": 139,
       "set": "heightfix",
       "sha256": "046c92a83a4c0ead2ab4feba3dde55b173ac113a43b8925b9130cc465748fe96",
+      "status": "candidate",
+      "superseded_by": null,
+      "supersedes": []
+    },
+    {
+      "character": "umbra",
+      "id": "umbra-canvas-fresh-umbra-c2-eyefix",
+      "note": "Deterministic eye-colour repair candidate of umbra-canvas-fresh-umbra-c2 (heterochromia repaired to the canon teal pair, RECORD-EYEFIX.md). NOT admitted and NOT locked; Owner eye verdict pending. Registered by Lane L 2026-11-27 at the parent agent's option.",
+      "path": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/umbra/umbra-c2-eyefix.png",
+      "ruling": null,
+      "seq": 140,
+      "set": "canvas-fresh",
+      "sha256": "87f89b64b1f9827acb1a527104f8a3efb23b1962c12b60949b9a5e7863b6694d",
       "status": "candidate",
       "superseded_by": null,
       "supersedes": []

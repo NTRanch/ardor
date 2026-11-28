@@ -9,6 +9,7 @@ use serde_json::{Map, Value, json};
 
 use crate::accounts::{self, AccountOp};
 use crate::channels;
+use crate::colour;
 use crate::gate::{self, Op, Refusal};
 use crate::model::{arr, find_by_id, is_valid_id};
 use crate::playtest;
@@ -1493,12 +1494,382 @@ fn publish_preflight(store: &mut Store, args: &Value) -> R<Value> {
     ))
 }
 
+// ---------- group 11: colour measurement (M-2) ----------
+//
+// Read tools: they measure image files on the server host and
+// never touch the store or the gate. Geometry (regions, iris and
+// pupil centres) is per-game CONFIG — inline arguments, a presets
+// document passed as `config`, or a built-in `preset` — never
+// code. The mechanisms live in crate::colour.
+
+fn parse_centre_arg(v: &Value, what: &str) -> R<(i64, i64)> {
+    let err = || ToolFailure::params(format!("{what} must be a [x, y] pair of integers"));
+    let a = v.as_array().filter(|a| a.len() == 2).ok_or_else(err)?;
+    match (a[0].as_i64(), a[1].as_i64()) {
+        (Some(x), Some(y)) => Ok((x, y)),
+        _ => Err(err()),
+    }
+}
+
+fn parse_centres_arg(v: &Value, key: &str) -> R<Vec<(i64, i64)>> {
+    let arr = v.as_array().ok_or_else(|| {
+        ToolFailure::params(format!("argument {key} must be an array of [x, y] pairs"))
+    })?;
+    if arr.len() > 64 {
+        return Err(ToolFailure::params(format!(
+            "argument {key} is capped at 64 centres"
+        )));
+    }
+    arr.iter().map(|c| parse_centre_arg(c, key)).collect()
+}
+
+fn parse_regions_arg(v: &Value) -> R<Vec<colour::Region>> {
+    let arr = v.as_array().ok_or_else(|| {
+        ToolFailure::params("argument regions must be an array of {name, at, size?}")
+    })?;
+    if arr.len() > 64 {
+        return Err(ToolFailure::params(
+            "argument regions is capped at 64 entries",
+        ));
+    }
+    let mut regions = Vec::new();
+    for item in arr {
+        let obj = item.as_object().ok_or_else(|| {
+            ToolFailure::params("each region must be an object {name, at, size?}")
+        })?;
+        for key in obj.keys() {
+            if !["name", "at", "size"].contains(&key.as_str()) {
+                return Err(ToolFailure::params(format!("unknown region field: {key}")));
+            }
+        }
+        let name = obj
+            .get("name")
+            .and_then(Value::as_str)
+            .filter(|s| !s.is_empty())
+            .ok_or_else(|| ToolFailure::params("each region needs a non-empty name"))?
+            .to_string();
+        let at = obj
+            .get("at")
+            .ok_or_else(|| ToolFailure::params(format!("region {name} needs an at [x, y]")))?;
+        let (x, y) = parse_centre_arg(at, "region at")?;
+        let size = match obj.get("size") {
+            None => 48,
+            Some(s) => s
+                .as_u64()
+                .filter(|s| (1..=1024).contains(s))
+                .ok_or_else(|| {
+                    ToolFailure::params(format!(
+                        "region {name} size must be an integer in 1..=1024"
+                    ))
+                })? as u32,
+        };
+        regions.push(colour::Region { name, x, y, size });
+    }
+    Ok(regions)
+}
+
+/// A strict sub-object (thresholds / rule / iris_rule): unknown
+/// fields are params errors, as at the top level.
+fn strict_sub_object(
+    map: &Map<String, Value>,
+    key: &str,
+    allowed: &[&str],
+) -> R<Option<Map<String, Value>>> {
+    match map.get(key) {
+        None => Ok(None),
+        Some(v) => {
+            let obj = v
+                .as_object()
+                .ok_or_else(|| ToolFailure::params(format!("argument {key} must be an object")))?;
+            for k in obj.keys() {
+                if !allowed.contains(&k.as_str()) {
+                    return Err(ToolFailure::params(format!("unknown {key} field: {k}")));
+                }
+            }
+            Ok(Some(obj.clone()))
+        }
+    }
+}
+
+fn parse_thresholds(map: &Map<String, Value>) -> R<colour::DriftThresholds> {
+    let mut t = colour::DriftThresholds::default();
+    let Some(obj) =
+        strict_sub_object(map, "thresholds", &["warn_hue_deg", "warn_sat", "warn_val"])?
+    else {
+        return Ok(t);
+    };
+    for (key, slot) in [
+        ("warn_hue_deg", &mut t.warn_hue_deg),
+        ("warn_sat", &mut t.warn_sat),
+        ("warn_val", &mut t.warn_val),
+    ] {
+        match obj.get(key) {
+            None => {}
+            Some(Value::Null) => *slot = None,
+            Some(v) => {
+                let n = v.as_f64().filter(|n| *n >= 0.0).ok_or_else(|| {
+                    ToolFailure::params(format!(
+                        "thresholds.{key} must be a non-negative number or null"
+                    ))
+                })?;
+                *slot = Some(n);
+            }
+        }
+    }
+    Ok(t)
+}
+
+fn parse_pupil_rule(map: &Map<String, Value>) -> R<colour::PupilRule> {
+    let mut rule = colour::PupilRule::default();
+    let Some(obj) = strict_sub_object(
+        map,
+        "rule",
+        &[
+            "disc_radius",
+            "dark_v_max",
+            "dark_fraction_max",
+            "mean_median_val_min",
+        ],
+    )?
+    else {
+        return Ok(rule);
+    };
+    if let Some(v) = obj.get("disc_radius") {
+        rule.disc_radius = v
+            .as_i64()
+            .filter(|n| (1..=512).contains(n))
+            .ok_or_else(|| ToolFailure::params("rule.disc_radius must be an integer in 1..=512"))?;
+    }
+    for (key, slot) in [
+        ("dark_v_max", &mut rule.dark_v_max),
+        ("dark_fraction_max", &mut rule.dark_fraction_max),
+        ("mean_median_val_min", &mut rule.mean_median_val_min),
+    ] {
+        if let Some(v) = obj.get(key) {
+            *slot = v
+                .as_f64()
+                .filter(|n| (0.0..=1.0).contains(n))
+                .ok_or_else(|| {
+                    ToolFailure::params(format!("rule.{key} must be a number in 0..=1"))
+                })?;
+        }
+    }
+    Ok(rule)
+}
+
+fn parse_iris_rule(map: &Map<String, Value>) -> R<colour::IrisRule> {
+    let mut rule = colour::IrisRule::default();
+    let Some(obj) = strict_sub_object(
+        map,
+        "iris_rule",
+        &["r_in", "r_out", "v_min", "v_max", "min_pixels"],
+    )?
+    else {
+        return Ok(rule);
+    };
+    for (key, slot) in [
+        ("r_in", &mut rule.r_in),
+        ("r_out", &mut rule.r_out),
+        ("v_min", &mut rule.v_min),
+        ("v_max", &mut rule.v_max),
+    ] {
+        if let Some(v) = obj.get(key) {
+            *slot = v
+                .as_f64()
+                .ok_or_else(|| ToolFailure::params(format!("iris_rule.{key} must be a number")))?;
+        }
+    }
+    if let Some(v) = obj.get("min_pixels") {
+        rule.min_pixels = v
+            .as_u64()
+            .filter(|n| (1..=100_000).contains(n))
+            .ok_or_else(|| {
+                ToolFailure::params("iris_rule.min_pixels must be an integer in 1..=100000")
+            })? as usize;
+    }
+    if !(0.0 <= rule.r_in && rule.r_in < rule.r_out && rule.r_out <= 512.0) {
+        return Err(ToolFailure::params(
+            "iris_rule needs 0 <= r_in < r_out <= 512",
+        ));
+    }
+    if !(0.0 <= rule.v_min && rule.v_min < rule.v_max && rule.v_max <= 1.0) {
+        return Err(ToolFailure::params(
+            "iris_rule needs 0 <= v_min < v_max <= 1",
+        ));
+    }
+    Ok(rule)
+}
+
+/// Resolve the call's measurement geometry: inline pieces win per
+/// kind; a `config` document or built-in `preset` + `character`
+/// fills the rest. Without either, the geometry is purely inline.
+fn resolve_geometry(map: &Map<String, Value>) -> R<colour::Geometry> {
+    let inline_regions = match map.get("regions") {
+        Some(v) => Some(parse_regions_arg(v)?),
+        None => None,
+    };
+    let inline_iris = match map.get("iris_centres") {
+        Some(v) => Some(parse_centres_arg(v, "iris_centres")?),
+        None => None,
+    };
+    let inline_pupil = match map.get("pupil_centres") {
+        Some(v) => Some(parse_centres_arg(v, "pupil_centres")?),
+        None => None,
+    };
+    let preset = opt_str(map, "preset");
+    let config = map.get("config").cloned();
+    let character = opt_str(map, "character");
+    if preset.is_none() && config.is_none() {
+        if character.is_some() {
+            return Err(ToolFailure::params(
+                "character requires a preset or config to resolve against",
+            ));
+        }
+        return Ok(colour::Geometry {
+            regions: inline_regions.unwrap_or_default(),
+            iris_centres: inline_iris.unwrap_or_default(),
+            pupil_centres: inline_pupil.unwrap_or_default(),
+            source: "inline".to_string(),
+            character: None,
+            patch_set: None,
+            iris_set: None,
+            pupil_set: None,
+        });
+    }
+    let character =
+        character.ok_or_else(|| ToolFailure::params("character is required with preset/config"))?;
+    let (doc, source) = if let Some(cfg) = config {
+        (
+            colour::parse_preset_doc(&cfg).map_err(ToolFailure::params)?,
+            "config".to_string(),
+        )
+    } else {
+        let name = preset.expect("preset checked above");
+        match colour::builtin_preset(&name) {
+            Some(Ok(doc)) => (doc, format!("preset:{name}")),
+            Some(Err(e)) => return Err(ToolFailure::domain("colour_error", e)),
+            None => {
+                return Err(ToolFailure::params(format!(
+                    "unknown preset: {name} (built-in presets: {})",
+                    colour::builtin_preset_names().join(", ")
+                )));
+            }
+        }
+    };
+    let mut geom = colour::geometry_from_presets(
+        &doc,
+        source,
+        &character,
+        opt_str(map, "patch_set").as_deref(),
+        opt_str(map, "iris_set").as_deref(),
+        opt_str(map, "pupil_set").as_deref(),
+    )
+    .map_err(ToolFailure::params)?;
+    if let Some(r) = inline_regions {
+        geom.regions = r;
+    }
+    if let Some(i) = inline_iris {
+        geom.iris_centres = i;
+    }
+    if let Some(p) = inline_pupil {
+        geom.pupil_centres = p;
+    }
+    Ok(geom)
+}
+
+fn colour_sample(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(
+        args,
+        &[
+            "image",
+            "regions",
+            "iris_centres",
+            "preset",
+            "character",
+            "patch_set",
+            "iris_set",
+            "config",
+            "iris_rule",
+        ],
+    )?;
+    let image = req_str(&map, "image")?;
+    let geom = resolve_geometry(&map)?;
+    let iris_rule = parse_iris_rule(&map)?;
+    let img = colour::load_rgb(&image).map_err(|e| ToolFailure::domain("colour_error", e))?;
+    Ok(colour::sample(&img, &image, &geom, &iris_rule))
+}
+
+fn colour_drift(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(
+        args,
+        &[
+            "base",
+            "candidate",
+            "regions",
+            "iris_centres",
+            "preset",
+            "character",
+            "patch_set",
+            "iris_set",
+            "config",
+            "iris_rule",
+            "thresholds",
+        ],
+    )?;
+    let base = req_str(&map, "base")?;
+    let candidate = req_str(&map, "candidate")?;
+    let geom = resolve_geometry(&map)?;
+    let iris_rule = parse_iris_rule(&map)?;
+    let thresholds = parse_thresholds(&map)?;
+    let base_img = colour::load_rgb(&base).map_err(|e| ToolFailure::domain("colour_error", e))?;
+    let cand_img =
+        colour::load_rgb(&candidate).map_err(|e| ToolFailure::domain("colour_error", e))?;
+    Ok(colour::drift(
+        &base_img,
+        &base,
+        &cand_img,
+        &candidate,
+        &geom,
+        &iris_rule,
+        &thresholds,
+    ))
+}
+
+fn pupil_screen(_store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(
+        args,
+        &[
+            "image",
+            "pupil_centres",
+            "preset",
+            "character",
+            "pupil_set",
+            "config",
+            "rule",
+        ],
+    )?;
+    let image = req_str(&map, "image")?;
+    let geom = resolve_geometry(&map)?;
+    if geom.pupil_centres.is_empty() {
+        return Err(ToolFailure::params(
+            "no pupil centres resolved: pass pupil_centres, or preset/config with a character",
+        ));
+    }
+    let rule = parse_pupil_rule(&map)?;
+    let img = colour::load_rgb(&image).map_err(|e| ToolFailure::domain("colour_error", e))?;
+    colour::pupil(&img, &image, &geom, &rule).map_err(|e| ToolFailure::domain("colour_error", e))
+}
+
 // ---------- dispatch ----------
 
 /// Route one tool call. Unknown tools are params errors, as in
 /// the fleet pattern.
 pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
     match name {
+        // group 11: colour measurement (M-2)
+        "colour_drift" => colour_drift(store, arguments),
+        "colour_sample" => colour_sample(store, arguments),
+        "pupil_screen" => pupil_screen(store, arguments),
         // group 10: channel credentials and sessions
         "credential_status" => credential_status(store, arguments),
         "get_channel_account" => get_channel_account(store, arguments),

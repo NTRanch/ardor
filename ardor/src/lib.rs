@@ -7,6 +7,7 @@ pub mod accounts;
 pub mod canon;
 pub mod chains;
 pub mod channels;
+pub mod colour;
 pub mod gate;
 pub mod genesis;
 pub mod guard;

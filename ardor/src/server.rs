@@ -89,6 +89,19 @@ fn schema(props: &[(&str, Value)], required: &[&str]) -> serde_json::Map<String,
 fn tool_definitions() -> Vec<Tool> {
     // Each schema needs its own copy of the common project prop.
     let project = || ("project", s_max(64));
+    // Colour tools (group 11): patch-region and centre-list props.
+    let region_list = || {
+        (
+            "regions",
+            json!({"type":"array","maxItems":64,"items":{"type":"object","properties":{"name":{"type":"string"},"at":{"type":"array","items":{"type":"integer"},"minItems":2,"maxItems":2},"size":{"type":"integer","minimum":1,"maximum":1024}},"required":["name","at"],"additionalProperties":false}}),
+        )
+    };
+    let centre_list = |name: &'static str| {
+        (
+            name,
+            json!({"type":"array","maxItems":64,"items":{"type":"array","items":{"type":"integer"},"minItems":2,"maxItems":2}}),
+        )
+    };
     let specs: Vec<(&str, &str, serde_json::Map<String, Value>)> = vec![
         // group 1: project scaffolding
         (
@@ -519,6 +532,61 @@ fn tool_definitions() -> Vec<Tool> {
             schema(
                 &[project(), ("channel", s_max(64)), ("now", s_max(40))],
                 &["project", "channel"],
+            ),
+        ),
+        // group 11: colour measurement (M-2)
+        (
+            "colour_sample",
+            "Measure one frame's colour (read-only): background corner RGB, per-region patch HSV (mean per-pixel HSV, the judged-picks method), and iris annulus readings (circular-median hue, median saturation, median R-B — the separation axis is saturation/blue-share, not hue). Geometry is per-game config: inline regions/iris_centres, a config presets document, or a built-in preset (moondeep) + character + set names (patch_set default judged, iris_set default c1). Numbers replicate the ardor-colour CLI so cross-set tables compare.",
+            schema(
+                &[
+                    ("image", s()),
+                    region_list(),
+                    centre_list("iris_centres"),
+                    ("preset", s()),
+                    ("character", s()),
+                    ("patch_set", s()),
+                    ("iris_set", s()),
+                    ("config", o()),
+                    ("iris_rule", o()),
+                ],
+                &["image"],
+            ),
+        ),
+        (
+            "colour_drift",
+            "Signed colour drift between a judged base frame and a candidate (read-only): per-region d_hue wrapped to [-180, 180), d_sat, d_val, and iris drift with amber_ward (hue moved toward the 35-degree candle-amber pole), each flagged against thresholds — {warn_hue_deg, warn_sat, warn_val}: a number to set, null to disable; defaults are the 2026-11-27 screen values (hue 15, sat 0.25, val off). Same geometry config as colour_sample.",
+            schema(
+                &[
+                    ("base", s()),
+                    ("candidate", s()),
+                    region_list(),
+                    centre_list("iris_centres"),
+                    ("preset", s()),
+                    ("character", s()),
+                    ("patch_set", s()),
+                    ("iris_set", s()),
+                    ("config", o()),
+                    ("iris_rule", o()),
+                    ("thresholds", o()),
+                ],
+                &["base", "candidate"],
+            ),
+        ),
+        (
+            "pupil_screen",
+            "The glowing-pupil screen (read-only): per-eye pupil-disc median V and dark-core fraction (share of disc pixels with V <= dark_v_max). Verdict GLOWING iff every eye's dark fraction <= dark_fraction_max AND the mean median-V >= mean_median_val_min; rule overrides the calibrated defaults (disc_radius 8, dark_v_max 0.25, dark_fraction_max 0.01, mean_median_val_min 0.66). Centres inline via pupil_centres or via preset/config + character (+ pupil_set, default c1). A screen, not a verdict — the Owner's eye decides.",
+            schema(
+                &[
+                    ("image", s()),
+                    centre_list("pupil_centres"),
+                    ("preset", s()),
+                    ("character", s()),
+                    ("pupil_set", s()),
+                    ("config", o()),
+                    ("rule", o()),
+                ],
+                &["image"],
             ),
         ),
     ];

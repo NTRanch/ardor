@@ -1,0 +1,237 @@
+#!/usr/bin/env python3
+"""moondeep-colour — the estate's ONE colour/drift measurement tool for
+MoonDeep portrait work. Consolidates the four samplers written by hand
+on 2026-11-27 (candle carry's 48x48-patch method; C1 full-colour lane's
+iris-mode sampler.py + measure*.py; judged-picks lane's drift_sampler.py;
+fresh lane's measure.py) into a single instrument with a stable schema,
+so drift numbers are comparable across sets — the portrait lock is a
+cross-set comparison and needs one ruler.
+
+USAGE
+  moondeep-colour sample  GIRL IMAGE [--patches SET] [--iris SET]
+  moondeep-colour drift   GIRL BASE CANDIDATE [--patches SET] [--iris SET]
+  moondeep-colour pupil   GIRL IMAGE [--set SET] [--centre X Y]...
+  moondeep-colour presets
+
+  GIRL is one of: solenne umbra wrenna petra sable tamsin vesper.
+  SET names a preset geometry in presets.json ('judged' patch coords
+  from the judged-picks lane; 'fresh' from the fresh-c2 lane; iris
+  centres 'c1' = set-1 geometry, 'fresh' = fresh-c2 geometry; pupil
+  centres default to 'c1', sable also has 'judged'). All coordinates
+  are in 832x1216 frame space.
+
+METHODS (each is a lane's published method, kept verbatim in spirit)
+  patch   — mean HSV (colorsys, per-pixel) of a 48x48 patch CENTRED on
+            the preset coords; the judged-picks candle lane's method.
+            Reproduces hue-drift.json exactly (see RECORD-T1).
+  corner  — mean RGB of the 24x24 top-left corner (background field).
+  iris    — annulus (2.5<=d<=6.5 px) around the preset pupil centre,
+            pixels with 0.12<V<0.85 kept; circular-median hue, median
+            saturation, median R-B (the C1 lane's measure.py method).
+  pupil   — disc r=8 at the preset pupil centre: median V and the
+            dark fraction (share of disc pixels with V<=0.25). The
+            Owner's 2026-11-27 20:10 glowing-pupil screen: an eye is
+            blown out when the whole pupil disc is bright and NO dark
+            core remains. Per-girl verdict GLOWING iff EVERY eye has
+            dark_fraction <= 0.01 AND the mean median-V across eyes
+            >= 0.66. Calibrated on the 2026-11-27 gate set (Sable's
+            candle carries flag; her set-1 base, her judged base, and
+            Wrenna/Solenne/Petra controls pass) — margins in RECORD-T1.
+            It is a screen, not a verdict: the Owner's eye decides.
+  drift   — per-region signed deltas: hue delta wrapped to [-180,180),
+            d_sat, d_val; iris drift adds amber_ward (did the iris hue
+            move toward 35 degrees, the candle-amber pole).
+
+OUTPUT — one JSON object on stdout:
+  {"tool": "moondeep-colour", "version": 1, "mode": ..., "girl": ...,
+   "image"/"base"/"candidate": ..., "regions": {...}, ...}
+  Numbers are rounded exactly as the source lanes rounded them
+  (hue 1dp, sat/val 3dp) so cross-set tables stay comparable.
+
+Dependencies: Python 3 stdlib + numpy + Pillow (as the source samplers).
+"""
+import colorsys, json, sys
+from pathlib import Path
+import numpy as np
+from PIL import Image
+
+HERE = Path(__file__).resolve().parent
+PRESETS = json.loads((HERE / "presets.json").read_text())
+AMBER_POLE = 35.0
+PUPIL_MED_V_MIN = 0.66
+PUPIL_DARK_MAX = 0.01
+
+
+def circ_median_deg(angles):
+    a = np.array(sorted(angles), dtype=float)
+    if a.size == 0:
+        return None
+    best, bestd = None, 1e18
+    for cand in a:
+        d = np.sum(np.abs((a - cand + 180) % 360 - 180))
+        if d < bestd:
+            bestd, best = d, cand
+    return float(best)
+
+
+def load(path):
+    return Image.open(path).convert("RGB")
+
+
+def patch_hsv(im, x, y, s=48):
+    px = np.asarray(im.crop((x - s // 2, y - s // 2, x + s // 2, y + s // 2)), dtype=float) / 255.0
+    hsv = np.array([colorsys.rgb_to_hsv(*p) for p in px.reshape(-1, 3)])
+    return {"at": [x, y], "hue": round(float(hsv[:, 0].mean()) * 360.0, 1),
+            "sat": round(float(hsv[:, 1].mean()), 3), "val": round(float(hsv[:, 2].mean()), 3)}
+
+
+def corner_rgb(im):
+    px = np.asarray(im.crop((0, 0, 24, 24)), dtype=float)
+    return [round(float(c), 1) for c in px.reshape(-1, 3).mean(axis=0)]
+
+
+def iris_annulus(im_arr, cx, cy):
+    px = []
+    for y in range(cy - 7, cy + 8):
+        for x in range(cx - 7, cx + 8):
+            d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+            if 2.5 <= d <= 6.5:
+                px.append(im_arr[y, x])
+    q = np.array(px)
+    if len(q) == 0:
+        return {"at": [cx, cy], "n": 0}
+    V = q.max(axis=1)
+    q = q[(V > 0.12) & (V < 0.85)]
+    if len(q) < 5:
+        return {"at": [cx, cy], "n": int(len(q))}
+    hsv = np.array([colorsys.rgb_to_hsv(*p) for p in q])
+    return {"at": [cx, cy], "n": int(len(q)),
+            "hue": round(circ_median_deg(hsv[:, 0] * 360.0), 1),
+            "sat": round(float(np.median(hsv[:, 1])), 3),
+            "rb": round(float(np.median(q[:, 0] - q[:, 2])), 3),
+            "rgb": [round(float(v), 3) for v in q.mean(axis=0)]}
+
+
+def pupil_disc(im_arr, cx, cy, r=8):
+    yy, xx = np.mgrid[cy - r:cy + r + 1, cx - r:cx + r + 1]
+    m = (xx - cx) ** 2 + (yy - cy) ** 2 <= r * r
+    V = im_arr[cy - r:cy + r + 1, cx - r:cx + r + 1].max(axis=2)[m]
+    return {"at": [cx, cy], "median_val": round(float(np.median(V)), 3),
+            "dark_fraction": round(float((V <= 0.25).mean()), 3),
+            "face_crop": [cx - 30, cy - 24, cx + 30, cy + 24]}
+
+
+def pupil_verdict(eyes):
+    if not eyes:
+        return None
+    if all(e["dark_fraction"] <= PUPIL_DARK_MAX for e in eyes) and \
+            float(np.mean([e["median_val"] for e in eyes])) >= PUPIL_MED_V_MIN:
+        return "GLOWING"
+    return "ok"
+
+
+def wrap_deg(d):
+    return (d + 180.0) % 360.0 - 180.0
+
+
+def measure(im, girl, patch_set, iris_set):
+    arr = np.asarray(im, dtype=float) / 255.0
+    out = {"background_corner_rgb": corner_rgb(im), "regions": {}, "iris": []}
+    patches = PRESETS["girls"][girl]["patches"].get(patch_set, {})
+    for name, (x, y) in patches.items():
+        out["regions"][name] = patch_hsv(im, x, y)
+    for cx, cy in PRESETS["girls"][girl]["iris"].get(iris_set, []):
+        out["iris"].append(iris_annulus(arr, cx, cy))
+    return out
+
+
+def drift_of(b, c):
+    d = {"d_hue": round(wrap_deg(c["hue"] - b["hue"]), 1),
+         "d_sat": round(c["sat"] - b["sat"], 3)}
+    if "val" in b and "val" in c:
+        d["d_val"] = round(c["val"] - b["val"], 3)
+    if "rb" in b and "rb" in c:
+        d["d_rb"] = round(c["rb"] - b["rb"], 3)
+        to_b = abs(wrap_deg(AMBER_POLE - b["hue"]))
+        to_c = abs(wrap_deg(AMBER_POLE - c["hue"]))
+        d["amber_ward"] = bool(to_c < to_b)
+    return d
+
+
+def main(argv):
+    if len(argv) < 2:
+        print(__doc__)
+        return 2
+    mode = argv[1]
+    if mode == "presets":
+        print(json.dumps(PRESETS, indent=1, sort_keys=True))
+        return 0
+    girl = argv[2]
+    if girl not in PRESETS["girls"]:
+        print(f"unknown girl: {girl}", file=sys.stderr)
+        return 2
+    opts = argv[3:]
+    def optval(flag, default=None):
+        return opts[opts.index(flag) + 1] if flag in opts else default
+    patch_set = optval("--patches", "judged")
+    iris_set = optval("--iris", "c1")
+
+    if mode == "sample":
+        im = load(opts[0])
+        out = {"tool": "moondeep-colour", "version": 1, "mode": "sample",
+               "girl": girl, "image": opts[0], "patch_set": patch_set, "iris_set": iris_set}
+        out.update(measure(im, girl, patch_set, iris_set))
+        print(json.dumps(out, indent=1))
+        return 0
+
+    if mode == "drift":
+        base_p, cand_p = opts[0], opts[1]
+        bm = measure(load(base_p), girl, patch_set, iris_set)
+        cm = measure(load(cand_p), girl, patch_set, iris_set)
+        regions = {}
+        for name in bm["regions"]:
+            if name in cm["regions"]:
+                regions[name] = {"base": bm["regions"][name], "candidate": cm["regions"][name],
+                                 "drift": drift_of(bm["regions"][name], cm["regions"][name])}
+        iris = []
+        for b, c in zip(bm["iris"], cm["iris"]):
+            e = {"base": b, "candidate": c}
+            if "hue" in b and "hue" in c:
+                e["drift"] = drift_of(b, c)
+            iris.append(e)
+        out = {"tool": "moondeep-colour", "version": 1, "mode": "drift", "girl": girl,
+               "base": base_p, "candidate": cand_p, "patch_set": patch_set, "iris_set": iris_set,
+               "background_corner_rgb": {"base": bm["background_corner_rgb"],
+                                         "candidate": cm["background_corner_rgb"]},
+               "regions": regions, "iris": iris}
+        print(json.dumps(out, indent=1))
+        return 0
+
+    if mode == "pupil":
+        path = opts[0]
+        im = np.asarray(load(path), dtype=float) / 255.0
+        centres = []
+        i = 0
+        while i < len(opts):
+            if opts[i] == "--centre":
+                centres.append([int(opts[i + 1]), int(opts[i + 2])])
+                i += 3
+            else:
+                i += 1
+        if not centres:
+            pset = optval("--set", "c1")
+            centres = PRESETS["girls"][girl]["pupil"].get(pset) or \
+                PRESETS["girls"][girl]["pupil"]["c1"]
+        eyes = [pupil_disc(im, cx, cy) for cx, cy in centres]
+        out = {"tool": "moondeep-colour", "version": 1, "mode": "pupil", "girl": girl,
+               "image": path, "eyes": eyes, "verdict": pupil_verdict(eyes),
+               "rule": {"dark_fraction_max": PUPIL_DARK_MAX, "mean_median_val_min": PUPIL_MED_V_MIN}}
+        print(json.dumps(out, indent=1))
+        return 0
+
+    print(f"unknown mode: {mode}", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

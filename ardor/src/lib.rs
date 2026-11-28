@@ -13,6 +13,7 @@ pub mod guard;
 pub mod model;
 pub mod playtest;
 pub mod projection;
+pub mod rig;
 pub mod scene_record;
 pub mod server;
 pub mod store;

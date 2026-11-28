@@ -521,6 +521,50 @@ fn tool_definitions() -> Vec<Tool> {
                 &["project", "channel"],
             ),
         ),
+        // group 11: rig measurement instruments (M-6)
+        (
+            "rig_bend_battery",
+            "A10.1 bend battery + Step 0 measures on an exported GLB rig, run under the official Blender build. The skeletal instrument is primary; the centroid instrument is reported, never gated (L-01). Flexion is reported anatomically with rest included angles stated (L-02). A direction column (evaluated joint world positions, rest and posed) ships with the magnitudes, and the hinge poses are gated on the sagittal plane, which a mis-axed bone cannot satisfy (L-29). Every primary measure is read by name; a pose whose primary is unreadable fails loudly (L-60). Read-only; mode=measure skips the battery poses.",
+            schema(
+                &[
+                    ("artefact", s()),
+                    ("mode", en(&["full", "measure"])),
+                    ("frames_dir", s()),
+                    ("blender", s()),
+                    ("timeout_s", i64()),
+                ],
+                &["artefact"],
+            ),
+        ),
+        (
+            "rig_zone_census",
+            "Face-zone and structural census of a rig artefact (.glb or .blend), with an optional pair for the A10.2 one-body proof. Zones derive from the artefact's own rings, never from a morph's name (L-34/L-40, Rule 10). On a .blend the zone truth is read from the artefact's own shape-key deltas by exact ring-slot membership (L-41); the GLB zone census replicates the builder's position frame and is citable for shipped/uncured artefacts. Colour differences compare raw bytes per vertex (L-25). A spec (build record) is required for zone readings. Read-only.",
+            schema(
+                &[
+                    ("artefact", s()),
+                    ("pair", s()),
+                    ("spec", s()),
+                    ("blender", s()),
+                    ("timeout_s", i64()),
+                ],
+                &["artefact"],
+            ),
+        ),
+        (
+            "rig_measure_bands",
+            "Torso band circumferences at the artefact's true section rows on a GLB: the battery's band_circ replicated exactly (same torso population, window and ellipse) with band centres at row_z x the build record's z_scale. Requires z_scale (argument) or a spec carrying one; it refuses rather than recover a scale from height, which is biased and misplaces the bands (L-27). Default rows are the Fleet-A bust/waist/hip sections; every row ships neighbouring-window population probes so an empty band reads as an instrument miss with evidence (L-44). Read-only.",
+            schema(
+                &[
+                    ("artefact", s()),
+                    ("z_scale", json!({"type": "number", "exclusiveMinimum": 0})),
+                    ("spec", s()),
+                    ("rows", a()),
+                    ("blender", s()),
+                    ("timeout_s", i64()),
+                ],
+                &["artefact"],
+            ),
+        ),
     ];
     specs
         .into_iter()

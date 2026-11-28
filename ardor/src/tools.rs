@@ -1570,6 +1570,11 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         "get_project" => get_project(store, arguments),
         "list_projects" => list_projects(store, arguments),
         "update_project_meta" => update_project_meta(store, arguments),
+        // group 11: rig measurement instruments (M-6) — read-only,
+        // no decide() gate, no store state.
+        "rig_bend_battery" => crate::rig::rig_bend_battery(arguments),
+        "rig_measure_bands" => crate::rig::rig_measure_bands(arguments),
+        "rig_zone_census" => crate::rig::rig_zone_census(arguments),
         "" => Err(ToolFailure::params("tools/call requires a tool name")),
         other => Err(ToolFailure::params(format!("unknown tool: {other}"))),
     }

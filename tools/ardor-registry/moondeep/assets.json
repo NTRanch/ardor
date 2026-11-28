@@ -1,0 +1,1533 @@
+{
+  "assets": [
+    {
+      "content_label": "sfw",
+      "id": "solenne-set1-solenne-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne/solenne-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "e167695494a146cdd7cbf5f403d9a8bdd8e1f7730f9c33a078a5560644eadd0c"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-set1-solenne-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne/solenne-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "2c59ab36c86cc747af2f7da814babe66285336414fa2cc4516b75d6c3b748967"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-set1-solenne-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne/solenne-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "05d6ff38840449c7dcf3a3a5c8ddb2ab5432aff49d0294e8ead408cbead4ec48"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-set1-solenne-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne/solenne-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "08f55f834c48f492d90ed49829f71f198feade85fb4002ab736603064a266518"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-set1-umbra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra/umbra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "68c3636043a6640a8db27b994689cf9437e1d047ca73dea9b3fe7e3e115acb76"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-set1-umbra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra/umbra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "a346ed4172ffd75dc433250f258be97f046b90621d266b3c277eba7e69a2f9a1"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-set1-umbra-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra/umbra-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "68d8a4e23904eebb019d876d8922052293fd13b89c3b7625fd711aa881c7c62d"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-set1-umbra-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra/umbra-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "6df410fa98a36d9e30958f7fe71cb4e27dc44276ac304505275916cffc9bf84f"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-set1-wrenna-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/wrenna/wrenna-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "fa395f055d38f8eb269dbdde69556d960c0630d3693ea0222554c64d69f657d2"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-set1-wrenna-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/wrenna/wrenna-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "d33f24052f6b94a8b7d6e101dda2892b006c41c5e91760e87f9acb6c26b359fe"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-set1-wrenna-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/wrenna/wrenna-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "03185ffd1631dee25cc02c6239f7a4ccdd3f37e446b184f81a3cf6ebcd5c2728"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-set1-wrenna-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/wrenna/wrenna-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "a376e513ca152b1af54c7594d631b607f1eebef8acacb385f437fdcf54e707e2"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-set1-petra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/petra/petra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "8bbf7282f7d761de7b5f86c598dc434cf43cf2b16fe8556746b925be4d88fe3f"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-set1-petra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/petra/petra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "47eb958dc092d7877eea2e9f2fce395b2ec34937e7d172345f03dcc4d998c911"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-set1-petra-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/petra/petra-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "4a00c20163156c87a9b38b51a7f5d6f76796ecbb2d5eb238ec591689d5bed423"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-set1-petra-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/petra/petra-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "e09a8fcd77af060284baee6a079e99477523c64581d0b61bcfd881a603a47d11"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-set1-sable-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/sable/sable-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "23a3fa9c611bce86fb01e776357db6580a68337fa40ad864fb82e55b8fb563e9"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-set1-sable-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/sable/sable-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "fcbd09112f7f6a50824822cf3ff646580ba0437b8d16630a28e14013b631c3c4"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-set1-sable-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/sable/sable-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "e90611650c7d913d4c9acfafd543f5af4c671f9f2f99178890f1ddf36e1766ab"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-set1-sable-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/sable/sable-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "3e5718e58f5119cb849f20f95868fdaaa0356dce2d84227986feeb103d5e5dc9"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-set1-tamsin-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/tamsin/tamsin-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "33e539f5358c800debd4666e735fc80ab348209dec3e5d2feabcd230fe56563a"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-set1-tamsin-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/tamsin/tamsin-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "3b34a3b82791a41295cbccd77a64c44c1c55d60ec8e16c315c6614c977df9e2f"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-set1-tamsin-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/tamsin/tamsin-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "b8a0fde54afffc86836ef29063d24447cfc9b8f6388e748a64b048f3865f268d"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-set1-tamsin-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/tamsin/tamsin-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "40a0fe9edabf3e3e0d7b7c2c0aa3d950d3c8e18e3e59bc8cf578c1d24b35817e"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-set1-vesper-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper/vesper-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "32cb35cebc86f3ac16bd79fc9d0ea4978e5ce22326124408e92ee439d093bf7b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-set1-vesper-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper/vesper-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "36ed5a19624f6fff8301ca989b706349fa66803e251142b6cc2f21b8ef026bbe"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-set1-vesper-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper/vesper-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "2a1287578fdefcb6f1e70ac593bd39a311cf598c5db210302105a2fa92679dc0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-set1-vesper-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper/vesper-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "4a86fe80c7047ccd59fee99ee7728e7368983be48f3582575b38625459d45387"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-torogao-solenne-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/solenne/solenne-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "511b5dc8023345611aaba99107ce6474787f004c80646020772b8a1eccf617a4"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-torogao-solenne-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/solenne/solenne-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "ee88924a8e2d77beef1470536692616e91d6368095a7c1cbae3d7a1f97f9181a"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-torogao-solenne-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/solenne/solenne-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "5b7293a1b00702a0cfd2f1bea123556cbdf607b3caa17f5744ff8638b358ffb4"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-torogao-solenne-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/solenne/solenne-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "36d996007cde37566690b7d1653d5be137478ba1e14ff8f7c4ecfc29c26c204a"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-torogao-umbra-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/umbra/umbra-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "13a0aaa0709871c4d640defd413ae30f75c3d636780ba3901e1430057b0d7507"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-torogao-umbra-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/umbra/umbra-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "c772bd904afadb763001e83b4b26113053e5dfb8b6065995d49615ef2e6aeaf3"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-torogao-umbra-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/umbra/umbra-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "f783453865e2b94233f5c7ca67be0894faf28320d69db6327ac1d013367e59d9"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-torogao-umbra-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/umbra/umbra-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "0d26c18b2cc1159803c6e3725d1ff419f271791d30bcc6786fe466ed6dbde0ec"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-torogao-wrenna-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/wrenna/wrenna-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "eb946dcf5072b123658627be3869a326584148b74bc5708e2c5d15b78260a10e"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-torogao-wrenna-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/wrenna/wrenna-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "981b351089dff8a725e41e2b797c87b54b578c4803a56433c3a2e2fe17c0cbca"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-torogao-wrenna-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/wrenna/wrenna-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "fd12d38a52a680684c4603fc87d0ab2cfa1bb8db8b56f5dbe654e38e15ef1b7a"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-torogao-wrenna-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/wrenna/wrenna-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "97884d559ba5c9230cc8506b66e29ed511ccca0b1a8b047163b1c02d96149070"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-torogao-petra-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/petra/petra-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "41ba4530837159e5cca5e90fd4d330599aba9f13c295444e1c5033c9cfd496a0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-torogao-petra-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/petra/petra-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "0d2c65b8c5fdd24c7e02541dcca41a1bd92d1181a8782cd3c369c7934d2a1fbd"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-torogao-petra-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/petra/petra-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "d5def18bd911f167d979404d4b39fa55c8a82a5cfb0819f146bbca0a3907fdc0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-torogao-petra-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/petra/petra-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "05512fcde58d1447873b550c154820ce7a502ac6ab680ef9951a0cc8113f070e"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-torogao-sable-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/sable/sable-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "07a4ca10e40df541e9098835c997b78edc0f144031ec58923fb3a3e25ba10853"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-torogao-sable-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/sable/sable-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "9099b55c7f2dbbeaee92836121165a7d403042ef83515b1ca68e4b1118421346"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-torogao-sable-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/sable/sable-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "5f990d2b9aec4125f7d91a892d862139eb8948651ea6e4b0a33659fe30e47d85"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-torogao-sable-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/sable/sable-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "9984816cbb35e2f9813b86da1044d1f0f8ca3bc52e9a8679ba570a76996f3493"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-torogao-tamsin-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/tamsin/tamsin-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "cd27a4209122f48f7f9de724498259c661bce8d89c0c485df552646eeebea8a4"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-torogao-tamsin-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/tamsin/tamsin-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "e4c52a838153103ccc9ef577b0cce7769fe0c7f4d2a8d78ffda6ac09d90120cd"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-torogao-tamsin-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/tamsin/tamsin-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "7238961b86308f3283e360746d093eafb4ec101f66056dd6fd043f7ce68dd00b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-torogao-tamsin-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/tamsin/tamsin-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "5f6528508a19a7acf00d0f291c68211ebf4e610e48effefa95cc08c4b02c2491"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-torogao-vesper-t1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/vesper/vesper-t1.png"
+      },
+      "route_to": "local",
+      "sha256": "5d35e408002b49b771c05bd9648996ad9b1cd12cfebe607d2b8ed4349d852fe3"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-torogao-vesper-t2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/vesper/vesper-t2.png"
+      },
+      "route_to": "local",
+      "sha256": "21ef98c29e82797d97d1331801b54c194f15c92db77d8efafc62b26435b0cf22"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-torogao-vesper-t3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/vesper/vesper-t3.png"
+      },
+      "route_to": "local",
+      "sha256": "2f22b66ce90f421d52280abd1f2ae1fbea8f99191bfab57341bc0999bff151b2"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-torogao-vesper-t4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-torogao-20261127/vesper/vesper-t4.png"
+      },
+      "route_to": "local",
+      "sha256": "4248bd583bcd60994f15d56588f10bb1fdbe5b80731314cccffb1c0546f1eeab"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-text-solenne-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/solenne/solenne-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "3d905cf01dfb6628f742c5b67efe317b0e3da37b2b8f58858b13705e57e3ee48"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-text-solenne-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/solenne/solenne-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "fae9ff613959d0c7c7feecd484237b9c92608db35c606b7d8e29814893a24753"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-text-solenne-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/solenne/solenne-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "6ba6b105b35036f2550694409de4bf859494f47c1f27c75844fd41e0b13497b5"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-text-umbra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/umbra/umbra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "8c0bf81cd1357d36722480e3110fd9214101104a007d1fa12d565bcc9b0f5ecf"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-text-umbra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/umbra/umbra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "8fa184d69db0ec3464b867e86399eedbe3eaf3bbeb562fbb435dda53ffb799fe"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-text-umbra-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/umbra/umbra-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "65067d7c6a5e3321bbe1db96c5b2d090d7944e924aba91b7bb83baa88189cfe7"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-text-wrenna-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/wrenna/wrenna-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "cfef57a6026f7a4931c402094adef79e9443171bc3be92b385a7049b2a79b7ff"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-text-wrenna-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/wrenna/wrenna-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "fd758c328269b42cb3f65c9376cd24562e2b874b16a51a5b18d0b65c0b705308"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-text-wrenna-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/wrenna/wrenna-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "a2bcb0adbad5b7c7d69a1550dab1d394ee54b345006f27bdf9c89c735ab36afa"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-text-petra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/petra/petra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "733b7a96c31da8ba82509a53311fa334835a4115a356c267de2e08d7190bc8a6"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-text-petra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/petra/petra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "23c30b232b19fd7a29482c6843b3caf464509b892733f26eb3b9c9bc44d32c80"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-text-petra-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/petra/petra-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "d26b151d5ca54cc77d74d42567a52159601a70fbfdc3b080ee0b5735d862a59b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-text-sable-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/sable/sable-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "55c4cbe02d4ead9dc54c76b6a4c148eaafae70b4218bba1268f2bc21a5f96c90"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-text-sable-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/sable/sable-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "28e4854b5bc49ff093a6822ae48bb7ee97b772acbb2f9419d619f8a4a29f1afe"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-text-sable-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/sable/sable-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "479c8810faf7f5dad5e4d2ca289fb6e855dd56d4681e4f6dda6e7a25cb2db2e8"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-text-tamsin-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/tamsin/tamsin-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "2ace39ac16a89c467eb693e7e2b56d8c5d0d60f43615bb53eca6b137234b92bd"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-text-tamsin-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/tamsin/tamsin-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "ae7d4b5154eebd25ca6929a0add4b61beaefedc288b50f73f77a0b32ad4bda82"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-text-tamsin-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/tamsin/tamsin-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "c9aee469013b248c86535a9e88d5117f5e7e8c38f2d89f8eb8c5ccd5fb5973cf"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-text-vesper-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/vesper/vesper-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "d061659ff3e07792b31f6bac03defdb0dc57dc0627b8dda2a0cae5432f331b5b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-text-vesper-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/vesper/vesper-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "7584c8667bf998cc30cc901004fec79986f0f4b1344b09137bbd3ae8d6c600c5"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-text-vesper-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regen-canvas-20261127/vesper/vesper-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "344cbc4bcdb86bfb7382f6373fc4f2cc9ecaf9cae80061ace6cf7024dcb864ca"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-frame-solenne-frame-s271113",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-frame/solenne-frame-s271113.png"
+      },
+      "route_to": "local",
+      "sha256": "811bb1c05bbc72beaabb697e7b665d96809168c682d56571cb2ec64dcf842e83"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-frame-solenne-frame-s271116",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-frame/solenne-frame-s271116.png"
+      },
+      "route_to": "local",
+      "sha256": "dffa8dc006f176674d162488f26985bb3ade52c00282d4a2c2f02d153c3e76da"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-construction-solenne-construction-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-construction/solenne-construction-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "e9c80f27a5eb26207f0c04533e8517982cf8ce6f8e3bf8346858e3be20fbdf97"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-construction-solenne-construction-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-construction/solenne-construction-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "544c5d164abfe14196901af49feed59a5b026cf97267c1f5fb94ec8bc06e6442"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-construction-solenne-construction-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-construction/solenne-construction-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "a3b25e3e7535a3ea0db0801fa0aac8092e34ed3d293f90ba5448226ba778059b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-construction-solenne-construction-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-construction/solenne-construction-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "1b2a592eb585f357d90e0ebc88a9144ebcbf4abbeb9dbad0a0d1c9b3bda96457"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-leather-solenne-leather-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-leather/solenne-leather-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "12d02da62be569fe95049fcc7f8203ed05ba6ae3924c13bb105228feaee941bb"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-leather-solenne-leather-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-leather/solenne-leather-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "5ae2d1ad8d15c9c01dd5be72b8b3fa7f892536200dd001ec4a0c7d43d02db9cb"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-leather-solenne-leather-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-leather/solenne-leather-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "898902981ae4306ac03a1eba774e47d29ecc9b097c22aa30b603401832634519"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-leather-solenne-leather-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-leather/solenne-leather-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "bf5847ff40eb0d0ca548774d8d26da753a63ac986ba5fa0e1292d49d4f253a57"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-wrap-solenne-wrap-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-wrap/solenne-wrap-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "371701a198c2c7dbe7b7634499574d4456be81a28ddb7b4a990443751e13e6a0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-wrap-solenne-wrap-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-wrap/solenne-wrap-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "4b7c058035c3303d26de111fc1e4efb8f07b7094d475562ce8060ccbc01b528e"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-wrap-solenne-wrap-c3",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-wrap/solenne-wrap-c3.png"
+      },
+      "route_to": "local",
+      "sha256": "39f6296c163eb822722eb112e44ddbd5c0a0432f94e601ed8f6d35cf7cff279b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-wrap-solenne-wrap-c4",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-wrap/solenne-wrap-c4.png"
+      },
+      "route_to": "local",
+      "sha256": "953a1daf0685719f64c8301d5080c440e41dabe42d393c3a41612a5bbce5ef7b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-physique-solenne-physique-s271123",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-physique/solenne-physique-s271123.png"
+      },
+      "route_to": "local",
+      "sha256": "85efd956856a08bccd6dcd3925c2977d870e437f9790759137864cea896c51c8"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-solenne-physique-solenne-physique-s271124",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-physique/solenne-physique-s271124.png"
+      },
+      "route_to": "local",
+      "sha256": "f2fda1040efa9aa132850b48cad34941ba897f09d65f18e95b4bddd5e6185b99"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-umbra-binding-umbra-binding-s271205",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra-binding/umbra-binding-s271205.png"
+      },
+      "route_to": "local",
+      "sha256": "9be473391c8e452d7510f5269ba443713ca7cbde59dddfaa433768f4299202af"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-umbra-binding-umbra-binding-s271206",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra-binding/umbra-binding-s271206.png"
+      },
+      "route_to": "local",
+      "sha256": "a6182f53bc2654f4411ab9eafbd6e9a95e7dcdbf47baee4ce5b198892fd6fb54"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-umbra-binding-tight-umbra-binding-tight-s271209",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra-binding-tight/umbra-binding-tight-s271209.png"
+      },
+      "route_to": "local",
+      "sha256": "03cd5da6a60b462e3e44c07fc3122b5c2946a100385844454b41af089d4d9241"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-umbra-binding-tight-umbra-binding-tight-s271210",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/umbra-binding-tight/umbra-binding-tight-s271210.png"
+      },
+      "route_to": "local",
+      "sha256": "dd81b54cdd3ec58f6f6c00ba3b2d66509c9f36595be51ffa13655bd2c1b5567c"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-vesper-claymore-vesper-claymore-s271705",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper-claymore/vesper-claymore-s271705.png"
+      },
+      "route_to": "local",
+      "sha256": "b649e9b0fe866613d851f7baf1713a85d3de92dec1697f16d8b0eb285a3d8097"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-vesper-claymore-vesper-claymore-s271706",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper-claymore/vesper-claymore-s271706.png"
+      },
+      "route_to": "local",
+      "sha256": "b52453891b6b207be475c339d574ba79e08b0ecf1499c727bcb706010a9a9275"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-vesper-backstrap-vesper-backstrap-s271804",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper-backstrap/vesper-backstrap-s271804.png"
+      },
+      "route_to": "local",
+      "sha256": "a1a8d8df148a2f88b684373dcd7f35a0eca519f043cb07f1c4612bd59ce485f1"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-vesper-backstrap-vesper-backstrap-s271806",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper-backstrap/vesper-backstrap-s271806.png"
+      },
+      "route_to": "local",
+      "sha256": "f22ee09b2b559e3dde524eee0197745d1bba2e483d87914c2206250b907f67d1"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-edge-cure-solenne-physique-s271123-edgefix",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-physique/solenne-physique-s271123-edgefix.png"
+      },
+      "route_to": "local",
+      "sha256": "91c23607a1ef02aa31dc1b4e5484b0e960b3db4675d00c3397d22404d3e542b8"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-edge-cure-solenne-physique-s271124-edgefix",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/solenne-physique/solenne-physique-s271124-edgefix.png"
+      },
+      "route_to": "local",
+      "sha256": "dd2ce62ffd88b7a9d5c835ae07252537b09835fd74eb48d1b30314ce951c69cc"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-edge-cure-vesper-backstrap-s271806-edgefix",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-regeneration-20261127/vesper-backstrap/vesper-backstrap-s271806-edgefix.png"
+      },
+      "route_to": "local",
+      "sha256": "37b6456fabd54bf2878758a9c900d92c01a9e8628ded395a7de63b83bb79cf44"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-carry-c1-solenne-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/solenne/solenne-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "00116db802f62863a8b1c9da735a0fceec13cbe697eac2dabf6dde0764bfd877"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-carry-c1-umbra-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/umbra/umbra-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "45077a8271c5ef091c1d035e30f341ad72a8ba9e3f137caf59612c23ac33a3df"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-carry-c1-wrenna-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/wrenna/wrenna-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "54f0e2cbf2fd8889014915fc98ed5467da1777a9694f7f4e5357f9e7939f28af"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-carry-c1-petra-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/petra/petra-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "fa8a680f49c80fc54248685a9236110083f2d04af18e752f223d3f29b56a5793"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-carry-c1-sable-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/sable/sable-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "e1c445fdf52e48b16891468c05c80052f8282dbdab703c085c3a79acc6f3eda0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-carry-c1-tamsin-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/tamsin/tamsin-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "92c455f64dce9cde37aebdbdf8b5287be0d67aa83fecaaab94a8517916505ac2"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-carry-c1-vesper-canvas-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/vesper/vesper-canvas-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "f78853c59ff9ab210160d785581358f66f7ebe73b4a02a7a1c33cffeb8a9ddca"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-carry-c1-petra-canvas-c1-alt-s274141",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-c1-20261127/petra/petra-canvas-c1-alt-s274141.png"
+      },
+      "route_to": "local",
+      "sha256": "48847e352c583019341eee5100bcc12f2c642823004b6bbc274f3ba0b95fbd05"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-carry-judged-umbra-canvas-carry-s274101",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/umbra-canvas-carry-s274101.png"
+      },
+      "route_to": "local",
+      "sha256": "241d9cf9465947275adf959e7ddce2cfa19d4fc9c63bd8fb9f9433806f9f71c5"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-carry-judged-wrenna-canvas-carry-s274201",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/wrenna-canvas-carry-s274201.png"
+      },
+      "route_to": "local",
+      "sha256": "5771f041024170d697c91db56fdb9fe8bfbeaec25514aadfe63063957439ef77"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-carry-judged-petra-canvas-carry-s274301",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/petra-canvas-carry-s274301.png"
+      },
+      "route_to": "local",
+      "sha256": "d70510cb6ab6d4c1b32d5392508e07153f586ee7ba31a35167f1fe7b2687c5d8"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-carry-judged-tamsin-canvas-carry-s274402",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/tamsin-canvas-carry-s274402.png"
+      },
+      "route_to": "local",
+      "sha256": "b8ced055b7320f2372041152e9c62615774e2e9a05613766492758038e081681"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-carry-judged-sable-canvas-carry-s274501",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/sable-canvas-carry-s274501.png"
+      },
+      "route_to": "local",
+      "sha256": "fc09b25e03f26ec6102800bb8f163cb06387b59095ef39b0277c15db6189aeb0"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-carry-judged-solenne-canvas-carry-s274601",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/solenne-canvas-carry-s274601.png"
+      },
+      "route_to": "local",
+      "sha256": "52bc7fb240bebeed7899d98e92a12170039e3483ebf20cef33fb0b7c7c8545e5"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-carry-judged-vesper-canvas-carry-s274701",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/vesper-canvas-carry-s274701.png"
+      },
+      "route_to": "local",
+      "sha256": "17a4b741a9ce8c2ff6b402acb504267d406f7058ca46fcb4a64671686482fc88"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-carry-judged-sable-canvas-carry-s274502-replay",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/variants/sable-canvas-carry-s274502-replay.png"
+      },
+      "route_to": "local",
+      "sha256": "df20825a729615ec73f8d33bdfd3fcffccc7584d26da031cda2d0ace245a62ec"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-carry-judged-solenne-canvas-carry-s274602-replay",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/variants/solenne-canvas-carry-s274602-replay.png"
+      },
+      "route_to": "local",
+      "sha256": "f1ecb9b6407a7f69400725af7d55176cdbe6050417f24a12253b1818e79bfc9c"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-carry-judged-tamsin-canvas-carry-s274401-cropped",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-carry-20261127/variants/tamsin-canvas-carry-s274401-cropped.png"
+      },
+      "route_to": "local",
+      "sha256": "d4bd338e3fc5e0668a4ce79d5078b4acf7b778c14b2041aee4ac7d5d033e9e16"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-fresh-solenne-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/solenne/solenne-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "f33620daed82c1daabda07e4eeb164512b65bc45b7b49b2be7f54e4d5082b3a1"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-fresh-umbra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/umbra/umbra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "db7ac9847b91bc518919ad667ca4bb4f329b099ba7d5388adc6dbfdaec5dd945"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-fresh-wrenna-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/wrenna/wrenna-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "3ea54aed3d44fc25b2710722697899ba86381bf3713d10b1890059dff36b2477"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-fresh-petra-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/petra/petra-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "4eb40cc4300632a5ac28751f601e8f32a164d84b4dfdc2c33fc7b4c3ee5c6f8b"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-fresh-sable-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/sable/sable-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "104a24b5b7d9f0afd31406d3ad16aab04efb512b0c8f4547b90d777b4ba09438"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-fresh-tamsin-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "fba1662d5849e9271e0dd313222ed0edba9c8305bd2463de5e2868a7bbf59d82"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-fresh-vesper-c1",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/vesper/vesper-c1.png"
+      },
+      "route_to": "local",
+      "sha256": "ca4349e08ed57537a60f070a51c83d546b9f30b6156727f14e943673a911e704"
+    },
+    {
+      "content_label": "sfw",
+      "id": "solenne-canvas-fresh-solenne-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/solenne/solenne-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "e113c379e744b85c266fe0653348ebf08851ca3ad3c82509ba89a5ff3ab92906"
+    },
+    {
+      "content_label": "sfw",
+      "id": "umbra-canvas-fresh-umbra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/umbra/umbra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "62058abbb71e4c055e594af59353f99c3081162e1b3d39082bce6ca947259a4e"
+    },
+    {
+      "content_label": "sfw",
+      "id": "wrenna-canvas-fresh-wrenna-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/wrenna/wrenna-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "69b8dc9e8aeb1ad6cf3bfc13dc919fe6acee25e545550a25ef90a86935c18ebb"
+    },
+    {
+      "content_label": "sfw",
+      "id": "petra-canvas-fresh-petra-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/petra/petra-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "b8288743ef09e10d06c71c60a50e57271b466b601495dcabbedafb679747ef46"
+    },
+    {
+      "content_label": "sfw",
+      "id": "sable-canvas-fresh-sable-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/sable/sable-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "bf10aec4daa48c9e9a88ca3bb47ced396d04efb80dfe88dbb3370aa641cc2114"
+    },
+    {
+      "content_label": "sfw",
+      "id": "vesper-canvas-fresh-vesper-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/vesper/vesper-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "98d0725de3cb67273a11800b69b1e578587981afe9a0d490d5f8604d5529a19d"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-canvas-fresh-tamsin-c2",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c2.png"
+      },
+      "route_to": "local",
+      "sha256": "42fb24d9d14d8a12345ccfd160a1b4bb9c99a4ba87445fe4bf8e7fa91b3fed98"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-heightfix-tamsin-c2-heightfix",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c2-heightfix.png"
+      },
+      "route_to": "local",
+      "sha256": "88f228a43a19bb0f6dfa93497eb6dfe692cd8477d326c93faf702161ddd1ccc7"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-heightfix-tamsin-c2-heightfix-alt1-whitefrill",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c2-heightfix-alt1-whitefrill.png"
+      },
+      "route_to": "local",
+      "sha256": "56b2fa960ef34099215995b6f5189fd065e84190dab860bae1c7ebada5b6a046"
+    },
+    {
+      "content_label": "sfw",
+      "id": "tamsin-heightfix-tamsin-c2-heightfix-alt2-halo",
+      "kind": "sprite",
+      "origin_lane": "ntranch",
+      "provenance": {
+        "source": "/home/hatch/workspace/moondeep-canvas-fresh-20261127/tamsin/tamsin-c2-heightfix-alt2-halo.png"
+      },
+      "route_to": "local",
+      "sha256": "046c92a83a4c0ead2ab4feba3dde55b173ac113a43b8925b9130cc465748fe96"
+    }
+  ]
+}

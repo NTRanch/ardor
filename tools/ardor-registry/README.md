@@ -12,6 +12,10 @@ it superseded, and the Owner ruling that put it there.
 - `ardor-registry` — the CLI (executable, Python 3 stdlib only).
 - `registry.json` — the registry of record. **Lock state is versioned
   state**: it lives here, in the repo, and changes to it are commits.
+- `moondeep/` — the same registry migrated into the ardor MCP
+  portrait tools (see "MCP form" below): the verbatim ardor store
+  directory the migration produced, loadable by pointing an ardor
+  server home at its parent.
 - `README.md` — this file.
 
 ## Registry schema (`moondeep-portrait-registry/1`)
@@ -62,6 +66,66 @@ tools/ardor-registry/ardor-registry manifest --format text
 `check` also matches by content: a byte-identical copy of a
 registered frame at a different path resolves to the registered
 entry, so lanes can verify staged copies.
+
+## MCP form — the portrait-lock registry as ardor tools (M-1)
+
+As of 2026-11-27 the registry mechanism also lives in the ardor
+MCP server, generalized per game (mapping:
+`moondeep-lessons-to-mcp-20261127/MAPPING.md` §M-1). Five tools,
+named in the live surface's attested shapes — writes verb-first,
+reads exclusively `get_<singular>` / `list_<plural>` (no `*_show`
+verb exists anywhere on the 61-tool surface; census in LANE-A of
+the mapping folder):
+
+| tool | act |
+|---|---|
+| `register_portrait` | register a frame: the server recomputes the sha256 pin from the frame's bytes on disk (never caller-supplied); status `candidate` / `working-set` / `defective`; optional `supersedes`, `ruling`, `note` |
+| `lock_portrait` | the Owner's lock: **requires** a ruling `{date, quote}` — the gate refuses a lock without one (`ruling_required`); supersedes the character's standing locked/working-set frames |
+| `get_portrait_lock` | one character's current frame + full entry list, or — given a `path` — the CLI `check` verdicts (`current` / `superseded` / `defective` / `unknown`), resolving byte-identical copies by content hash |
+| `list_portrait_locks` | the manifest: per character the current frame (locked first, else working-set), status counts, set vocabulary |
+| `list_portrait_history` | one character's entries in registration order |
+
+Design points:
+
+- **Per-game by project, schema neutral.** The store document is
+  `portrait-registry/1`; the game is the ardor project slug, and
+  the cast list, set vocabulary, and frame root paths are whatever
+  the project's registrations say — no per-game schema fork. The
+  source schema name (`moondeep-portrait-registry/1`) is kept
+  above as provenance for the CLI file.
+- **Built on the keeper-chain surface, not beside it.** Every
+  registered portrait is born as an asset record through the same
+  gate checks as `register_asset` (kind `sprite`, lane-stamped),
+  and the portraits document references it by id; keeper chains
+  remain the provenance half, joined by asset id. Lock state is
+  the distinct mechanism the chains do not carry.
+- **Pins are re-verified on every read.** Each entry view carries
+  `sha_state` — `verified` / `mismatch` / `missing` / `unreadable`
+  — recomputed live from the frame's bytes, so a tampered pin or
+  a tampered frame is caught by any read.
+- **Supersession normalization.** Superseding a frame rewrites its
+  status to `superseded` *unless it is `defective`* — a defect is
+  the stronger fact and is never laundered into a mere
+  replacement; the `superseded_by` link still records the
+  replacement. This reproduces the source registry exactly,
+  including Tamsin's defective canvas-fresh frame and its
+  heightfix cure. Chains cannot fork (a frame is replaced exactly
+  once) or cycle (self-supersession refused; edges point only
+  backwards at registration).
+- **Lock state is still versioned state.** The MCP store lives in
+  the server home; `moondeep/` here is the migrated dataset
+  committed as the record, as `registry.json` is for the CLI.
+
+Migration: `registry.json`'s 139 entries were registered through
+the tools in topological order (a frame only after the frames it
+supersedes; the three recorded-`superseded` entries registered as
+candidates and flipped by their successors' registrations, as the
+mechanism requires). Verification through the tools:
+**139/139 sha pins verified**, statuses, supersession links, and
+rulings identical to the source; a planted wrong-sha control copy
+was flagged as exactly one `mismatch`. Driver and full record:
+night lane B, 2026-11-27 (`night-20261127/migrate_portraits.py`,
+`night-20261127/lane-B-registry.md` in the estate workspace).
 
 ## Why
 

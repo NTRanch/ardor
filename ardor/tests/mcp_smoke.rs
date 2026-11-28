@@ -282,7 +282,7 @@ fn full_client_round_trip() {
         .iter()
         .filter_map(|t| t["name"].as_str())
         .collect();
-    assert_eq!(names.len(), 61, "61 tools across the ten groups: {names:?}");
+    assert_eq!(names.len(), 66, "66 tools across the ten groups: {names:?}");
     for expected in [
         "create_project",
         "upsert_dialogue",

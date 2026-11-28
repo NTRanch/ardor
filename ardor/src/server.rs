@@ -420,6 +420,47 @@ fn tool_definitions() -> Vec<Tool> {
                 &["project", "chain", "refusal"],
             ),
         ),
+        // group 7b: portrait-lock registry
+        (
+            "register_portrait",
+            "Register a portrait frame in the project's portrait-lock registry (portrait-registry/1). The frame's SHA-256 is recomputed from its bytes on disk — never taken from the caller — an asset record is born with its lane stamp, and the lock-state entry records character, set, status (candidate, working-set or defective), supersedes links, ruling and note. The character must be a cast member. Locked is not a registration status: see lock_portrait.",
+            schema(&[project(), ("portrait", o())], &["project", "portrait"]),
+        ),
+        (
+            "lock_portrait",
+            "Lock a registered portrait as a character's frame of record, by portrait id or by path. The gate requires the Owner ruling that sets the lock (a ruling object with date and quote) — a lock without one is refused — and refuses defective or already-superseded frames. The character's standing locked/working-set frames are superseded by the locked one.",
+            schema(
+                &[
+                    project(),
+                    ("character", s_max(64)),
+                    ("portrait", s_max(64)),
+                    ("path", s()),
+                    ("ruling", o()),
+                ],
+                &["project", "character"],
+            ),
+        ),
+        (
+            "get_portrait_lock",
+            "One character's portrait-lock state: her current frame (locked if one stands, else working-set) and every registered frame, each pin re-verified against the file on disk. Given a path instead, the registry's verdict for that frame: current, superseded (naming the successor), defective, or unknown; a byte-identical copy at another path resolves by content.",
+            schema(
+                &[project(), ("character", s_max(64)), ("path", s())],
+                &["project"],
+            ),
+        ),
+        (
+            "list_portrait_locks",
+            "The portrait-lock manifest: every cast member's current frame (locked if one stands, else working-set) with SHA-256 pins re-verified against the files on disk, plus registry counts by status and the set vocabulary.",
+            schema(&[project()], &["project"]),
+        ),
+        (
+            "list_portrait_history",
+            "A character's full portrait registry: every registered frame in registration order with its supersession links, rulings, notes, and pins re-verified against the files on disk.",
+            schema(
+                &[project(), ("character", s_max(64))],
+                &["project", "character"],
+            ),
+        ),
         // group 8: playtest and QA
         (
             "run_playtest",

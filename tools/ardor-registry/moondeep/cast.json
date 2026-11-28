@@ -1,0 +1,39 @@
+{
+  "characters": [
+    {
+      "id": "solenne",
+      "name": "Solenne",
+      "version": 1
+    },
+    {
+      "id": "umbra",
+      "name": "Umbra",
+      "version": 1
+    },
+    {
+      "id": "wrenna",
+      "name": "Wrenna",
+      "version": 1
+    },
+    {
+      "id": "petra",
+      "name": "Petra",
+      "version": 1
+    },
+    {
+      "id": "sable",
+      "name": "Sable",
+      "version": 1
+    },
+    {
+      "id": "tamsin",
+      "name": "Tamsin",
+      "version": 1
+    },
+    {
+      "id": "vesper",
+      "name": "Vesper",
+      "version": 1
+    }
+  ]
+}

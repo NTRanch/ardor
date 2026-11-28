@@ -123,6 +123,15 @@ pub enum Op {
     RegisterChain {
         chain: Value,
     },
+    RegisterPortrait {
+        entry: Value,
+        asset: Value,
+    },
+    LockPortrait {
+        character: String,
+        entry_id: String,
+        ruling: Value,
+    },
     RecordChainValidation {
         chain_id: String,
     },
@@ -186,14 +195,29 @@ fn changed_docs(op: &Op) -> Vec<&'static str> {
             vec!["qa"]
         }
         Op::CreateProject { .. } => vec![
-            "assets", "canon", "cast", "census", "chains", "genesis", "graph", "levels", "project",
-            "qa", "releases", "safety", "story", "systems",
+            "assets",
+            "canon",
+            "cast",
+            "census",
+            "chains",
+            "genesis",
+            "graph",
+            "levels",
+            "portraits",
+            "project",
+            "qa",
+            "releases",
+            "safety",
+            "story",
+            "systems",
         ],
         Op::DeclareFlag { .. } | Op::UpsertDialogue { .. } | Op::UpsertScene { .. } => {
             vec!["graph"]
         }
         Op::PrepareHandoff { .. } => vec!["releases"],
         Op::RecordAssetHandoff { .. } | Op::RegisterAsset { .. } => vec!["assets"],
+        Op::RegisterPortrait { .. } => vec!["assets", "portraits"],
+        Op::LockPortrait { .. } => vec!["portraits"],
         Op::ActivateChain { .. }
         | Op::IntakeSessionRecord { .. }
         | Op::RecordChainValidation { .. }
@@ -339,6 +363,41 @@ pub fn safety_audit(state: &ProjectState) -> Value {
     }
     let ok = checks.iter().all(|c| c["ok"].as_bool() == Some(true));
     json!({"ok": ok, "checks": checks})
+}
+
+/// The asset-record checks, shared by `register_asset` and by
+/// the portrait registry, whose entries are born as asset
+/// records through this same gate: a real content hash, a named
+/// provenance source, and the lane stamp from birth.
+pub(crate) fn check_asset_record(asset: &Value) -> Result<(), Refusal> {
+    let hash = str_field(asset, "sha256").unwrap_or("");
+    if !is_sha256_hex(hash) {
+        return Err(Refusal::new(
+            "invalid_content_hash",
+            "asset sha256 must be a 64-character lowercase hex digest",
+        ));
+    }
+    let source = asset
+        .get("provenance")
+        .and_then(|p| str_field(p, "source"))
+        .unwrap_or("");
+    if source.is_empty() {
+        return Err(Refusal::new(
+            "provenance_required",
+            "an asset record must name its provenance source; unprovenanced assets do not enter a project",
+        ));
+    }
+    let origin_lane = str_field(asset, "origin_lane").unwrap_or("");
+    let content_label = str_field(asset, "content_label").unwrap_or("");
+    if !ORIGIN_LANES.contains(&origin_lane) || !CONTENT_LABELS.contains(&content_label) {
+        return Err(Refusal::new(
+            "lane_unclassified",
+            "an asset record must carry its lane stamp from birth: origin_lane \
+             (ntranch or qompassai) and content_label (sfw or nsfw); unlabelled \
+             assets do not enter a project",
+        ));
+    }
+    Ok(())
 }
 
 // ---------- decide ----------
@@ -536,36 +595,15 @@ pub fn decide(state: &ProjectState, accounts: &Value, op: &Op) -> Result<(), Ref
             }
             Ok(())
         }
-        Op::RegisterAsset { asset } => {
-            let hash = str_field(asset, "sha256").unwrap_or("");
-            if !is_sha256_hex(hash) {
-                return Err(Refusal::new(
-                    "invalid_content_hash",
-                    "asset sha256 must be a 64-character lowercase hex digest",
-                ));
-            }
-            let source = asset
-                .get("provenance")
-                .and_then(|p| str_field(p, "source"))
-                .unwrap_or("");
-            if source.is_empty() {
-                return Err(Refusal::new(
-                    "provenance_required",
-                    "an asset record must name its provenance source; unprovenanced assets do not enter a project",
-                ));
-            }
-            let origin_lane = str_field(asset, "origin_lane").unwrap_or("");
-            let content_label = str_field(asset, "content_label").unwrap_or("");
-            if !ORIGIN_LANES.contains(&origin_lane) || !CONTENT_LABELS.contains(&content_label) {
-                return Err(Refusal::new(
-                    "lane_unclassified",
-                    "an asset record must carry its lane stamp from birth: origin_lane \
-                     (ntranch or qompassai) and content_label (sfw or nsfw); unlabelled \
-                     assets do not enter a project",
-                ));
-            }
-            Ok(())
+        Op::RegisterAsset { asset } => check_asset_record(asset),
+        Op::RegisterPortrait { entry, asset } => {
+            crate::portraits::decide_register(state, entry, asset)
         }
+        Op::LockPortrait {
+            character,
+            entry_id,
+            ruling,
+        } => crate::portraits::decide_lock(state, character, entry_id, ruling),
         Op::RecordAssetHandoff { asset_id, .. } => {
             if find_by_id(state.doc("assets"), "assets", asset_id).is_none() {
                 return Err(Refusal::new(
@@ -1049,6 +1087,14 @@ pub fn apply(state: &mut ProjectState, op: Op) -> Vec<&'static str> {
             }));
         }
         Op::RegisterChain { chain } => crate::chains::apply_chain(state, chain),
+        Op::RegisterPortrait { entry, asset } => {
+            crate::portraits::apply_register(state, entry, asset)
+        }
+        Op::LockPortrait {
+            character,
+            entry_id,
+            ruling,
+        } => crate::portraits::apply_lock(state, &character, &entry_id, ruling),
         Op::RecordChainValidation { chain_id } => {
             crate::chains::apply_validation_run(state, &chain_id)
         }

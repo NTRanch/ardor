@@ -1123,6 +1123,244 @@ fn record_custody_refusal(store: &mut Store, args: &Value) -> R<Value> {
     })
 }
 
+// ---------- group 7b: portrait-lock registry ----------
+
+fn register_portrait(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "portrait"])?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let portrait = req_obj(&map, "portrait")?;
+    let id = req_payload_id(&portrait, "portrait")?;
+    let character = match portrait.get("character").and_then(Value::as_str) {
+        Some(c) if is_valid_id(c) => c.to_string(),
+        _ => {
+            return Err(ToolFailure::params(
+                "portrait requires a 'character' that is a lowercase slug",
+            ));
+        }
+    };
+    let path = match portrait.get("path").and_then(Value::as_str) {
+        Some(p) if !p.is_empty() => p.to_string(),
+        _ => return Err(ToolFailure::params("portrait requires a 'path'")),
+    };
+    if !std::path::Path::new(&path).is_absolute() {
+        return Err(ToolFailure::params(
+            "portrait path must be absolute; the registry records frames of record, not relative guesses",
+        ));
+    }
+    let set = match portrait.get("set").and_then(Value::as_str) {
+        Some(s) if is_valid_id(s) => s.to_string(),
+        _ => {
+            return Err(ToolFailure::params(
+                "portrait requires a 'set' that is a lowercase slug",
+            ));
+        }
+    };
+    let status = match portrait.get("status").and_then(Value::as_str) {
+        None => "candidate".to_string(),
+        Some(s) if crate::portraits::REGISTER_STATUSES.contains(&s) => s.to_string(),
+        Some("locked") => {
+            return Err(ToolFailure::params(
+                "a frame is not registered locked; lock_portrait records the lock with its ruling",
+            ));
+        }
+        Some("superseded") => {
+            return Err(ToolFailure::params(
+                "superseded is a chain outcome, not a registration status",
+            ));
+        }
+        Some(other) => {
+            return Err(ToolFailure::params(format!(
+                "portrait status must be candidate, working-set or defective: {other}"
+            )));
+        }
+    };
+    let mut supersedes: Vec<Value> = Vec::new();
+    if let Some(items) = portrait.get("supersedes") {
+        let Some(items) = items.as_array() else {
+            return Err(ToolFailure::params(
+                "portrait supersedes must be an array of portrait ids",
+            ));
+        };
+        for item in items {
+            match item.as_str() {
+                Some(s) if is_valid_id(s) => supersedes.push(json!(s)),
+                _ => {
+                    return Err(ToolFailure::params(
+                        "portrait supersedes entries must be lowercase slug ids",
+                    ));
+                }
+            }
+        }
+    }
+    let ruling = match portrait.get("ruling") {
+        None | Some(Value::Null) => Value::Null,
+        Some(r) if r.is_object() => r.clone(),
+        Some(_) => {
+            return Err(ToolFailure::params(
+                "portrait ruling must be an object with date and quote",
+            ));
+        }
+    };
+    let note = match portrait.get("note") {
+        None | Some(Value::Null) => Value::Null,
+        Some(n) if n.is_string() => n.clone(),
+        Some(_) => return Err(ToolFailure::params("portrait note must be a string")),
+    };
+    let origin_lane = match portrait.get("origin_lane").and_then(Value::as_str) {
+        None => "ntranch",
+        Some(l) if gate::ORIGIN_LANES.contains(&l) => l,
+        Some(other) => {
+            return Err(ToolFailure::params(format!(
+                "origin_lane must be ntranch or qompassai: {other}"
+            )));
+        }
+    };
+    let content_label = match portrait.get("content_label").and_then(Value::as_str) {
+        None => "sfw",
+        Some(l) if gate::CONTENT_LABELS.contains(&l) => l,
+        Some(other) => {
+            return Err(ToolFailure::params(format!(
+                "content_label must be sfw or nsfw: {other}"
+            )));
+        }
+    };
+    // The pin is recomputed from the frame's bytes here — never
+    // taken from the caller — so a registered sha256 is a
+    // measurement, not a claim.
+    let Some(sha256) = crate::portraits::sha256_file(std::path::Path::new(&path)) else {
+        return Err(ToolFailure::domain(
+            "frame_unreadable",
+            format!(
+                "cannot read the frame at {path}; a portrait pin is recomputed from the frame's bytes, so an unreadable frame cannot be registered"
+            ),
+        ));
+    };
+    let asset = json!({
+        "id": id,
+        "kind": "sprite",
+        "sha256": sha256,
+        "provenance": {"source": path},
+        "origin_lane": origin_lane,
+        "content_label": content_label,
+        "route_to": "local"
+    });
+    let entry = json!({
+        "id": id,
+        "character": character,
+        "set": set,
+        "path": path,
+        "sha256": sha256,
+        "status": status,
+        "supersedes": supersedes,
+        "superseded_by": null,
+        "ruling": ruling,
+        "note": note
+    });
+    gated_write(store, &mut state, Op::RegisterPortrait { entry, asset })?;
+    Ok(json!({
+        "project": state.slug,
+        "portrait": find_by_id(state.doc("portraits"), "entries", &id).cloned(),
+        "asset": find_by_id(state.doc("assets"), "assets", &id).cloned()
+    }))
+}
+
+fn lock_portrait(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(
+        args,
+        &["project", "character", "portrait", "path", "ruling"],
+    )?;
+    let (_slug, mut state) = load_project(store, &map)?;
+    let character = req_id(&map, "character")?;
+    // The ruling is required by the gate, not by params shape: a
+    // missing ruling is the gate's typed `ruling_required`
+    // refusal, so it is passed through (empty when absent)
+    // rather than rejected here as a shape error.
+    let ruling = opt_obj(&map, "ruling").unwrap_or_else(|| json!({}));
+    let entry_id = match (opt_str(&map, "portrait"), opt_str(&map, "path")) {
+        (Some(id), None) => {
+            if !is_valid_id(&id) {
+                return Err(ToolFailure::params("portrait must be a lowercase slug id"));
+            }
+            id
+        }
+        (None, Some(path)) => {
+            match arr(state.doc("portraits"), "entries")
+                .iter()
+                .find(|e| e.get("path").and_then(Value::as_str) == Some(path.as_str()))
+            {
+                Some(e) => e["id"].as_str().unwrap_or("").to_string(),
+                None => {
+                    return Err(ToolFailure::domain(
+                        "unknown_portrait",
+                        format!("no registered portrait at {path}"),
+                    ));
+                }
+            }
+        }
+        _ => {
+            return Err(ToolFailure::params(
+                "lock_portrait takes exactly one of 'portrait' (id) or 'path'",
+            ));
+        }
+    };
+    gated_write(
+        store,
+        &mut state,
+        Op::LockPortrait {
+            character,
+            entry_id: entry_id.clone(),
+            ruling,
+        },
+    )?;
+    Ok(json!({
+        "project": state.slug,
+        "portrait": find_by_id(state.doc("portraits"), "entries", &entry_id).cloned()
+    }))
+}
+
+fn get_portrait_lock(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "character", "path"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    match (opt_str(&map, "character"), opt_str(&map, "path")) {
+        (Some(character), None) => {
+            if !crate::portraits::character_exists(&state, &character)
+                && !crate::portraits::has_entries(&state, &character)
+            {
+                return Err(ToolFailure::domain(
+                    "unknown_character",
+                    format!("no character '{character}' in this project"),
+                ));
+            }
+            Ok(crate::portraits::get_view(&state, &character))
+        }
+        (None, Some(path)) => Ok(crate::portraits::verdict_for_path(&state, &path)),
+        _ => Err(ToolFailure::params(
+            "get_portrait_lock takes exactly one of 'character' or 'path'",
+        )),
+    }
+}
+
+fn list_portrait_locks(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    Ok(crate::portraits::list_view(&state))
+}
+
+fn list_portrait_history(store: &mut Store, args: &Value) -> R<Value> {
+    let map = strict_object(args, &["project", "character"])?;
+    let (_slug, state) = load_project(store, &map)?;
+    let character = req_id(&map, "character")?;
+    if !crate::portraits::character_exists(&state, &character)
+        && !crate::portraits::has_entries(&state, &character)
+    {
+        return Err(ToolFailure::domain(
+            "unknown_character",
+            format!("no character '{character}' in this project"),
+        ));
+    }
+    Ok(crate::portraits::history_view(&state, &character))
+}
+
 // ---------- group 8: playtest and QA ----------
 
 fn run_playtest(store: &mut Store, args: &Value) -> R<Value> {
@@ -1521,13 +1759,18 @@ pub fn dispatch(store: &mut Store, name: &str, arguments: &Value) -> R<Value> {
         // group 7: asset routing and provenance
         "activate_chain" => activate_chain(store, arguments),
         "get_chain" => get_chain(store, arguments),
+        "get_portrait_lock" => get_portrait_lock(store, arguments),
         "intake_session_record" => intake_session_record(store, arguments),
         "list_assets" => list_assets(store, arguments),
         "list_chains" => list_chains(store, arguments),
+        "list_portrait_history" => list_portrait_history(store, arguments),
+        "list_portrait_locks" => list_portrait_locks(store, arguments),
+        "lock_portrait" => lock_portrait(store, arguments),
         "record_asset_handoff" => record_asset_handoff(store, arguments),
         "record_custody_refusal" => record_custody_refusal(store, arguments),
         "register_asset" => register_asset(store, arguments),
         "register_chain" => register_chain(store, arguments),
+        "register_portrait" => register_portrait(store, arguments),
         "run_chain_validation" => run_chain_validation(store, arguments),
         // group 6: content and safety systems
         "audit_safety" => audit_safety(store, arguments),

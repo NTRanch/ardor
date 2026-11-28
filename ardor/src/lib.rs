@@ -12,6 +12,7 @@ pub mod genesis;
 pub mod guard;
 pub mod model;
 pub mod playtest;
+pub mod portraits;
 pub mod projection;
 pub mod scene_record;
 pub mod server;

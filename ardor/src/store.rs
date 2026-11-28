@@ -3,8 +3,8 @@
 //! One directory per project under the server home; one JSON
 //! document per concern inside it (`project.json`, `cast.json`,
 //! `canon.json`, `census.json`, `chains.json`, `graph.json`, `systems.json`,
-//! `story.json`, `levels.json`, `safety.json`, `assets.json`, `qa.json`,
-//! `releases.json`). Documents load fully into memory; a canonical
+//! `story.json`, `levels.json`, `safety.json`, `assets.json`, `portraits.json`,
+//! `qa.json`, `releases.json`). Documents load fully into memory; a canonical
 //! write replaces exactly the documents an operation touched, via
 //! write-temp-then-rename so a crash never leaves a torn file.
 //! Nothing is written before the gate (see `gate.rs`) approves the
@@ -18,9 +18,22 @@ use serde_json::{Value, json};
 use crate::model::{canonical, empty_object, sha256_hex};
 
 /// Document names (also the in-memory field keys), alphabetical.
-pub const DOCS: [&str; 14] = [
-    "assets", "canon", "cast", "census", "chains", "genesis", "graph", "levels", "project", "qa",
-    "releases", "safety", "story", "systems",
+pub const DOCS: [&str; 15] = [
+    "assets",
+    "canon",
+    "cast",
+    "census",
+    "chains",
+    "genesis",
+    "graph",
+    "levels",
+    "portraits",
+    "project",
+    "qa",
+    "releases",
+    "safety",
+    "story",
+    "systems",
 ];
 
 /// A store failure (I/O or corrupt state). Carried as a stable

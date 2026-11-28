@@ -1,5 +1,21 @@
 # Changelog — Ardor
 
+## Unreleased
+
+- **Portrait-lock registry (M-1)** — five tools generalize the
+  MoonDeep portrait-lock registry CLI into the server, per game:
+  `register_portrait` (server-computed sha256 pin; the frame is
+  born as an asset record through the `register_asset` gate),
+  `lock_portrait` (a lock without an Owner ruling is refused by
+  the gate), `get_portrait_lock`, `list_portrait_locks`,
+  `list_portrait_history`. New store document `portraits`
+  (schema `portrait-registry/1`); reads re-verify every pin live.
+  The MoonDeep registry (139 entries) is migrated as the first
+  dataset under `tools/ardor-registry/moondeep/`, verified
+  139/139 through the tools. Surface: 66 tools in ten groups.
+  No version bump: 1.1.0 remains the published crates.io release
+  until the next publish.
+
 ## 1.1.0 — 2026-11-26
 
 The Stage 1–4 programme release: everything merged to main since the

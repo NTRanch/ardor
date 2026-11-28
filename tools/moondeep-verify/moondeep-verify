@@ -1,0 +1,497 @@
+#!/usr/bin/env python3
+"""moondeep-verify — freeze-hash / bind verifier for MoonDeep motion clips.
+
+Verifies frozen torogao-motion-clip/2 files (D-1397: animation is code)
+and their bind evidence, recomputing every number from the artefacts
+themselves instead of trusting transcriptions.
+
+FREEZE HASH (torogao-format h0 canonicalisation, as cracked by hand in
+the tranche-1 verdict-pack verification, 2026-11-27):
+    sha256( raw_file_text with the `,"freeze":{...}` block removed,
+            trailing newline stripped )
+The recorded hash is the `freeze.sha256` value inside the block. A
+59-char truncated rite_salute hash survived into two documents before
+this recomputation existed; this tool is the standing form of it.
+
+BIND CHECKS: given a bind_report.json, recompute the twin and
+loop-closure pixel diffs from the frame PNGs beside it (channel-max
+mask, per rig-lessons L-37: pixels, never file md5 — a pixel counts
+as differing when any channel differs). Claims are read from a
+gates.json beside or above the report (clips.<clip>.twin /
+.loop_closure .differing / .max_channel_delta) when one exists;
+without a claim the recomputed numbers are reported as UNCLAIMED.
+
+USAGE:
+    moondeep-verify PATH [PATH...]          files or dirs (recursive)
+    moondeep-verify --claim HEX PATH...     also compare each recomputed
+                                            freeze hash against an
+                                            externally transcribed HEX
+                                            (the document-checking mode)
+    moondeep-verify --self-test CLIP BIND_DIR
+                                            planted controls on scratch
+                                            copies: one corrupted hash
+                                            digit, one corrupted channel
+                                            byte, one corrupted frame
+                                            pixel — all must be caught
+
+EXIT CODES: 0 = everything verified PASS · 1 = any MISMATCH ·
+2 = unreadable / nothing verifiable in an explicitly named file.
+Python stdlib only.
+"""
+
+import hashlib
+import json
+import os
+import struct
+import sys
+import zlib
+
+# ---------------------------------------------------------------- freeze
+
+def find_freeze_span(text):
+    """Return (start, end) of the `,"freeze":{...}` segment in raw text,
+    or None. Brace scan is string-aware. If freeze is the first key
+    (no leading comma), the span covers `"freeze":{...},` instead."""
+    i = text.find('"freeze":{')
+    if i < 0:
+        return None
+    j = text.index('{', i)
+    depth = 0
+    in_str = False
+    esc = False
+    k = j
+    while k < len(text):
+        c = text[k]
+        if in_str:
+            if esc:
+                esc = False
+            elif c == '\\':
+                esc = True
+            elif c == '"':
+                in_str = False
+        else:
+            if c == '"':
+                in_str = True
+            elif c == '{':
+                depth += 1
+            elif c == '}':
+                depth -= 1
+                if depth == 0:
+                    end = k + 1
+                    if i > 0 and text[i - 1] == ',':
+                        return (i - 1, end)
+                    if end < len(text) and text[end] == ',':
+                        return (i, end + 1)
+                    return (i, end)
+        k += 1
+    return None
+
+
+def freeze_recompute(raw_bytes):
+    """Return (recomputed_hash, recorded_hash) or raise ValueError."""
+    text = raw_bytes.decode('utf-8')
+    span = find_freeze_span(text)
+    if span is None:
+        raise ValueError('no freeze block')
+    canon = text[:span[0]] + text[span[1]:]
+    if canon.endswith('\n'):
+        canon = canon[:-1]
+        if canon.endswith('\r'):
+            canon = canon[:-1]
+    recomputed = hashlib.sha256(canon.encode('utf-8')).hexdigest()
+    recorded = json.loads(text)['freeze']['sha256']
+    return recomputed, recorded
+
+
+# ---------------------------------------------------------------- png
+
+def png_decode(path):
+    """Decode a PNG to (width, height, rgba_bytes) using stdlib only.
+    Bit depth 8, colour types 0/2/3/4/6, non-interlaced."""
+    data = open(path, 'rb').read()
+    if data[:8] != b'\x89PNG\r\n\x1a\n':
+        raise ValueError('not a PNG')
+    pos = 8
+    idat = bytearray()
+    plte = None
+    meta = None
+    while pos < len(data):
+        (length,) = struct.unpack('>I', data[pos:pos + 4])
+        ctype = data[pos + 4:pos + 8]
+        chunk = data[pos + 8:pos + 8 + length]
+        if ctype == b'IHDR':
+            w, h, bd, ct, _comp, _filt, inter = struct.unpack('>IIBBBBB', chunk)
+            if bd != 8:
+                raise ValueError('bit depth %d unsupported' % bd)
+            if inter != 0:
+                raise ValueError('interlaced PNG unsupported')
+            meta = (w, h, ct)
+        elif ctype == b'PLTE':
+            plte = chunk
+        elif ctype == b'IDAT':
+            idat += chunk
+        pos += 12 + length
+    w, h, ct = meta
+    nch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ct]
+    raw = zlib.decompress(bytes(idat))
+    stride = w * nch
+    out = bytearray(h * stride)
+    prev = bytearray(stride)
+    p = 0
+    for y in range(h):
+        f = raw[p]
+        p += 1
+        row = bytearray(raw[p:p + stride])
+        p += stride
+        if f == 1:      # Sub
+            for i in range(nch, stride):
+                row[i] = (row[i] + row[i - nch]) & 0xFF
+        elif f == 2:    # Up
+            for i in range(stride):
+                row[i] = (row[i] + prev[i]) & 0xFF
+        elif f == 3:    # Average
+            for i in range(stride):
+                left = row[i - nch] if i >= nch else 0
+                row[i] = (row[i] + ((left + prev[i]) >> 1)) & 0xFF
+        elif f == 4:    # Paeth
+            for i in range(stride):
+                a = row[i - nch] if i >= nch else 0
+                b = prev[i]
+                c = prev[i - nch] if i >= nch else 0
+                pa, pb, pc = abs(b - c), abs(a - c), abs(a + b - 2 * c)
+                pr = a if (pa <= pb and pa <= pc) else (b if pb <= pc else c)
+                row[i] = (row[i] + pr) & 0xFF
+        elif f != 0:
+            raise ValueError('unknown filter %d' % f)
+        out[y * stride:(y + 1) * stride] = row
+        prev = row
+    if ct == 6:
+        return w, h, bytes(out)
+    rgba = bytearray(w * h * 4)
+    if ct == 2:
+        for i in range(w * h):
+            rgba[4 * i:4 * i + 3] = out[3 * i:3 * i + 3]
+            rgba[4 * i + 3] = 255
+    elif ct == 0:
+        for i in range(w * h):
+            rgba[4 * i] = rgba[4 * i + 1] = rgba[4 * i + 2] = out[i]
+            rgba[4 * i + 3] = 255
+    elif ct == 4:
+        for i in range(w * h):
+            rgba[4 * i] = rgba[4 * i + 1] = rgba[4 * i + 2] = out[2 * i]
+            rgba[4 * i + 3] = out[2 * i + 1]
+    elif ct == 3:
+        for i in range(w * h):
+            idx = out[i] * 3
+            rgba[4 * i:4 * i + 3] = plte[idx:idx + 3]
+            rgba[4 * i + 3] = 255
+    return w, h, bytes(rgba)
+
+
+def png_idat(path):
+    """Raw concatenated IDAT payload — a fast identity path: equal IDAT
+    under the same IHDR means equal pixels, no decode needed."""
+    data = open(path, 'rb').read()
+    pos = 8
+    idat = bytearray()
+    ihdr = None
+    while pos < len(data):
+        (length,) = struct.unpack('>I', data[pos:pos + 4])
+        ctype = data[pos + 4:pos + 8]
+        if ctype == b'IHDR':
+            ihdr = data[pos + 8:pos + 8 + length]
+        elif ctype == b'IDAT':
+            idat += data[pos + 8:pos + 8 + length]
+        pos += 12 + length
+    return ihdr, bytes(idat)
+
+
+def pixel_diff(path_a, path_b):
+    """Return (differing_px, pixels, max_channel_delta). Channel-max
+    mask: a pixel differs when the largest per-channel |delta| > 0."""
+    ihdr_a, idat_a = png_idat(path_a)
+    ihdr_b, idat_b = png_idat(path_b)
+    if ihdr_a == ihdr_b and idat_a == idat_b:
+        w, h = struct.unpack('>II', ihdr_a[:8])
+        return 0, w * h, 0
+    wa, ha, pa = png_decode(path_a)
+    wb, hb, pb = png_decode(path_b)
+    if (wa, ha) != (wb, hb):
+        raise ValueError('dimension mismatch %dx%d vs %dx%d' % (wa, ha, wb, hb))
+    differing = 0
+    max_delta = 0
+    for i in range(0, len(pa), 4):
+        d = max(abs(pa[i] - pb[i]), abs(pa[i + 1] - pb[i + 1]),
+                abs(pa[i + 2] - pb[i + 2]), abs(pa[i + 3] - pb[i + 3]))
+        if d:
+            differing += 1
+            if d > max_delta:
+                max_delta = d
+    return differing, wa * ha, max_delta
+
+
+def png_encode_rgba(path, w, h, rgba):
+    """Minimal encoder (filter 0 rows) — used by --self-test to plant
+    a corrupted pixel in a scratch copy."""
+    def chunk(ctype, payload):
+        c = struct.pack('>I', len(payload)) + ctype + payload
+        return c + struct.pack('>I', zlib.crc32(ctype + payload) & 0xFFFFFFFF)
+    raw = bytearray()
+    stride = w * 4
+    for y in range(h):
+        raw.append(0)
+        raw += rgba[y * stride:(y + 1) * stride]
+    ihdr = struct.pack('>IIBBBBB', w, h, 8, 6, 0, 0, 0)
+    out = (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', ihdr)
+           + chunk(b'IDAT', zlib.compress(bytes(raw), 6)) + chunk(b'IEND', b''))
+    open(path, 'wb').write(out)
+
+
+# ---------------------------------------------------------------- checks
+
+class Results:
+    def __init__(self):
+        self.passed = 0
+        self.mismatched = 0
+        self.skipped = 0
+        self.unreadable = 0
+
+
+def check_freeze(path, res, claim=None):
+    try:
+        raw = open(path, 'rb').read()
+    except OSError as e:
+        print('UNREADABLE %s (%s)' % (path, e))
+        res.unreadable += 1
+        return
+    try:
+        recomputed, recorded = freeze_recompute(raw)
+    except (ValueError, KeyError, json.JSONDecodeError) as e:
+        print('NO-FREEZE %s (%s)' % (path, e))
+        res.skipped += 1
+        return
+    ok = recomputed.lower() == recorded.lower()
+    print('%s %s freeze recomputed=%s recorded=%s'
+          % ('PASS' if ok else 'MISMATCH', path, recomputed, recorded))
+    if ok:
+        res.passed += 1
+    else:
+        res.mismatched += 1
+    if claim is not None:
+        cok = recomputed.lower() == claim.lower()
+        print('%s %s claim=%s recomputed=%s'
+              % ('PASS' if cok else 'MISMATCH', path, claim, recomputed))
+        if cok:
+            res.passed += 1
+        else:
+            res.mismatched += 1
+
+
+def find_gates(report_dir):
+    d = os.path.abspath(report_dir)
+    for _ in range(3):
+        g = os.path.join(d, 'gates.json')
+        if os.path.isfile(g):
+            try:
+                return json.load(open(g))
+            except (OSError, json.JSONDecodeError):
+                return None
+        d = os.path.dirname(d)
+    return None
+
+
+def check_bind(path, res):
+    try:
+        report = json.load(open(path))
+        renders = report['renders']
+        frames_bound = report['frames_bound']
+        clip = report.get('clip', '?')
+    except (OSError, KeyError, json.JSONDecodeError) as e:
+        print('UNREADABLE %s (%s)' % (path, e))
+        res.unreadable += 1
+        return
+    d = os.path.dirname(os.path.abspath(path))
+    gates = find_gates(d)
+    claim = None
+    if gates:
+        claim = gates.get('clips', {}).get(clip)
+    by_file = {r['file']: r for r in renders}
+
+    def front(frame):
+        name = 'bind_f%03d_front.png' % frame
+        return os.path.join(d, name) if name in by_file else None
+
+    twin_a = next((r for r in renders if r['file'].endswith('_twinA.png')), None)
+    twin_b = next((r for r in renders if r['file'].endswith('_twinB.png')), None)
+    pairs = []
+    if twin_a and twin_b:
+        pairs.append(('twin', os.path.join(d, twin_a['file']),
+                      os.path.join(d, twin_b['file']),
+                      (claim or {}).get('twin')))
+    lo, hi = frames_bound[0], frames_bound[-1]
+    fa, fb = front(lo), front(hi)
+    if fa and fb and lo != hi:
+        pairs.append(('loop_closure', fa, fb, (claim or {}).get('loop_closure')))
+    if not pairs:
+        print('NO-CHECKS %s (no twin pair or loop pair in renders)' % path)
+        res.skipped += 1
+        return
+    for kind, pa, pb, c in pairs:
+        if not (os.path.isfile(pa) and os.path.isfile(pb)):
+            print('SKIPPED %s %s (frames not present)' % (path, kind))
+            res.skipped += 1
+            continue
+        try:
+            differing, pixels, max_delta = pixel_diff(pa, pb)
+        except (OSError, ValueError) as e:
+            print('MISMATCH %s %s (diff failed: %s)' % (path, kind, e))
+            res.mismatched += 1
+            continue
+        if c is None:
+            print('UNCLAIMED %s %s differing=%d pixels=%d max_delta=%d'
+                  % (path, kind, differing, pixels, max_delta))
+            res.skipped += 1
+            continue
+        ok = (differing == c.get('differing')
+              and max_delta == c.get('max_channel_delta', max_delta)
+              and pixels == c.get('pixels', pixels))
+        print('%s %s %s differing=%d (claimed %s) max_delta=%d (claimed %s)'
+              % ('PASS' if ok else 'MISMATCH', path, kind, differing,
+                 c.get('differing'), max_delta, c.get('max_channel_delta')))
+        if ok:
+            res.passed += 1
+        else:
+            res.mismatched += 1
+
+
+# ---------------------------------------------------------------- self-test
+
+def self_test(clip_path, bind_dir):
+    import shutil
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix='moondeep-verify-selftest-')
+    failures = []
+    try:
+        raw = open(clip_path, 'rb').read()
+        recomputed, recorded = freeze_recompute(raw)
+        # control 1: one corrupted hash digit in the recorded value
+        bad = ('0' if recorded[0] != '0' else '1') + recorded[1:]
+        doctored = raw.replace(recorded.encode(), bad.encode(), 1)
+        p1 = os.path.join(tmp, 'badhash.json')
+        open(p1, 'wb').write(doctored)
+        r1, rec1 = freeze_recompute(open(p1, 'rb').read())
+        if r1 == rec1:
+            failures.append('corrupted hash digit NOT caught')
+        else:
+            print('CONTROL PASS corrupted-hash-digit -> MISMATCH '
+                  '(recorded %s… vs recomputed %s…)' % (bad[:12], r1[:12]))
+        # control 2: one corrupted byte in channel data
+        text = raw.decode('utf-8')
+        span = find_freeze_span(text)
+        head = text[:span[0]]
+        pos = head.find('"value"')
+        if pos < 0:
+            failures.append('no channel value found to corrupt')
+        else:
+            seg = head[pos:pos + 200]
+            di = next(i for i, ch in enumerate(seg) if ch.isdigit())
+            newd = str((int(seg[di]) + 1) % 10)
+            corrupt = head[:pos + di] + newd + head[pos + di + 1:] + text[span[0]:]
+            p2 = os.path.join(tmp, 'badchannel.json')
+            open(p2, 'w').write(corrupt)
+            r2, rec2 = freeze_recompute(open(p2, 'rb').read())
+            if r2 == rec2:
+                failures.append('corrupted channel byte NOT caught')
+            else:
+                print('CONTROL PASS corrupted-channel-byte -> MISMATCH '
+                      '(recomputed %s…)' % r2[:12])
+        # control 3: one corrupted pixel in a twin frame
+        report = json.load(open(os.path.join(bind_dir, 'bind_report.json')))
+        ta = next(r['file'] for r in report['renders']
+                  if r['file'].endswith('_twinA.png'))
+        tb = next(r['file'] for r in report['renders']
+                  if r['file'].endswith('_twinB.png'))
+        w, h, px = png_decode(os.path.join(bind_dir, tb))
+        px2 = bytearray(px)
+        px2[0] = (px2[0] + 17) % 256
+        pb_path = os.path.join(tmp, 'twinB_corrupt.png')
+        png_encode_rgba(pb_path, w, h, bytes(px2))
+        differing, pixels, max_delta = pixel_diff(
+            os.path.join(bind_dir, ta), pb_path)
+        if differing != 1:
+            failures.append('corrupted pixel: differing=%d, expected 1'
+                            % differing)
+        else:
+            print('CONTROL PASS corrupted-pixel -> differing=1 of %d '
+                  '(max_delta=%d)' % (pixels, max_delta))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    if failures:
+        for f in failures:
+            print('CONTROL FAIL %s' % f)
+        return 1
+    print('SELF-TEST PASS (3/3 planted controls caught)')
+    return 0
+
+
+# ---------------------------------------------------------------- main
+
+def iter_targets(paths):
+    for p in paths:
+        if os.path.isdir(p):
+            for root, _dirs, files in os.walk(p):
+                for f in sorted(files):
+                    if f.endswith('.json'):
+                        yield os.path.join(root, f)
+        else:
+            yield p
+
+
+def main(argv):
+    args = [a for a in argv[1:] if not a.startswith('--')]
+    opts = [a for a in argv[1:] if a.startswith('--')]
+    claim = None
+    for o in opts:
+        if o.startswith('--claim='):
+            claim = o.split('=', 1)[1].strip().lower()
+        elif o == '--help' or o == '-h':
+            print(__doc__)
+            return 0
+        elif o == '--self-test':
+            pass
+        else:
+            print('unknown option %s' % o, file=sys.stderr)
+            return 2
+    if '--self-test' in opts:
+        if len(args) != 2:
+            print('usage: moondeep-verify --self-test CLIP_JSON BIND_DIR',
+                  file=sys.stderr)
+            return 2
+        return self_test(args[0], args[1])
+    if not args:
+        print(__doc__, file=sys.stderr)
+        return 2
+    explicit_files = [p for p in args if os.path.isfile(p)]
+    for p in args:
+        if not os.path.exists(p):
+            print('UNREADABLE %s (no such path)' % p)
+            return 2
+    res = Results()
+    for target in iter_targets(args):
+        if os.path.basename(target) == 'bind_report.json':
+            check_bind(target, res)
+        else:
+            check_freeze(target, res, claim=claim)
+    print('SUMMARY pass=%d mismatch=%d skipped=%d unreadable=%d'
+          % (res.passed, res.mismatched, res.skipped, res.unreadable))
+    if res.mismatched:
+        return 1
+    if res.unreadable:
+        return 2
+    if res.passed == 0 and explicit_files:
+        return 2
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""moondeep-registry — MoonDeep portrait-lock registry CLI.
+"""ardor-registry — MoonDeep portrait-lock registry CLI.
 
 The registry (registry.json, beside this script by default) is the
 durable form of the portrait lock: one entry per frame of record with
@@ -22,7 +22,7 @@ Commands:
                                 locked frame if any, else her
                                 working-set frame, with sha256.
 
-Registry location: --registry PATH, else $MOONDEEP_REGISTRY, else
+Registry location: --registry PATH, else $ARDOR_REGISTRY, else
 registry.json in this script's directory (the in-repo copy is the
 state of record; lock state is versioned state).
 
@@ -121,7 +121,7 @@ def cmd_lock(reg, registry_path, args):
              "supersedes": [], "superseded_by": None, "ruling": None, "note": None}
         reg["entries"].append(e)
     date = args.date or datetime.date.today().isoformat()
-    quote = args.ruling or "Owner lock via moondeep-registry CLI"
+    quote = args.ruling or "Owner lock via ardor-registry CLI"
     superseded_now = []
     for other in reg["entries"]:
         if other is e or other["girl"] != girl:
@@ -175,9 +175,9 @@ def cmd_manifest(reg, args):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(prog="moondeep-registry", description=__doc__,
+    p = argparse.ArgumentParser(prog="ardor-registry", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--registry", default=os.environ.get("MOONDEEP_REGISTRY"),
+    p.add_argument("--registry", default=os.environ.get("ARDOR_REGISTRY"),
                    help="registry.json path (default: beside this script)")
     sub = p.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("check", help="is this base current?")

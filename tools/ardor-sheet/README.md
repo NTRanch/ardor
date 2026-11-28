@@ -1,4 +1,4 @@
-# moondeep-sheet — sheet + delivery kit (TOOLING-PLAN T3)
+# ardor-sheet — sheet + delivery kit (TOOLING-PLAN T3)
 
 One builder for the MoonDeep standard sheet deliveries, converging
 the four hand-written `build_sheets.py` variants the 2026-11-27 art
@@ -15,8 +15,8 @@ frame, DejaVu Sans-Bold, panel field (18,18,18), sheet field
 ## Usage
 
 ```
-moondeep-sheet row  --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
-moondeep-sheet cast --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
+ardor-sheet row  --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
+ardor-sheet cast --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
                     [--cols 4] [--scale 2] [--pad 12]
 
 SPEC = PATH|CLASS|LABEL   (pipe-separated; paths must not contain '|')

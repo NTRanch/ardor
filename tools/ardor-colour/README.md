@@ -1,4 +1,4 @@
-# moondeep-colour
+# ardor-colour
 
 The estate's one colour/drift measurement tool for MoonDeep portrait
 work. Consolidates the four colour samplers written by hand on
@@ -13,10 +13,10 @@ ruler. Build record and gate evidence: `RECORD-T1.md` in
 ## Usage
 
 ```
-python3 moondeep-colour sample  GIRL IMAGE [--patches SET] [--iris SET]
-python3 moondeep-colour drift   GIRL BASE CANDIDATE [--patches SET] [--iris SET]
-python3 moondeep-colour pupil   GIRL IMAGE [--set SET] [--centre X Y]...
-python3 moondeep-colour presets
+python3 ardor-colour sample  GIRL IMAGE [--patches SET] [--iris SET]
+python3 ardor-colour drift   GIRL BASE CANDIDATE [--patches SET] [--iris SET]
+python3 ardor-colour pupil   GIRL IMAGE [--set SET] [--centre X Y]...
+python3 ardor-colour presets
 ```
 
 - `GIRL`: solenne, umbra, wrenna, petra, sable, tamsin, vesper.

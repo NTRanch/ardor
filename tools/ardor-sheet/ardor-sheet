@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""moondeep-sheet — the MoonDeep sheet + delivery kit (TOOLING-PLAN T3).
+"""ardor-sheet — the MoonDeep sheet + delivery kit (TOOLING-PLAN T3).
 
 One builder for the estate's standard sheet deliveries, converging the
 four hand-written build_sheets.py variants the 2026-11-27 lanes each
@@ -8,8 +8,8 @@ heightfix sheet also used): per-panel caption band on top, DejaVu
 Sans-Bold, panel field (18,18,18), sheet field (40,40,40).
 
 USAGE
-    moondeep-sheet row  --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
-    moondeep-sheet cast --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
+    ardor-sheet row  --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
+    ardor-sheet cast --out NAME [--dir DIR] --panel SPEC [--panel SPEC ...]
                         [--cols 4] [--scale 2] [--pad 12]
 
     SPEC = PATH|CLASS|LABEL   (pipe-separated; paths must not contain '|')
@@ -260,7 +260,7 @@ def build_sheet(args: argparse.Namespace) -> dict[str, Path]:
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="moondeep-sheet",
+        prog="ardor-sheet",
         description="MoonDeep sheet + delivery kit (see file header).")
     sub = parser.add_subparsers(dest="command", required=True)
     for name in ("row", "cast"):
@@ -299,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         outputs = build_sheet(args)
     except SheetError as exc:
-        print(f"moondeep-sheet: error: {exc}", file=sys.stderr)
+        print(f"ardor-sheet: error: {exc}", file=sys.stderr)
         return 2
     for key, path in outputs.items():
         img = Image.open(path) if path.suffix in (".png", ".jpg") else None

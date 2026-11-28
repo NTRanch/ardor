@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""moondeep-verify — freeze-hash / bind verifier for MoonDeep motion clips.
+"""ardor-verify — freeze-hash / bind verifier for MoonDeep motion clips.
 
 Verifies frozen torogao-motion-clip/2 files (D-1397: animation is code)
 and their bind evidence, recomputing every number from the artefacts
@@ -22,12 +22,12 @@ gates.json beside or above the report (clips.<clip>.twin /
 without a claim the recomputed numbers are reported as UNCLAIMED.
 
 USAGE:
-    moondeep-verify PATH [PATH...]          files or dirs (recursive)
-    moondeep-verify --claim HEX PATH...     also compare each recomputed
+    ardor-verify PATH [PATH...]          files or dirs (recursive)
+    ardor-verify --claim HEX PATH...     also compare each recomputed
                                             freeze hash against an
                                             externally transcribed HEX
                                             (the document-checking mode)
-    moondeep-verify --self-test CLIP BIND_DIR
+    ardor-verify --self-test CLIP BIND_DIR
                                             planted controls on scratch
                                             copies: one corrupted hash
                                             digit, one corrupted channel
@@ -369,7 +369,7 @@ def check_bind(path, res):
 def self_test(clip_path, bind_dir):
     import shutil
     import tempfile
-    tmp = tempfile.mkdtemp(prefix='moondeep-verify-selftest-')
+    tmp = tempfile.mkdtemp(prefix='ardor-verify-selftest-')
     failures = []
     try:
         raw = open(clip_path, 'rb').read()
@@ -464,7 +464,7 @@ def main(argv):
             return 2
     if '--self-test' in opts:
         if len(args) != 2:
-            print('usage: moondeep-verify --self-test CLIP_JSON BIND_DIR',
+            print('usage: ardor-verify --self-test CLIP_JSON BIND_DIR',
                   file=sys.stderr)
             return 2
         return self_test(args[0], args[1])

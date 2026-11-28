@@ -1,4 +1,4 @@
-# tools/moondeep-registry — MoonDeep portrait-lock registry
+# tools/ardor-registry — MoonDeep portrait-lock registry
 
 The durable form of the MoonDeep portrait lock, built per
 `TOOLING-PLAN.md` T2 (BUILD-NOW, commissioned 2026-11-27). One JSON
@@ -9,7 +9,7 @@ it superseded, and the Owner ruling that put it there.
 
 ## Files
 
-- `moondeep-registry` — the CLI (executable, Python 3 stdlib only).
+- `ardor-registry` — the CLI (executable, Python 3 stdlib only).
 - `registry.json` — the registry of record. **Lock state is versioned
   state**: it lives here, in the repo, and changes to it are commits.
 - `README.md` — this file.
@@ -37,26 +37,26 @@ hand in this schema, or via `lock` when the Owner picks finals).
 ## Usage
 
 Run from anywhere; the CLI finds `registry.json` beside itself
-(override with `--registry PATH` or `$MOONDEEP_REGISTRY`).
+(override with `--registry PATH` or `$ARDOR_REGISTRY`).
 
 ```sh
 # Pre-flight before striking on a base: is it still current?
-tools/moondeep-registry/moondeep-registry check /path/to/base.png
+tools/ardor-registry/ardor-registry check /path/to/base.png
 #   CURRENT <path> (status: ...)            exit 0 — strike away
 #   SUPERSEDED-BY <newer path>              exit 1 — use the newer base
 #   DEFECTIVE <path>                        exit 1 — gated out (reject/framing)
 #   UNKNOWN <path>                          exit 2 — not a frame of record
 
 # Record the Owner's lock for a girl (step 1's closing act):
-tools/moondeep-registry/moondeep-registry lock solenne /path/to/final.png \
+tools/ardor-registry/ardor-registry lock solenne /path/to/final.png \
     --ruling "Owner lock, 2026-11-27" --date 2026-11-27
 # Her previous locked/working-set frame is marked superseded by the
 # new one; the change is a registry edit — commit it.
 
 # The step-2 (festival) asset manifest: per girl, locked frame if
 # any, else the working-set frame, with sha256:
-tools/moondeep-registry/moondeep-registry manifest
-tools/moondeep-registry/moondeep-registry manifest --format text
+tools/ardor-registry/ardor-registry manifest
+tools/ardor-registry/ardor-registry manifest --format text
 ```
 
 `check` also matches by content: a byte-identical copy of a

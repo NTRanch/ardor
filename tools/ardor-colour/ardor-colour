@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""moondeep-colour — the estate's ONE colour/drift measurement tool for
+"""ardor-colour — the estate's ONE colour/drift measurement tool for
 MoonDeep portrait work. Consolidates the four samplers written by hand
 on 2026-11-27 (candle carry's 48x48-patch method; C1 full-colour lane's
 iris-mode sampler.py + measure*.py; judged-picks lane's drift_sampler.py;
@@ -8,10 +8,10 @@ so drift numbers are comparable across sets — the portrait lock is a
 cross-set comparison and needs one ruler.
 
 USAGE
-  moondeep-colour sample  GIRL IMAGE [--patches SET] [--iris SET]
-  moondeep-colour drift   GIRL BASE CANDIDATE [--patches SET] [--iris SET]
-  moondeep-colour pupil   GIRL IMAGE [--set SET] [--centre X Y]...
-  moondeep-colour presets
+  ardor-colour sample  GIRL IMAGE [--patches SET] [--iris SET]
+  ardor-colour drift   GIRL BASE CANDIDATE [--patches SET] [--iris SET]
+  ardor-colour pupil   GIRL IMAGE [--set SET] [--centre X Y]...
+  ardor-colour presets
 
   GIRL is one of: solenne umbra wrenna petra sable tamsin vesper.
   SET names a preset geometry in presets.json ('judged' patch coords
@@ -43,7 +43,7 @@ METHODS (each is a lane's published method, kept verbatim in spirit)
             move toward 35 degrees, the candle-amber pole).
 
 OUTPUT — one JSON object on stdout:
-  {"tool": "moondeep-colour", "version": 1, "mode": ..., "girl": ...,
+  {"tool": "ardor-colour", "version": 1, "mode": ..., "girl": ...,
    "image"/"base"/"candidate": ..., "regions": {...}, ...}
   Numbers are rounded exactly as the source lanes rounded them
   (hue 1dp, sat/val 3dp) so cross-set tables stay comparable.
@@ -178,7 +178,7 @@ def main(argv):
 
     if mode == "sample":
         im = load(opts[0])
-        out = {"tool": "moondeep-colour", "version": 1, "mode": "sample",
+        out = {"tool": "ardor-colour", "version": 1, "mode": "sample",
                "girl": girl, "image": opts[0], "patch_set": patch_set, "iris_set": iris_set}
         out.update(measure(im, girl, patch_set, iris_set))
         print(json.dumps(out, indent=1))
@@ -199,7 +199,7 @@ def main(argv):
             if "hue" in b and "hue" in c:
                 e["drift"] = drift_of(b, c)
             iris.append(e)
-        out = {"tool": "moondeep-colour", "version": 1, "mode": "drift", "girl": girl,
+        out = {"tool": "ardor-colour", "version": 1, "mode": "drift", "girl": girl,
                "base": base_p, "candidate": cand_p, "patch_set": patch_set, "iris_set": iris_set,
                "background_corner_rgb": {"base": bm["background_corner_rgb"],
                                          "candidate": cm["background_corner_rgb"]},
@@ -223,7 +223,7 @@ def main(argv):
             centres = PRESETS["girls"][girl]["pupil"].get(pset) or \
                 PRESETS["girls"][girl]["pupil"]["c1"]
         eyes = [pupil_disc(im, cx, cy) for cx, cy in centres]
-        out = {"tool": "moondeep-colour", "version": 1, "mode": "pupil", "girl": girl,
+        out = {"tool": "ardor-colour", "version": 1, "mode": "pupil", "girl": girl,
                "image": path, "eyes": eyes, "verdict": pupil_verdict(eyes),
                "rule": {"dark_fraction_max": PUPIL_DARK_MAX, "mean_median_val_min": PUPIL_MED_V_MIN}}
         print(json.dumps(out, indent=1))

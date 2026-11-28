@@ -1,4 +1,4 @@
-# moondeep-verify
+# ardor-verify
 
 Freeze-hash / bind verifier for MoonDeep motion clips. Recomputes every
 number from the artefacts themselves instead of trusting transcriptions —
@@ -28,12 +28,12 @@ reported as UNCLAIMED.
 
 ## Usage
 
-    moondeep-verify PATH [PATH...]            files or dirs (recursive)
-    moondeep-verify --claim HEX PATH...       also compare each recomputed
+    ardor-verify PATH [PATH...]            files or dirs (recursive)
+    ardor-verify --claim HEX PATH...       also compare each recomputed
                                               freeze hash against an
                                               externally transcribed HEX
                                               (the document-checking mode)
-    moondeep-verify --self-test CLIP BIND_DIR planted controls on scratch
+    ardor-verify --self-test CLIP BIND_DIR planted controls on scratch
                                               copies: one corrupted hash
                                               digit, one corrupted channel
                                               byte, one corrupted frame

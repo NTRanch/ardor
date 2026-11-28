@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+"""moondeep-registry — MoonDeep portrait-lock registry CLI.
+
+The registry (registry.json, beside this script by default) is the
+durable form of the portrait lock: one entry per frame of record with
+its sha256, status (working-set / candidate / superseded / defective /
+locked), supersedes chain, and the ruling that set the status.
+
+Commands:
+  check <path>                  Is this base current?
+                                  CURRENT            (exit 0)
+                                  SUPERSEDED-BY <p>  (exit 1)
+                                  DEFECTIVE          (exit 1)
+                                  UNKNOWN            (exit 2)
+  lock <girl> <path> [--ruling "text"] [--date YYYY-MM-DD]
+                                Record <path> as <girl>'s locked frame.
+                                Her previous locked/working-set frame
+                                (if a different path) is marked
+                                superseded by it.
+  manifest [--format json|text]
+                                Emit the asset manifest: per girl, her
+                                locked frame if any, else her
+                                working-set frame, with sha256.
+
+Registry location: --registry PATH, else $MOONDEEP_REGISTRY, else
+registry.json in this script's directory (the in-repo copy is the
+state of record; lock state is versioned state).
+
+Stdlib only.
+"""
+import argparse, datetime, hashlib, json, os, sys
+
+GIRLS = ["solenne", "umbra", "wrenna", "petra", "sable", "tamsin", "vesper"]
+
+
+def sha256_of(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def default_registry_path():
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)), "registry.json")
+
+
+def load_registry(path):
+    with open(path) as f:
+        return json.load(f)
+
+
+def save_registry(reg, path):
+    reg["updated"] = datetime.date.today().isoformat()
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(reg, f, indent=1)
+    os.replace(tmp, path)
+
+
+def norm(path):
+    return os.path.realpath(os.path.abspath(os.path.expanduser(path)))
+
+
+def find_by_path(reg, path):
+    for e in reg["entries"]:
+        if e["path"] == path:
+            return e
+    return None
+
+
+def find_by_sha(reg, sha):
+    for e in reg["entries"]:
+        if e["sha256"] == sha:
+            return e
+    return None
+
+
+def verdict(e, queried):
+    """Print the check verdict for entry e; return the exit code."""
+    if e["superseded_by"]:
+        print(f"SUPERSEDED-BY {e['superseded_by']} (queried: {queried}; "
+              f"girl: {e['girl']}, set: {e['set']}, status: {e['status']})")
+        return 1
+    if e["status"] == "defective":
+        print(f"DEFECTIVE {e['path']} (girl: {e['girl']}, set: {e['set']})")
+        return 1
+    extra = "" if e["path"] == queried else f" (registered as {e['path']})"
+    print(f"CURRENT {queried} (status: {e['status']}, girl: {e['girl']}, set: {e['set']}){extra}")
+    return 0
+
+
+def cmd_check(reg, args):
+    path = norm(args.path)
+    e = find_by_path(reg, path)
+    if e is None and os.path.isfile(path):
+        e = find_by_sha(reg, sha256_of(path))
+    if e is None:
+        print(f"UNKNOWN {path}")
+        return 2
+    return verdict(e, path)
+
+
+def cmd_lock(reg, registry_path, args):
+    girl = args.girl.lower()
+    if girl not in reg.get("girls", GIRLS):
+        print(f"error: unknown girl '{args.girl}'", file=sys.stderr)
+        return 2
+    path = norm(args.path)
+    e = find_by_path(reg, path)
+    if e is not None and e["girl"] != girl:
+        print(f"error: {path} is registered to {e['girl']}, not {girl}", file=sys.stderr)
+        return 2
+    if e is None:
+        if not os.path.isfile(path):
+            print(f"error: {path} is not registered and does not exist on disk; "
+                  "cannot compute its sha256", file=sys.stderr)
+            return 2
+        e = {"id": path, "girl": girl, "set": "locked", "path": path,
+             "sha256": sha256_of(path), "status": "candidate",
+             "supersedes": [], "superseded_by": None, "ruling": None, "note": None}
+        reg["entries"].append(e)
+    date = args.date or datetime.date.today().isoformat()
+    quote = args.ruling or "Owner lock via moondeep-registry CLI"
+    superseded_now = []
+    for other in reg["entries"]:
+        if other is e or other["girl"] != girl:
+            continue
+        if other["status"] in ("locked", "working-set"):
+            other["status"] = "superseded"
+            other["superseded_by"] = path
+            superseded_now.append(other["path"])
+    e["status"] = "locked"
+    e["superseded_by"] = None
+    e["ruling"] = {"date": date, "quote": quote}
+    for p in superseded_now:
+        if p not in e["supersedes"]:
+            e["supersedes"].append(p)
+    save_registry(reg, registry_path)
+    print(f"LOCKED {girl}: {path} sha256 {e['sha256']}")
+    for p in superseded_now:
+        print(f"  supersedes {p}")
+    return 0
+
+
+def cmd_manifest(reg, args):
+    chosen, missing = [], []
+    for girl in reg.get("girls", GIRLS):
+        pick = None
+        for want in ("locked", "working-set"):
+            for e in reg["entries"]:
+                if e["girl"] == girl and e["status"] == want:
+                    pick = e
+                    break
+            if pick:
+                break
+        if pick:
+            chosen.append({"girl": girl, "path": pick["path"],
+                           "sha256": pick["sha256"], "status": pick["status"],
+                           "set": pick["set"]})
+        else:
+            missing.append(girl)
+            chosen.append({"girl": girl, "path": None, "sha256": None,
+                           "status": None, "set": None})
+    if args.format == "text":
+        for c in chosen:
+            print(f"{c['girl']:8s} {c['status'] or 'MISSING':12s} {c['sha256'] or '-'}  {c['path'] or '-'}")
+    else:
+        print(json.dumps({"manifest": "moondeep-portrait-lock/1",
+                          "generated": datetime.date.today().isoformat(),
+                          "entries": chosen}, indent=1))
+    for g in missing:
+        print(f"warning: no locked or working-set frame for {g}", file=sys.stderr)
+    return 1 if missing else 0
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(prog="moondeep-registry", description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--registry", default=os.environ.get("MOONDEEP_REGISTRY"),
+                   help="registry.json path (default: beside this script)")
+    sub = p.add_subparsers(dest="cmd", required=True)
+    c = sub.add_parser("check", help="is this base current?")
+    c.add_argument("path")
+    l = sub.add_parser("lock", help="record a girl's locked frame")
+    l.add_argument("girl")
+    l.add_argument("path")
+    l.add_argument("--ruling", default=None, help="ruling text to record")
+    l.add_argument("--date", default=None, help="ruling date YYYY-MM-DD (default: today)")
+    m = sub.add_parser("manifest", help="emit the asset manifest")
+    m.add_argument("--format", choices=("json", "text"), default="json")
+    args = p.parse_args(argv)
+
+    registry_path = args.registry or default_registry_path()
+    if not os.path.isfile(registry_path):
+        print(f"error: registry not found at {registry_path}", file=sys.stderr)
+        return 2
+    reg = load_registry(registry_path)
+    if args.cmd == "check":
+        return cmd_check(reg, args)
+    if args.cmd == "lock":
+        return cmd_lock(reg, registry_path, args)
+    if args.cmd == "manifest":
+        return cmd_manifest(reg, args)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
